@@ -309,7 +309,15 @@ function renderTop20(top20){
 
 async function load(){
   try{
-    const res = await fetch('dashboard_data.json', {cache:'no-store'});
+    // Cache-busting query param defeats GitHub Pages' CDN edge caching -
+    // {cache:'no-store'} alone only stops the BROWSER from caching, it has
+    // no effect on GitHub's own CDN layer, which can otherwise keep serving
+    // a stale (or even a stale 404) response for a while after the file
+    // actually changes.
+    const res = await fetch('dashboard_data.json?v=' + Date.now(), {cache:'no-store'});
+    if (!res.ok){
+      throw new Error(`HTTP ${res.status} ${res.statusText} - the file may not have deployed yet, try again in a minute`);
+    }
     const data = await res.json();
 
     const updated = new Date(data.generated_at);
@@ -334,7 +342,8 @@ async function load(){
     document.getElementById('allTickersCount').textContent = ALL_TICKERS.length ? `(${ALL_TICKERS.length})` : '';
     renderAllTickers();
   } catch(e){
-    document.getElementById('updated').textContent = 'Could not load dashboard_data.json';
+    document.getElementById('updated').textContent = 'Could not load dashboard_data.json - ' + e.message;
+    document.getElementById('updated').classList.add('stale');
     console.error(e);
   }
 }
