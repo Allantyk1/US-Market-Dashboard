@@ -37,6 +37,21 @@ def _safe_float(v):
         return None
 
 
+def compute_suggested_entry(current_price, lower_bb):
+    """Same formula used in generate_vlookup_calculator.py - the raw
+    screener output (Complete_US_Market_Report.xlsx) never has a
+    'Suggested Entry Price' column, that's a derived value computed
+    downstream. All Tickers needs to compute it here too, rather than
+    reading a column that doesn't actually exist in the source file."""
+    cp, lb = _safe_float(current_price), _safe_float(lower_bb)
+    if cp is None:
+        return None
+    if lb is None:
+        return round(cp * 0.995, 2)
+    dist = cp - lb
+    return round(min(cp * 0.995, lb + dist * 0.35), 2)
+
+
 def load_all_tickers():
     """Full ticker universe with ALL the calculator's fields - not trimmed.
     The dashboard shows a compact summary by default and lets you tap a
@@ -55,7 +70,7 @@ def load_all_tickers():
             "signal": r.get("Signal"),
             "matrix_score": r.get("Matrix Score"),
             "current_price": _safe_float(r.get("Current Price")),
-            "suggested_entry": _safe_float(r.get("Suggested Entry Price")),
+            "suggested_entry": compute_suggested_entry(r.get("Current Price"), r.get("Support (Lower BB)")),
             "high_52w_price": _safe_float(r.get("52W High Price")),
             "high_52w_drop_pct": r.get("52W High Drop %"),
             "ema20": _safe_float(r.get("EMA20")),
