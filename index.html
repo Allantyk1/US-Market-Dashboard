@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Market Desk</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1220">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1220; --panel:#111B2E; --panel-2:#0E1729; --line:#1E2C46;
+    --ink:#E7ECF5; --ink-dim:#8FA0BE; --ink-faint:#5A6A87;
+    --amber:#E3A63E; --amber-dim:#8A6A2E;
+    --green:#3FBF7F; --green-dim:#1F4A38;
+    --red:#E0596B; --red-dim:#4A2530;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif; -webkit-font-smoothing:antialiased;
+    padding-bottom:48px;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums;}
+  a{color:inherit;}
+
+  header{
+    padding:22px 20px 18px; border-bottom:1px solid var(--line);
+    position:sticky; top:0; background:rgba(11,18,32,0.92); backdrop-filter:blur(8px);
+    z-index:10;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber); margin:0 0 6px;
+  }
+  h1{font-size:22px; margin:0; font-weight:600; letter-spacing:-0.01em;}
+  .updated{font-size:12px; color:var(--ink-faint); margin-top:4px;}
+  .updated.stale{color:var(--red);}
+
+  .hero{padding:20px; display:flex; flex-direction:column; gap:4px;}
+  .hero-value{font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:600; letter-spacing:-0.02em;}
+  .hero-sub{display:flex; gap:14px; font-size:14px; color:var(--ink-dim);}
+  .pill{
+    display:inline-flex; align-items:center; gap:5px; padding:3px 9px;
+    border-radius:999px; font-size:13px; font-family:'IBM Plex Mono',monospace; font-weight:500;
+  }
+  .pill.up{background:var(--green-dim); color:var(--green);}
+  .pill.down{background:var(--red-dim); color:var(--red);}
+
+  section{padding:8px 20px 4px;}
+  .section-title{
+    font-size:12px; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--ink-faint); margin:22px 0 10px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .section-title .count{color:var(--ink-dim); font-family:'IBM Plex Mono',monospace;}
+
+  .alert-card{
+    background:var(--panel); border:1px solid var(--amber-dim); border-left:3px solid var(--amber);
+    border-radius:var(--radius); padding:13px 14px; margin-bottom:9px;
+  }
+  .alert-card.warn{border-left-color:var(--red); border-color:var(--red-dim);}
+  .alert-card.buy{border-left-color:var(--green); border-color:var(--green-dim);}
+  .alert-title{font-weight:600; font-size:14px; margin-bottom:3px;}
+  .alert-msg{font-size:13px; color:var(--ink-dim); line-height:1.4;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-bottom:9px;
+  }
+  .card-top{display:flex; justify-content:space-between; align-items:baseline;}
+  .ticker-block{display:flex; align-items:baseline; gap:8px;}
+  .ticker{font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:16px;}
+  .company{font-size:12px; color:var(--ink-faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .price{font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:600;}
+  .card-mid{display:flex; justify-content:space-between; margin-top:8px; font-size:12px; color:var(--ink-dim);}
+  .card-mid .val{color:var(--ink); font-family:'IBM Plex Mono',monospace;}
+  .card-bottom{display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;}
+  .tag{
+    font-size:10.5px; font-family:'IBM Plex Mono',monospace; padding:2px 7px;
+    border-radius:5px; letter-spacing:0.03em; text-transform:uppercase; font-weight:600;
+  }
+  .tag.buy{background:var(--green-dim); color:var(--green);}
+  .tag.sell{background:var(--red-dim); color:var(--red);}
+  .tag.watch{background:#3A3320; color:var(--amber);}
+  .tag.rising{background:var(--green-dim); color:var(--green);}
+  .tag.falling{background:var(--red-dim); color:var(--red);}
+  .tag.flat{background:#20293D; color:var(--ink-dim);}
+  .tag.held{background:#20293D; color:var(--ink-dim); border:1px solid var(--line);}
+
+  .empty{color:var(--ink-faint); font-size:13px; padding:16px 0; text-align:center;}
+
+  .search-row{display:flex; gap:8px; margin-bottom:10px;}
+  .search-input{
+    flex:1; background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    color:var(--ink); padding:10px 12px; font-family:'IBM Plex Sans',sans-serif; font-size:14px;
+  }
+  .search-input:focus{outline:none; border-color:var(--amber);}
+  .filter-row{display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;}
+  .filter-chip{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; padding:5px 11px;
+    border-radius:999px; border:1px solid var(--line); color:var(--ink-dim);
+    background:transparent; cursor:pointer; letter-spacing:0.02em;
+  }
+  .filter-chip.active{background:var(--amber); color:#241A08; border-color:var(--amber); font-weight:600;}
+  .ticker-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 12px; border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .ticker-row:last-child{border-bottom:none;}
+  .ticker-row .tk{font-family:'IBM Plex Mono',monospace; font-weight:700; width:64px; flex-shrink:0;}
+  .ticker-row .co{color:var(--ink-faint); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 8px;}
+  .ticker-row .pr{font-family:'IBM Plex Mono',monospace; width:70px; text-align:right; flex-shrink:0;}
+  .ticker-list-wrap{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+  .result-count{font-size:11px; color:var(--ink-faint); margin:6px 2px 10px; font-family:'IBM Plex Mono',monospace;}
+
+  footer{padding:26px 20px 10px; font-size:11px; color:var(--ink-faint); text-align:center; line-height:1.6;}
+
+  @media (min-width:640px){
+    .hero-value{font-size:48px;}
+    section{padding-left:32px; padding-right:32px;}
+    header{padding-left:32px; padding-right:32px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Market Desk</p>
+  <h1>Portfolio &amp; Recommendations</h1>
+  <div class="updated" id="updated">Loading…</div>
+</header>
+
+<div class="hero">
+  <div class="hero-value mono" id="totalValue">—</div>
+  <div class="hero-sub">
+    <span id="totalGain" class="pill">—</span>
+    <span id="dataMode" style="color:var(--ink-faint);"></span>
+  </div>
+</div>
+
+<section>
+  <div class="section-title">Alerts <span class="count" id="alertCount"></span></div>
+  <div id="alerts"><div class="empty">No alerts right now.</div></div>
+</section>
+
+<section>
+  <div class="section-title">My Portfolio <span class="count" id="holdingsCount"></span></div>
+  <div id="holdings"><div class="empty">No holdings loaded yet.</div></div>
+</section>
+
+<section>
+  <div class="section-title">Recommended This Month <span class="count" id="top20Count"></span></div>
+  <div id="top20"><div class="empty">No recommendations loaded yet.</div></div>
+</section>
+
+<section>
+  <div class="section-title">All Tickers <span class="count" id="allTickersCount"></span></div>
+  <div class="search-row">
+    <input type="text" class="search-input" id="tickerSearch" placeholder="Search ticker or company…">
+  </div>
+  <div class="filter-row" id="signalFilters">
+    <button class="filter-chip active" data-signal="ALL">All</button>
+    <button class="filter-chip" data-signal="BUY">Buy</button>
+    <button class="filter-chip" data-signal="SELL">Sell</button>
+    <button class="filter-chip" data-signal="WATCHLIST">Watch</button>
+  </div>
+  <div class="result-count" id="resultCount"></div>
+  <div class="ticker-list-wrap"><div id="allTickersList"><div class="empty">No data loaded yet.</div></div></div>
+</section>
+
+<footer>
+  Data from your local screener pipeline · $1K/month planning tool, not financial advice<br>
+  Figures reflect the last time the data was published, not live market ticks
+</footer>
+
+<script>
+const fmtMoney = (v) => v === null || v === undefined ? '—' :
+  (v < 0 ? '-$' + Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})
+         : '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
+const fmtPct = (v) => v === null || v === undefined ? '—' : (v*100 >= 0 ? '+' : '') + (v*100).toFixed(1) + '%';
+const trendTag = (t) => {
+  const cls = t === 'RISING' ? 'rising' : t === 'FALLING' ? 'falling' : 'flat';
+  return `<span class="tag ${cls}">${t || 'N/A'}</span>`;
+};
+const signalTag = (s) => {
+  const cls = s === 'BUY' ? 'buy' : s === 'SELL' ? 'sell' : 'watch';
+  return `<span class="tag ${cls}">${s || '—'}</span>`;
+};
+
+function renderAlerts(holdings, top20){
+  const alerts = [];
+  holdings.forEach(h => {
+    if (h.macd_trend === 'FALLING'){
+      alerts.push({type:'warn', title:`⚠️ ${h.ticker} momentum turning bearish`,
+        msg:`MACD histogram falling at ${fmtMoney(h.current_price)}.`});
+    }
+    if (h.analyst_target && h.current_price >= h.analyst_target){
+      alerts.push({type:'', title:`🎯 ${h.ticker} hit analyst target`,
+        msg:`At ${fmtMoney(h.current_price)}, at/above target ${fmtMoney(h.analyst_target)}.`});
+    }
+    if (h.gain_pct !== null && h.gain_pct <= -0.10){
+      alerts.push({type:'warn', title:`🔻 ${h.ticker} down ${fmtPct(h.gain_pct)}`,
+        msg:`Down from your average cost of ${fmtMoney(h.avg_cost)}.`});
+    }
+  });
+  top20.forEach(r => {
+    if (!r.already_held && r.current_price && r.suggested_entry && r.current_price <= r.suggested_entry){
+      alerts.push({type:'buy', title:`💰 ${r.ticker} at suggested entry`,
+        msg:`${fmtMoney(r.current_price)} has reached the ${fmtMoney(r.suggested_entry)} entry.`});
+    }
+  });
+
+  document.getElementById('alertCount').textContent = alerts.length ? `(${alerts.length})` : '';
+  const el = document.getElementById('alerts');
+  if (!alerts.length){ el.innerHTML = '<div class="empty">No alerts right now.</div>'; return; }
+  el.innerHTML = alerts.map(a => `
+    <div class="alert-card ${a.type}">
+      <div class="alert-title">${a.title}</div>
+      <div class="alert-msg">${a.msg}</div>
+    </div>`).join('');
+}
+
+function renderHoldings(holdings){
+  document.getElementById('holdingsCount').textContent = holdings.length ? `(${holdings.length})` : '';
+  const el = document.getElementById('holdings');
+  if (!holdings.length){ el.innerHTML = '<div class="empty">No holdings yet — add them in Portfolio_Tracker.xlsx.</div>'; return; }
+  el.innerHTML = holdings.map(h => `
+    <div class="card">
+      <div class="card-top">
+        <div class="ticker-block">
+          <span class="ticker">${h.ticker}</span>
+          <span class="company">${h.company || ''}</span>
+        </div>
+        <span class="price mono">${fmtMoney(h.current_price)}</span>
+      </div>
+      <div class="card-mid">
+        <span>${h.shares} sh · avg ${fmtMoney(h.avg_cost)}</span>
+        <span class="val ${h.gain_dollar >= 0 ? '' : ''}" style="color:${h.gain_dollar >= 0 ? 'var(--green)' : 'var(--red)'}">
+          ${fmtMoney(h.gain_dollar)} (${fmtPct(h.gain_pct)})
+        </span>
+      </div>
+      <div class="card-bottom">
+        ${trendTag(h.macd_trend)}
+        <span class="tag flat">Target ${fmtMoney(h.analyst_target)}</span>
+        <span class="tag flat">Weight ${h.weight_pct ? (h.weight_pct*100).toFixed(1)+'%' : '—'}</span>
+      </div>
+    </div>`).join('');
+}
+
+let ALL_TICKERS = [];
+let activeSignal = 'ALL';
+
+function renderAllTickers(){
+  const q = document.getElementById('tickerSearch').value.trim().toUpperCase();
+  let rows = ALL_TICKERS;
+  if (activeSignal !== 'ALL') rows = rows.filter(t => t.signal === activeSignal);
+  if (q) rows = rows.filter(t =>
+    (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
+
+  document.getElementById('resultCount').textContent = `${rows.length} of ${ALL_TICKERS.length} tickers`;
+  const el = document.getElementById('allTickersList');
+  if (!rows.length){ el.innerHTML = '<div class="empty">No matches.</div>'; return; }
+
+  // Cap rendering for very broad queries so an old phone doesn't choke on 634 rows at once
+  const capped = rows.slice(0, 150);
+  el.innerHTML = capped.map(t => {
+    const color = t.signal === 'BUY' ? 'var(--green)' : t.signal === 'SELL' ? 'var(--red)' : 'var(--ink-dim)';
+    return `<div class="ticker-row">
+      <span class="tk" style="color:${color}">${t.ticker}</span>
+      <span class="co">${t.company || ''}</span>
+      <span class="pr">${fmtMoney(t.current_price)}</span>
+    </div>`;
+  }).join('');
+  if (rows.length > 150){
+    el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
+  }
+}
+
+function renderTop20(top20){
+  document.getElementById('top20Count').textContent = top20.length ? `(${top20.length})` : '';
+  const el = document.getElementById('top20');
+  if (!top20.length){ el.innerHTML = '<div class="empty">No recommendations loaded yet.</div>'; return; }
+  el.innerHTML = top20.map(r => `
+    <div class="card">
+      <div class="card-top">
+        <div class="ticker-block">
+          <span class="ticker">${r.ticker}</span>
+          <span class="company">${r.company || ''}</span>
+        </div>
+        <span class="price mono">${fmtMoney(r.current_price)}</span>
+      </div>
+      <div class="card-mid">
+        <span>Entry ${fmtMoney(r.suggested_entry)} · ${r.shares_needed || '—'} sh</span>
+        <span class="val">Cap ${fmtMoney(r.capital_required)}</span>
+      </div>
+      <div class="card-bottom">
+        ${signalTag(r.signal)}
+        ${trendTag(r.macd_trend)}
+        ${r.already_held ? '<span class="tag held">Already held</span>' : ''}
+      </div>
+    </div>`).join('');
+}
+
+async function load(){
+  try{
+    const res = await fetch('dashboard_data.json', {cache:'no-store'});
+    const data = await res.json();
+
+    const updated = new Date(data.generated_at);
+    const ageHours = (Date.now() - updated.getTime()) / 36e5;
+    const updEl = document.getElementById('updated');
+    updEl.textContent = 'Updated ' + updated.toLocaleString();
+    if (ageHours > 30) updEl.classList.add('stale');
+
+    document.getElementById('dataMode').textContent = data.is_real_data ? '' : '· simulated data';
+
+    const p = data.portfolio;
+    document.getElementById('totalValue').textContent = fmtMoney(p.total_value);
+    const gainEl = document.getElementById('totalGain');
+    gainEl.textContent = `${fmtMoney(p.total_gain)} (${fmtPct(p.total_gain_pct)})`;
+    gainEl.className = 'pill ' + (p.total_gain >= 0 ? 'up' : 'down');
+
+    renderAlerts(p.holdings, data.top20);
+    renderHoldings(p.holdings);
+    renderTop20(data.top20);
+
+    ALL_TICKERS = data.all_tickers || [];
+    document.getElementById('allTickersCount').textContent = ALL_TICKERS.length ? `(${ALL_TICKERS.length})` : '';
+    renderAllTickers();
+  } catch(e){
+    document.getElementById('updated').textContent = 'Could not load dashboard_data.json';
+    console.error(e);
+  }
+}
+
+document.getElementById('tickerSearch').addEventListener('input', renderAllTickers);
+document.getElementById('signalFilters').addEventListener('click', (e) => {
+  if (!e.target.classList.contains('filter-chip')) return;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  e.target.classList.add('active');
+  activeSignal = e.target.dataset.signal;
+  renderAllTickers();
+});
+
+load();
+</script>
+</body>
+</html>
