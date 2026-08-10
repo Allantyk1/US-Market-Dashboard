@@ -11,13 +11,21 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0B1220; --panel:#111B2E; --panel-2:#0E1729; --line:#1E2C46;
+    --bg:#0B1220; --bg-rgb:11,18,32; --panel:#111B2E; --panel-2:#0E1729; --line:#1E2C46;
     --ink:#E7ECF5; --ink-dim:#8FA0BE; --ink-faint:#5A6A87;
-    --amber:#E3A63E; --amber-dim:#8A6A2E;
+    --amber:#E3A63E; --amber-dim:#8A6A2E; --amber-ink:#241A08;
     --green:#3FBF7F; --green-dim:#1F4A38;
     --red:#E0596B; --red-dim:#4A2530;
     --radius:14px;
   }
+  :root[data-theme="light"]{
+    --bg:#F4F5F8; --bg-rgb:244,245,248; --panel:#FFFFFF; --panel-2:#ECEEF3; --line:#DDE1EA;
+    --ink:#101827; --ink-dim:#51607A; --ink-faint:#8994A8;
+    --amber:#B6791A; --amber-dim:#F2E2C4; --amber-ink:#FFFFFF;
+    --green:#1C8A57; --green-dim:#D9F1E4;
+    --red:#C93B54; --red-dim:#FBDDE3;
+  }
+  body{transition:background-color 0.15s ease, color 0.15s ease;}
   *{box-sizing:border-box;}
   body{
     margin:0; background:var(--bg); color:var(--ink);
@@ -29,7 +37,7 @@
 
   header{
     padding:22px 20px 18px; border-bottom:1px solid var(--line);
-    position:sticky; top:0; background:rgba(11,18,32,0.92); backdrop-filter:blur(8px);
+    position:sticky; top:0; background:rgba(var(--bg-rgb),0.92); backdrop-filter:blur(8px);
     z-index:10;
   }
   .eyebrow{
@@ -39,6 +47,13 @@
   h1{font-size:22px; margin:0; font-weight:600; letter-spacing:-0.01em;}
   .updated{font-size:12px; color:var(--ink-faint); margin-top:4px;}
   .updated.stale{color:var(--red);}
+
+  .theme-toggle{
+    background:var(--panel-2); border:1px solid var(--line); color:var(--ink-dim);
+    width:34px; height:34px; border-radius:10px; font-size:16px; cursor:pointer;
+    flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
+  .theme-toggle:hover{border-color:var(--amber); color:var(--amber);}
 
   .hero{padding:20px; display:flex; flex-direction:column; gap:4px;}
   .hero-value{font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:600; letter-spacing:-0.02em;}
@@ -104,7 +119,7 @@
     border-radius:999px; border:1px solid var(--line); color:var(--ink-dim);
     background:transparent; cursor:pointer; letter-spacing:0.02em;
   }
-  .filter-chip.active{background:var(--amber); color:#241A08; border-color:var(--amber); font-weight:600;}
+  .filter-chip.active{background:var(--amber); color:var(--amber-ink); border-color:var(--amber); font-weight:600;}
   .result-count{font-size:11px; color:var(--ink-faint); margin:6px 2px 10px; font-family:'IBM Plex Mono',monospace;}
 
   footer{padding:26px 20px 10px; font-size:11px; color:var(--ink-faint); text-align:center; line-height:1.6;}
@@ -115,12 +130,24 @@
     header{padding-left:32px; padding-right:32px;}
   }
 </style>
+<script>
+  // Runs before the page paints, so there's no flash of the wrong theme
+  (function(){
+    const saved = localStorage.getItem('market-desk-theme');
+    if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script>
 </head>
 <body>
 
 <header>
-  <p class="eyebrow">Market Desk</p>
-  <h1>Portfolio &amp; Recommendations</h1>
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <p class="eyebrow">Market Desk</p>
+      <h1>Portfolio &amp; Recommendations</h1>
+    </div>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">◐</button>
+  </div>
   <div class="updated" id="updated">Loading…</div>
 </header>
 
@@ -356,6 +383,24 @@ document.getElementById('signalFilters').addEventListener('click', (e) => {
   activeSignal = e.target.dataset.signal;
   renderAllTickers();
 });
+
+function initThemeToggle(){
+  const btn = document.getElementById('themeToggle');
+  const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
+  const updateIcon = () => { btn.textContent = isLight() ? '◑' : '◐'; };
+  updateIcon();
+  btn.addEventListener('click', () => {
+    if (isLight()){
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('market-desk-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('market-desk-theme', 'light');
+    }
+    updateIcon();
+  });
+}
+initThemeToggle();
 
 load();
 </script>
