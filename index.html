@@ -105,15 +105,6 @@
     background:transparent; cursor:pointer; letter-spacing:0.02em;
   }
   .filter-chip.active{background:var(--amber); color:#241A08; border-color:var(--amber); font-weight:600;}
-  .ticker-row{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:10px 12px; border-bottom:1px solid var(--line); font-size:13px;
-  }
-  .ticker-row:last-child{border-bottom:none;}
-  .ticker-row .tk{font-family:'IBM Plex Mono',monospace; font-weight:700; width:64px; flex-shrink:0;}
-  .ticker-row .co{color:var(--ink-faint); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 8px;}
-  .ticker-row .pr{font-family:'IBM Plex Mono',monospace; width:70px; text-align:right; flex-shrink:0;}
-  .ticker-list-wrap{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
   .result-count{font-size:11px; color:var(--ink-faint); margin:6px 2px 10px; font-family:'IBM Plex Mono',monospace;}
 
   footer{padding:26px 20px 10px; font-size:11px; color:var(--ink-faint); text-align:center; line-height:1.6;}
@@ -168,7 +159,7 @@
     <button class="filter-chip" data-signal="WATCHLIST">Watch</button>
   </div>
   <div class="result-count" id="resultCount"></div>
-  <div class="ticker-list-wrap"><div id="allTickersList"><div class="empty">No data loaded yet.</div></div></div>
+  <div id="allTickersList"><div class="empty">No data loaded yet.</div></div>
 </section>
 
 <footer>
@@ -266,14 +257,26 @@ function renderAllTickers(){
 
   // Cap rendering for very broad queries so an old phone doesn't choke on 634 rows at once
   const capped = rows.slice(0, 150);
-  el.innerHTML = capped.map(t => {
-    const color = t.signal === 'BUY' ? 'var(--green)' : t.signal === 'SELL' ? 'var(--red)' : 'var(--ink-dim)';
-    return `<div class="ticker-row">
-      <span class="tk" style="color:${color}">${t.ticker}</span>
-      <span class="co">${t.company || ''}</span>
-      <span class="pr">${fmtMoney(t.current_price)}</span>
-    </div>`;
-  }).join('');
+  el.innerHTML = capped.map(t => `
+    <div class="card">
+      <div class="card-top">
+        <div class="ticker-block">
+          <span class="ticker">${t.ticker}</span>
+          <span class="company">${t.company || ''}</span>
+        </div>
+        <span class="price mono">${fmtMoney(t.current_price)}</span>
+      </div>
+      <div class="card-mid">
+        <span>Entry ${fmtMoney(t.suggested_entry)} · RSI ${t.rsi ?? '—'}</span>
+        <span class="val">${t.high_52w_drop_pct || '—'} from 52W high</span>
+      </div>
+      <div class="card-bottom">
+        ${signalTag(t.signal)}
+        ${trendTag(t.macd_trend)}
+        <span class="tag flat">Target ${fmtMoney(t.analyst_target)}</span>
+        <span class="tag flat" style="opacity:0.7">${t.category || ''}</span>
+      </div>
+    </div>`).join('');
   if (rows.length > 150){
     el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
   }
