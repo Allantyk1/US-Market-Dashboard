@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-10T21:19:27",
+  "generated_at": "2026-08-10T21:34:28",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 73716.81,
-    "total_cost": 78206.03,
-    "total_gain": -4489.22,
-    "total_gain_pct": -0.0574,
+    "total_value": 92610.3,
+    "total_cost": 96038.46,
+    "total_gain": -3428.16,
+    "total_gain_pct": -0.0357,
     "holdings": [
       {
         "ticker": "CLS",
@@ -16,7 +16,7 @@
         "market_value": 3813.96,
         "gain_dollar": -2.51,
         "gain_pct": -0.0007,
-        "weight_pct": 0.0517,
+        "weight_pct": 0.0412,
         "suggested_entry": 301.23,
         "analyst_target": 477.12,
         "macd_trend": "FALLING"
@@ -30,7 +30,7 @@
         "market_value": 5566.0,
         "gain_dollar": -452.43,
         "gain_pct": -0.0752,
-        "weight_pct": 0.0755,
+        "weight_pct": 0.0601,
         "suggested_entry": 47.36,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -44,7 +44,7 @@
         "market_value": 4664.5,
         "gain_dollar": -316.3,
         "gain_pct": -0.0635,
-        "weight_pct": 0.0633,
+        "weight_pct": 0.0504,
         "suggested_entry": 85.18,
         "analyst_target": 119.82,
         "macd_trend": "RISING"
@@ -58,7 +58,7 @@
         "market_value": 30495.0,
         "gain_dollar": -2187.9,
         "gain_pct": -0.0669,
-        "weight_pct": 0.4137,
+        "weight_pct": 0.3293,
         "suggested_entry": 89.77,
         "analyst_target": 115.17,
         "macd_trend": "RISING"
@@ -72,10 +72,24 @@
         "market_value": 4535.3,
         "gain_dollar": -589.71,
         "gain_pct": -0.1151,
-        "weight_pct": 0.0615,
+        "weight_pct": 0.049,
         "suggested_entry": 35.03,
         "analyst_target": 81.73,
         "macd_trend": "RISING"
+      },
+      {
+        "ticker": "IRM",
+        "company": "Iron Mountain Incorp",
+        "shares": 20.0,
+        "avg_cost": 121.105,
+        "current_price": 121.15,
+        "market_value": 2423.0,
+        "gain_dollar": 0.9,
+        "gain_pct": 0.0004,
+        "weight_pct": 0.0262,
+        "suggested_entry": 120.35,
+        "analyst_target": 144.5,
+        "macd_trend": "FALLING"
       },
       {
         "ticker": "IWM",
@@ -86,9 +100,23 @@
         "market_value": 603.12,
         "gain_dollar": 13.86,
         "gain_pct": 0.0235,
-        "weight_pct": 0.0082,
+        "weight_pct": 0.0065,
         "suggested_entry": 292.64,
         "analyst_target": null,
+        "macd_trend": "RISING"
+      },
+      {
+        "ticker": "MU",
+        "company": "Micron Technology, I",
+        "shares": 18.021,
+        "avg_cost": 816.839,
+        "current_price": 877.57,
+        "market_value": 15814.69,
+        "gain_dollar": 1094.43,
+        "gain_pct": 0.0743,
+        "weight_pct": 0.1708,
+        "suggested_entry": 803.73,
+        "analyst_target": 1501.98,
         "macd_trend": "RISING"
       },
       {
@@ -100,7 +128,7 @@
         "market_value": 8980.8,
         "gain_dollar": 2521.37,
         "gain_pct": 0.3903,
-        "weight_pct": 0.1218,
+        "weight_pct": 0.097,
         "suggested_entry": 201.61,
         "analyst_target": 302.83,
         "macd_trend": "RISING"
@@ -128,7 +156,7 @@
         "market_value": 3676.0,
         "gain_dollar": -904.2,
         "gain_pct": -0.1974,
-        "weight_pct": 0.0499,
+        "weight_pct": 0.0397,
         "suggested_entry": 16.54,
         "analyst_target": 19.87,
         "macd_trend": "RISING"
@@ -142,7 +170,7 @@
         "market_value": 3506.25,
         "gain_dollar": 177.62,
         "gain_pct": 0.0534,
-        "weight_pct": 0.0476,
+        "weight_pct": 0.0379,
         "suggested_entry": 110.38,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -156,10 +184,24 @@
         "market_value": 7875.88,
         "gain_dollar": 1147.53,
         "gain_pct": 0.1706,
-        "weight_pct": 0.1068,
+        "weight_pct": 0.085,
         "suggested_entry": 682.22,
         "analyst_target": null,
         "macd_trend": "RISING"
+      },
+      {
+        "ticker": "CMG",
+        "company": "Chipotle Mexican Gri",
+        "shares": 20.0,
+        "avg_cost": 34.504,
+        "current_price": 32.79,
+        "market_value": 655.8,
+        "gain_dollar": -34.28,
+        "gain_pct": -0.0497,
+        "weight_pct": 0.0071,
+        "suggested_entry": 31.35,
+        "analyst_target": 44.05,
+        "macd_trend": "FALLING"
       }
     ]
   },
