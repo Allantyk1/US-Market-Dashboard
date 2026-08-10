@@ -107,6 +107,19 @@
 
   .empty{color:var(--ink-faint); font-size:13px; padding:16px 0; text-align:center;}
 
+  .card.expandable{cursor:pointer;}
+  .card-detail{
+    display:none; margin-top:12px; padding-top:12px; border-top:1px solid var(--line);
+  }
+  .card-detail.open{display:block;}
+  .detail-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; font-size:12px;
+  }
+  .detail-grid .dlabel{color:var(--ink-faint);}
+  .detail-grid .dval{color:var(--ink); font-family:'IBM Plex Mono',monospace; text-align:right;}
+  .expand-hint{font-size:10.5px; color:var(--ink-faint); text-align:center; margin-top:8px;
+    font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
+
   .search-row{display:flex; gap:8px; margin-bottom:10px;}
   .search-input{
     flex:1; background:var(--panel); border:1px solid var(--line); border-radius:10px;
@@ -284,8 +297,8 @@ function renderAllTickers(){
 
   // Cap rendering for very broad queries so an old phone doesn't choke on 634 rows at once
   const capped = rows.slice(0, 150);
-  el.innerHTML = capped.map(t => `
-    <div class="card">
+  el.innerHTML = capped.map((t, i) => `
+    <div class="card expandable" onclick="toggleTickerDetail(${i})">
       <div class="card-top">
         <div class="ticker-block">
           <span class="ticker">${t.ticker}</span>
@@ -303,10 +316,45 @@ function renderAllTickers(){
         <span class="tag flat">Target ${fmtMoney(t.analyst_target)}</span>
         <span class="tag flat" style="opacity:0.7">${t.category || ''}</span>
       </div>
+      <div class="card-detail" id="detail-${i}">
+        <div class="detail-grid">
+          <span class="dlabel">EMA20 / EMA40</span><span class="dval">${fmtMoney(t.ema20)} / ${fmtMoney(t.ema40)}</span>
+          <span class="dlabel">Support / Resistance</span><span class="dval">${fmtMoney(t.support_lower_bb)} / ${fmtMoney(t.resistance_upper_bb)}</span>
+          <span class="dlabel">Middle BB</span><span class="dval">${fmtMoney(t.middle_bb)}</span>
+          <span class="dlabel">52W High</span><span class="dval">${fmtMoney(t.high_52w_price)}</span>
+          <span class="dlabel">MACD Line / Signal</span><span class="dval">${t.macd_line ?? '—'} / ${t.macd_signal ?? '—'}</span>
+          <span class="dlabel">MACD Histogram</span><span class="dval">${t.macd_histogram ?? '—'}</span>
+          <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
+          <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
+          <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
+          <span class="dlabel">Intrinsic Value</span><span class="dval">${fmtMoney(t.intrinsic_value)}</span>
+          <span class="dlabel">Margin of Safety</span><span class="dval">${t.margin_of_safety || '—'}</span>
+          <span class="dlabel">Analyst Upside</span><span class="dval">${t.analyst_upside_pct || '—'}</span>
+          <span class="dlabel">Put/Call OI Ratio</span><span class="dval">${t.put_call_ratio ?? '—'}</span>
+          <span class="dlabel">Put Wall (Floor)</span><span class="dval">${fmtMoney(t.put_wall_price)} · ${fmtCompact(t.put_wall_oi)} OI</span>
+          <span class="dlabel">Call Wall (Ceiling)</span><span class="dval">${fmtMoney(t.call_wall_price)} · ${fmtCompact(t.call_wall_oi)} OI</span>
+          <span class="dlabel">Matrix Score</span><span class="dval">${t.matrix_score ?? '—'}</span>
+        </div>
+      </div>
+      <div class="expand-hint">Tap for full technical detail</div>
     </div>`).join('');
   if (rows.length > 150){
     el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
   }
+}
+
+function toggleTickerDetail(i){
+  const el = document.getElementById('detail-' + i);
+  if (el) el.classList.toggle('open');
+}
+
+function fmtCompact(v){
+  if (v === null || v === undefined || v === '') return '—';
+  const n = Number(v);
+  if (isNaN(n)) return '—';
+  if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1) + 'K';
+  return String(n);
 }
 
 function renderTop20(top20){
