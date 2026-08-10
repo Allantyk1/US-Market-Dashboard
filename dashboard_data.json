@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T14:24:41",
+  "generated_at": "2026-08-10T14:32:51",
   "is_real_data": true,
   "portfolio": {
     "total_value": 0,
@@ -68,7 +68,7 @@
       "matrix_score": 3,
       "current_price": 50.6,
       "suggested_entry": 47.36,
-      "analyst_target": NaN,
+      "analyst_target": null,
       "macd_trend": "RISING",
       "shares_needed": 704,
       "capital_required": 33341.44,
@@ -172,7 +172,7 @@
       "matrix_score": 3,
       "current_price": 252.58,
       "suggested_entry": 221.8,
-      "analyst_target": NaN,
+      "analyst_target": null,
       "macd_trend": "RISING",
       "shares_needed": 151,
       "capital_required": 33491.8,
@@ -334,7 +334,7 @@
       "high_52w_drop_pct": "-37.8%",
       "rsi": 46.9,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "TRGP",
@@ -438,7 +438,7 @@
       "high_52w_drop_pct": "-32.2%",
       "rsi": 63.9,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "TDG",
@@ -854,7 +854,7 @@
       "high_52w_drop_pct": "-6.8%",
       "rsi": 42.9,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "APP",
@@ -2817,7 +2817,7 @@
       "high_52w_drop_pct": "-5.3%",
       "rsi": 63.8,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLE",
@@ -2830,7 +2830,7 @@
       "high_52w_drop_pct": "-8.7%",
       "rsi": 47.7,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLY",
@@ -2843,7 +2843,7 @@
       "high_52w_drop_pct": "-3.7%",
       "rsi": 62.9,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLRE",
@@ -2856,7 +2856,7 @@
       "high_52w_drop_pct": "-3.2%",
       "rsi": 46.3,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "HRL",
@@ -3090,7 +3090,7 @@
       "high_52w_drop_pct": "-15.9%",
       "rsi": 71.0,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "CINF",
@@ -3454,7 +3454,7 @@
       "high_52w_drop_pct": "-4.5%",
       "rsi": 54.9,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "GEHC",
@@ -4624,7 +4624,7 @@
       "high_52w_drop_pct": "-21.8%",
       "rsi": 72.8,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "AAPL",
@@ -4741,7 +4741,7 @@
       "high_52w_drop_pct": "-61.6%",
       "rsi": 56.7,
       "macd_trend": "FLAT",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "RGTI",
@@ -4806,7 +4806,7 @@
       "high_52w_drop_pct": "-0.5%",
       "rsi": 61.8,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "MRVL",
@@ -4845,7 +4845,7 @@
       "high_52w_drop_pct": "-53.6%",
       "rsi": 51.1,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "AES",
@@ -4936,7 +4936,7 @@
       "high_52w_drop_pct": "-0.1%",
       "rsi": 59.0,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "FCX",
@@ -6522,7 +6522,7 @@
       "high_52w_drop_pct": "-58.1%",
       "rsi": 40.0,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "TQQQ",
@@ -6535,7 +6535,7 @@
       "high_52w_drop_pct": "-15.3%",
       "rsi": 58.6,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "SOXX",
@@ -6548,7 +6548,7 @@
       "high_52w_drop_pct": "-17.2%",
       "rsi": 54.3,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "KMI",
@@ -6691,7 +6691,7 @@
       "high_52w_drop_pct": "-3.3%",
       "rsi": 59.6,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "DIA",
@@ -6704,7 +6704,7 @@
       "high_52w_drop_pct": "-1.3%",
       "rsi": 66.8,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "VTI",
@@ -6717,7 +6717,7 @@
       "high_52w_drop_pct": "-0.4%",
       "rsi": 69.6,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "CRL",
@@ -6769,7 +6769,7 @@
       "high_52w_drop_pct": "-0.3%",
       "rsi": 72.8,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLP",
@@ -6782,7 +6782,7 @@
       "high_52w_drop_pct": "-4.4%",
       "rsi": 51.3,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLU",
@@ -6795,7 +6795,7 @@
       "high_52w_drop_pct": "-8.0%",
       "rsi": 35.4,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLI",
@@ -6808,7 +6808,7 @@
       "high_52w_drop_pct": "-1.6%",
       "rsi": 65.1,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLB",
@@ -6821,7 +6821,7 @@
       "high_52w_drop_pct": "-1.6%",
       "rsi": 66.4,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLC",
@@ -6834,7 +6834,7 @@
       "high_52w_drop_pct": "-7.1%",
       "rsi": 51.1,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "BXP",
@@ -6899,7 +6899,7 @@
       "high_52w_drop_pct": "-0.5%",
       "rsi": 69.6,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "SNAP",
@@ -8069,7 +8069,7 @@
       "high_52w_drop_pct": "-14.3%",
       "rsi": 58.8,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "SLV",
@@ -8082,7 +8082,7 @@
       "high_52w_drop_pct": "-47.6%",
       "rsi": 71.1,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "SMH",
@@ -8095,7 +8095,7 @@
       "high_52w_drop_pct": "-13.3%",
       "rsi": 55.9,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "GOOG",
@@ -8134,7 +8134,7 @@
       "high_52w_drop_pct": "-1.2%",
       "rsi": 65.6,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "LULU",
@@ -8225,7 +8225,7 @@
       "high_52w_drop_pct": "-0.5%",
       "rsi": 69.6,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "MTB",
@@ -8355,7 +8355,7 @@
       "high_52w_drop_pct": "-2.6%",
       "rsi": 48.3,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "BAC",
@@ -8381,7 +8381,7 @@
       "high_52w_drop_pct": "-1.7%",
       "rsi": 67.5,
       "macd_trend": "RISING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "XLF",
@@ -8394,7 +8394,7 @@
       "high_52w_drop_pct": "-1.4%",
       "rsi": 66.0,
       "macd_trend": "FALLING",
-      "analyst_target": NaN
+      "analyst_target": null
     },
     {
       "ticker": "JPM",
