@@ -71,6 +71,15 @@
     color:var(--ink-faint); margin:22px 0 10px; display:flex; justify-content:space-between; align-items:center;
   }
   .section-title .count{color:var(--ink-dim); font-family:'IBM Plex Mono',monospace;}
+  .section-collapse-btn{
+    background:var(--panel-2); border:1px solid var(--line); color:var(--ink-dim);
+    width:22px; height:22px; border-radius:6px; font-family:'IBM Plex Mono',monospace;
+    font-size:14px; line-height:1; cursor:pointer; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; margin-left:8px;
+  }
+  .section-collapse-btn:hover{border-color:var(--amber); color:var(--amber);}
+  .section-body.collapsed{display:none;}
+
 
   .alert-card{
     background:var(--panel); border:1px solid var(--amber-dim); border-left:3px solid var(--amber);
@@ -178,8 +187,13 @@
 </section>
 
 <section>
-  <div class="section-title">My Portfolio <span class="count" id="holdingsCount"></span></div>
-  <div id="holdings"><div class="empty">No holdings loaded yet.</div></div>
+  <div class="section-title">
+    <span>My Portfolio <span class="count" id="holdingsCount"></span></span>
+    <button class="section-collapse-btn" id="portfolioCollapseBtn" aria-label="Toggle My Portfolio section">−</button>
+  </div>
+  <div id="holdingsBody" class="section-body">
+    <div id="holdings"><div class="empty">No holdings loaded yet.</div></div>
+  </div>
 </section>
 
 <section>
@@ -448,6 +462,25 @@ function initThemeToggle(){
     updateIcon();
   });
 }
+function initSectionCollapse(btnId, bodyId, storageKey){
+  const btn = document.getElementById(btnId);
+  const body = document.getElementById(bodyId);
+  const isCollapsed = () => body.classList.contains('collapsed');
+  const updateSymbol = () => { btn.textContent = isCollapsed() ? '+' : '−'; };
+
+  if (localStorage.getItem(storageKey) === 'collapsed'){
+    body.classList.add('collapsed');
+  }
+  updateSymbol();
+
+  btn.addEventListener('click', () => {
+    body.classList.toggle('collapsed');
+    localStorage.setItem(storageKey, isCollapsed() ? 'collapsed' : 'expanded');
+    updateSymbol();
+  });
+}
+initSectionCollapse('portfolioCollapseBtn', 'holdingsBody', 'market-desk-portfolio-collapsed');
+
 initThemeToggle();
 
 load();
