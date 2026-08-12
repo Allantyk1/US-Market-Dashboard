@@ -55,6 +55,75 @@
   }
   .theme-toggle:hover{border-color:var(--amber); color:var(--amber);}
 
+  .ticker-tape{
+    background:var(--panel-2); border-bottom:1px solid var(--line);
+    overflow:hidden; white-space:nowrap; position:relative;
+  }
+  .ticker-tape-track{
+    display:inline-flex; animation:tape-scroll 45s linear infinite;
+  }
+  .ticker-tape:hover .ticker-tape-track{animation-play-state:paused;}
+  @keyframes tape-scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  .tape-item{
+    display:inline-flex; align-items:baseline; gap:8px; padding:10px 20px;
+    font-family:'IBM Plex Mono',monospace; font-size:13px; white-space:nowrap;
+    border-right:1px solid var(--line);
+  }
+  .tape-ticker{font-weight:700; color:var(--ink);}
+  .tape-price{color:var(--ink-dim);}
+  .tape-arrow.up{color:var(--green);}
+  .tape-arrow.down{color:var(--red);}
+  .tape-arrow.flat{color:var(--ink-faint);}
+
+  .tab-nav{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-bottom:4px;}
+  .tab-btn{
+    flex-shrink:0; background:var(--panel); border:1px solid var(--line); color:var(--ink-dim);
+    padding:10px 16px; border-radius:12px; font-weight:600; font-size:14px; cursor:pointer;
+    display:flex; align-items:center; gap:7px; font-family:'IBM Plex Sans',sans-serif;
+  }
+  .tab-btn .tab-count{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:500;
+    background:var(--panel-2); padding:1px 7px; border-radius:999px; color:var(--ink-faint);
+  }
+  .tab-btn.active{border-color:var(--green); color:var(--green); background:var(--green-dim);}
+  .tab-btn.active .tab-count{background:transparent; color:var(--green);}
+  .tab-btn[data-tab="SELL"].active{border-color:var(--red); color:var(--red); background:var(--red-dim);}
+  .tab-btn[data-tab="SELL"].active .tab-count{color:var(--red);}
+  .tab-btn[data-tab="WATCHLIST"].active,
+  .tab-btn[data-tab="ALL"].active,
+  .tab-btn[data-tab="PORTFOLIO"].active{
+    border-color:var(--amber); color:var(--amber); background:var(--amber-dim);
+  }
+  .tab-btn[data-tab="WATCHLIST"].active .tab-count,
+  .tab-btn[data-tab="ALL"].active .tab-count,
+  .tab-btn[data-tab="PORTFOLIO"].active .tab-count{color:var(--amber);}
+
+  .score-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);
+  }
+  .trend-badge{
+    display:inline-block; font-size:11px; font-weight:600; padding:3px 10px;
+    border-radius:999px; margin-left:8px;
+  }
+  .trend-badge.bullish{background:var(--green-dim); color:var(--green);}
+  .trend-badge.bearish{background:var(--red-dim); color:var(--red);}
+  .trend-badge.neutral{background:var(--panel-2); color:var(--ink-faint);}
+  .recommended-tag{
+    font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--amber);
+    border:1px solid var(--amber-dim); border-radius:5px; padding:1px 6px; margin-left:6px;
+  }
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px;}
+  .stat-box{background:var(--panel-2); border-radius:10px; padding:8px 10px;}
+  .stat-box .stat-label{
+    font-size:9.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.04em;
+    font-family:'IBM Plex Mono',monospace; margin-bottom:3px;
+  }
+  .stat-box .stat-value{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;}
+  .stat-box .stat-value .up{color:var(--green);}
+
   .hero{padding:20px; display:flex; flex-direction:column; gap:4px;}
   .hero-value{font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:600; letter-spacing:-0.02em;}
   .hero-sub{display:flex; gap:14px; font-size:14px; color:var(--ink-dim);}
@@ -173,6 +242,10 @@
   <div class="updated" id="updated">Loading…</div>
 </header>
 
+<div class="ticker-tape" id="tickerTape">
+  <div class="ticker-tape-track" id="tickerTapeTrack"></div>
+</div>
+
 <div class="hero">
   <div class="hero-value mono" id="totalValue">—</div>
   <div class="hero-sub">
@@ -187,33 +260,18 @@
 </section>
 
 <section>
-  <div class="section-title">
-    <span>My Portfolio <span class="count" id="holdingsCount"></span></span>
-    <button class="section-collapse-btn" id="portfolioCollapseBtn" aria-label="Toggle My Portfolio section">−</button>
+  <div class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="BUY">Buy <span class="tab-count" id="countBuy">0</span></button>
+    <button class="tab-btn" data-tab="WATCHLIST">Watch <span class="tab-count" id="countWatch">0</span></button>
+    <button class="tab-btn" data-tab="SELL">Sell <span class="tab-count" id="countSell">0</span></button>
+    <button class="tab-btn" data-tab="ALL">All Stocks <span class="tab-count" id="countAll">0</span></button>
+    <button class="tab-btn" data-tab="PORTFOLIO">Portfolio <span class="tab-count" id="countPortfolio">0</span></button>
   </div>
-  <div id="holdingsBody" class="section-body">
-    <div id="holdings"><div class="empty">No holdings loaded yet.</div></div>
-  </div>
-</section>
-
-<section>
-  <div class="section-title">Recommended This Month <span class="count" id="top20Count"></span></div>
-  <div id="top20"><div class="empty">No recommendations loaded yet.</div></div>
-</section>
-
-<section>
-  <div class="section-title">All Tickers <span class="count" id="allTickersCount"></span></div>
   <div class="search-row">
-    <input type="text" class="search-input" id="tickerSearch" placeholder="Search ticker or company…">
-  </div>
-  <div class="filter-row" id="signalFilters">
-    <button class="filter-chip active" data-signal="ALL">All</button>
-    <button class="filter-chip" data-signal="BUY">Buy</button>
-    <button class="filter-chip" data-signal="SELL">Sell</button>
-    <button class="filter-chip" data-signal="WATCHLIST">Watch</button>
+    <input type="text" class="search-input" id="tickerSearch" placeholder="Search by ticker or name…">
   </div>
   <div class="result-count" id="resultCount"></div>
-  <div id="allTickersList"><div class="empty">No data loaded yet.</div></div>
+  <div id="tabContent"><div class="empty">No data loaded yet.</div></div>
 </section>
 
 <footer>
@@ -268,98 +326,10 @@ function renderAlerts(holdings, top20){
     </div>`).join('');
 }
 
-function renderHoldings(holdings){
-  document.getElementById('holdingsCount').textContent = holdings.length ? `(${holdings.length})` : '';
-  const el = document.getElementById('holdings');
-  if (!holdings.length){ el.innerHTML = '<div class="empty">No holdings yet — add them in Portfolio_Tracker.xlsx.</div>'; return; }
-  el.innerHTML = holdings.map(h => `
-    <div class="card">
-      <div class="card-top">
-        <div class="ticker-block">
-          <span class="ticker">${h.ticker}</span>
-          <span class="company">${h.company || ''}</span>
-        </div>
-        <span class="price mono">${fmtMoney(h.current_price)}</span>
-      </div>
-      <div class="card-mid">
-        <span>${h.shares} sh · avg ${fmtMoney(h.avg_cost)}</span>
-        <span class="val ${h.gain_dollar >= 0 ? '' : ''}" style="color:${h.gain_dollar >= 0 ? 'var(--green)' : 'var(--red)'}">
-          ${fmtMoney(h.gain_dollar)} (${fmtPct(h.gain_pct)})
-        </span>
-      </div>
-      <div class="card-bottom">
-        ${trendTag(h.macd_trend)}
-        <span class="tag flat">Target ${fmtMoney(h.analyst_target)}</span>
-        <span class="tag flat">Weight ${h.weight_pct ? (h.weight_pct*100).toFixed(1)+'%' : '—'}</span>
-      </div>
-    </div>`).join('');
-}
-
-let ALL_TICKERS = [];
-let activeSignal = 'ALL';
-
-function renderAllTickers(){
-  const q = document.getElementById('tickerSearch').value.trim().toUpperCase();
-  let rows = ALL_TICKERS;
-  if (activeSignal !== 'ALL') rows = rows.filter(t => t.signal === activeSignal);
-  if (q) rows = rows.filter(t =>
-    (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
-
-  document.getElementById('resultCount').textContent = `${rows.length} of ${ALL_TICKERS.length} tickers`;
-  const el = document.getElementById('allTickersList');
-  if (!rows.length){ el.innerHTML = '<div class="empty">No matches.</div>'; return; }
-
-  // Cap rendering for very broad queries so an old phone doesn't choke on 634 rows at once
-  const capped = rows.slice(0, 150);
-  el.innerHTML = capped.map((t, i) => `
-    <div class="card expandable" onclick="toggleTickerDetail(${i})">
-      <div class="card-top">
-        <div class="ticker-block">
-          <span class="ticker">${t.ticker}</span>
-          <span class="company">${t.company || ''}</span>
-        </div>
-        <span class="price mono">${fmtMoney(t.current_price)}</span>
-      </div>
-      <div class="card-mid">
-        <span>Entry ${fmtMoney(t.suggested_entry)} · RSI ${t.rsi ?? '—'}</span>
-        <span class="val">${t.high_52w_drop_pct || '—'} from 52W high</span>
-      </div>
-      <div class="card-bottom">
-        ${signalTag(t.signal)}
-        ${trendTag(t.macd_trend)}
-        <span class="tag flat">Target ${fmtMoney(t.analyst_target)}</span>
-        <span class="tag flat" style="opacity:0.7">${t.category || ''}</span>
-      </div>
-      <div class="card-detail" id="detail-${i}">
-        <div class="detail-grid">
-          <span class="dlabel">EMA20 / EMA40</span><span class="dval">${fmtMoney(t.ema20)} / ${fmtMoney(t.ema40)}</span>
-          <span class="dlabel">Support / Resistance</span><span class="dval">${fmtMoney(t.support_lower_bb)} / ${fmtMoney(t.resistance_upper_bb)}</span>
-          <span class="dlabel">Middle BB</span><span class="dval">${fmtMoney(t.middle_bb)}</span>
-          <span class="dlabel">52W High</span><span class="dval">${fmtMoney(t.high_52w_price)}</span>
-          <span class="dlabel">MACD Line / Signal</span><span class="dval">${t.macd_line ?? '—'} / ${t.macd_signal ?? '—'}</span>
-          <span class="dlabel">MACD Histogram</span><span class="dval">${t.macd_histogram ?? '—'}</span>
-          <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
-          <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
-          <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
-          <span class="dlabel">Intrinsic Value</span><span class="dval">${fmtMoney(t.intrinsic_value)}</span>
-          <span class="dlabel">Margin of Safety</span><span class="dval">${t.margin_of_safety || '—'}</span>
-          <span class="dlabel">Analyst Upside</span><span class="dval">${t.analyst_upside_pct || '—'}</span>
-          <span class="dlabel">Put/Call OI Ratio</span><span class="dval">${t.put_call_ratio ?? '—'}</span>
-          <span class="dlabel">Put Wall (Floor)</span><span class="dval">${fmtMoney(t.put_wall_price)} · ${fmtCompact(t.put_wall_oi)} OI</span>
-          <span class="dlabel">Call Wall (Ceiling)</span><span class="dval">${fmtMoney(t.call_wall_price)} · ${fmtCompact(t.call_wall_oi)} OI</span>
-          <span class="dlabel">Matrix Score</span><span class="dval">${t.matrix_score ?? '—'}</span>
-        </div>
-      </div>
-      <div class="expand-hint">Tap for full technical detail</div>
-    </div>`).join('');
-  if (rows.length > 150){
-    el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
-  }
-}
-
-function toggleTickerDetail(i){
-  const el = document.getElementById('detail-' + i);
-  if (el) el.classList.toggle('open');
+function trendBadge(trend){
+  const cls = trend === 'RISING' ? 'bullish' : trend === 'FALLING' ? 'bearish' : 'neutral';
+  const text = trend === 'RISING' ? 'Strengthening (Bullish)' : trend === 'FALLING' ? 'Weakening (Bearish)' : 'Neutral';
+  return `<span class="trend-badge ${cls}">${text}</span>`;
 }
 
 function fmtCompact(v){
@@ -371,29 +341,157 @@ function fmtCompact(v){
   return String(n);
 }
 
-function renderTop20(top20){
-  document.getElementById('top20Count').textContent = top20.length ? `(${top20.length})` : '';
-  const el = document.getElementById('top20');
-  if (!top20.length){ el.innerHTML = '<div class="empty">No recommendations loaded yet.</div>'; return; }
-  el.innerHTML = top20.map(r => `
+let ALL_TICKERS = [];
+let TOP20_SET = new Set();
+let HOLDINGS = [];
+let activeTab = 'BUY';
+
+// --- Screener-style card: Buy / Watch / Sell / All Stocks tabs ---
+function screenerCard(t, i){
+  const upside = (t.analyst_target && t.current_price) ? (t.analyst_target - t.current_price) / t.current_price : null;
+  const isRecommended = TOP20_SET.has(t.ticker);
+  return `
+    <div class="card expandable" onclick="toggleTickerDetail(${i})">
+      <div class="card-top">
+        <div class="ticker-block">
+          <span class="ticker">${t.ticker}</span>
+          ${isRecommended ? '<span class="recommended-tag">TOP 20</span>' : ''}
+        </div>
+        <div style="text-align:right;">
+          <div class="price mono">${fmtMoney(t.current_price)}</div>
+          <div class="score-badge">Score ${t.matrix_score ?? '—'}</div>
+        </div>
+      </div>
+      <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
+      <div class="card-mid">
+        <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
+        ${trendBadge(t.macd_trend)}
+      </div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value">${fmtMoney(t.ema20)}</div></div>
+        <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value">${fmtMoney(t.suggested_entry)}</div></div>
+        <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value">${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class="up">${fmtPct(upside)}</span>` : ''}</div></div>
+      </div>
+      <div class="card-detail" id="detail-${i}">
+        <div class="detail-grid">
+          <span class="dlabel">EMA20 / EMA40</span><span class="dval">${fmtMoney(t.ema20)} / ${fmtMoney(t.ema40)}</span>
+          <span class="dlabel">Support / Resistance</span><span class="dval">${fmtMoney(t.support_lower_bb)} / ${fmtMoney(t.resistance_upper_bb)}</span>
+          <span class="dlabel">Middle BB</span><span class="dval">${fmtMoney(t.middle_bb)}</span>
+          <span class="dlabel">52W High</span><span class="dval">${fmtMoney(t.high_52w_price)} (${t.high_52w_drop_pct || '—'})</span>
+          <span class="dlabel">MACD Line / Signal</span><span class="dval">${t.macd_line ?? '—'} / ${t.macd_signal ?? '—'}</span>
+          <span class="dlabel">MACD Histogram</span><span class="dval">${t.macd_histogram ?? '—'}</span>
+          <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
+          <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
+          <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
+          <span class="dlabel">Intrinsic Value</span><span class="dval">${fmtMoney(t.intrinsic_value)}</span>
+          <span class="dlabel">Margin of Safety</span><span class="dval">${t.margin_of_safety || '—'}</span>
+          <span class="dlabel">Analyst Upside</span><span class="dval">${t.analyst_upside_pct || '—'}</span>
+          <span class="dlabel">Put/Call OI Ratio</span><span class="dval">${t.put_call_ratio ?? '—'}</span>
+          <span class="dlabel">Put Wall (Floor)</span><span class="dval">${fmtMoney(t.put_wall_price)} · ${fmtCompact(t.put_wall_oi)} OI</span>
+          <span class="dlabel">Call Wall (Ceiling)</span><span class="dval">${fmtMoney(t.call_wall_price)} · ${fmtCompact(t.call_wall_oi)} OI</span>
+          <span class="dlabel">Category</span><span class="dval">${t.category || '—'}</span>
+        </div>
+      </div>
+      <div class="expand-hint">Tap for full technical detail</div>
+    </div>`;
+}
+
+// --- Holdings-style card: Portfolio tab (your actual position, not screening metrics) ---
+function holdingCard(h){
+  return `
     <div class="card">
       <div class="card-top">
         <div class="ticker-block">
-          <span class="ticker">${r.ticker}</span>
-          <span class="company">${r.company || ''}</span>
+          <span class="ticker">${h.ticker}</span>
+          <span class="company">${h.company || ''}</span>
         </div>
-        <span class="price mono">${fmtMoney(r.current_price)}</span>
+        <span class="price mono">${fmtMoney(h.current_price)}</span>
       </div>
       <div class="card-mid">
-        <span>Entry ${fmtMoney(r.suggested_entry)} · ${r.shares_needed || '—'} sh</span>
-        <span class="val">Cap ${fmtMoney(r.capital_required)}</span>
+        <span>${h.shares} sh · avg ${fmtMoney(h.avg_cost)}</span>
+        <span class="val" style="color:${h.gain_dollar >= 0 ? 'var(--green)' : 'var(--red)'}">
+          ${fmtMoney(h.gain_dollar)} (${fmtPct(h.gain_pct)})
+        </span>
       </div>
       <div class="card-bottom">
-        ${signalTag(r.signal)}
-        ${trendTag(r.macd_trend)}
-        ${r.already_held ? '<span class="tag held">Already held</span>' : ''}
+        ${trendTag(h.macd_trend)}
+        <span class="tag flat">Target ${fmtMoney(h.analyst_target)}</span>
+        <span class="tag flat">Weight ${h.weight_pct ? (h.weight_pct*100).toFixed(1)+'%' : '—'}</span>
       </div>
-    </div>`).join('');
+    </div>`;
+}
+
+function renderTabContent(){
+  const q = document.getElementById('tickerSearch').value.trim().toUpperCase();
+  const el = document.getElementById('tabContent');
+  const countEl = document.getElementById('resultCount');
+
+  if (activeTab === 'PORTFOLIO'){
+    let rows = HOLDINGS;
+    if (q) rows = rows.filter(h => (h.ticker || '').toUpperCase().includes(q) || (h.company || '').toUpperCase().includes(q));
+    countEl.textContent = `${rows.length} of ${HOLDINGS.length} holdings`;
+    if (!rows.length){
+      el.innerHTML = HOLDINGS.length ? '<div class="empty">No matches.</div>'
+        : '<div class="empty">No holdings yet — add them in Portfolio_Tracker.xlsx.</div>';
+      return;
+    }
+    el.innerHTML = rows.map(holdingCard).join('');
+    return;
+  }
+
+  let rows = ALL_TICKERS;
+  if (activeTab !== 'ALL') rows = rows.filter(t => t.signal === activeTab);
+  if (q) rows = rows.filter(t => (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
+
+  countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : rows.length} tickers`;
+  if (!rows.length){ el.innerHTML = '<div class="empty">No matches.</div>'; return; }
+
+  // Cap rendering for very broad queries so an old phone doesn't choke at once
+  const capped = rows.slice(0, 150);
+  el.innerHTML = capped.map((t, i) => screenerCard(t, i)).join('');
+  if (rows.length > 150){
+    el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
+  }
+}
+
+function toggleTickerDetail(i){
+  const el = document.getElementById('detail-' + i);
+  if (el) el.classList.toggle('open');
+}
+
+function updateTabCounts(){
+  document.getElementById('countBuy').textContent = ALL_TICKERS.filter(t => t.signal === 'BUY').length;
+  document.getElementById('countWatch').textContent = ALL_TICKERS.filter(t => t.signal === 'WATCHLIST').length;
+  document.getElementById('countSell').textContent = ALL_TICKERS.filter(t => t.signal === 'SELL').length;
+  document.getElementById('countAll').textContent = ALL_TICKERS.length;
+  document.getElementById('countPortfolio').textContent = HOLDINGS.length;
+}
+
+document.getElementById('tabNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeTab = btn.dataset.tab;
+  renderTabContent();
+});
+document.getElementById('tickerSearch').addEventListener('input', renderTabContent);
+
+// --- Scrolling ticker tape ---
+function renderTickerTape(items){
+  const track = document.getElementById('tickerTapeTrack');
+  if (!items.length){ document.getElementById('tickerTape').style.display = 'none'; return; }
+  const html = items.map(t => {
+    const dir = t.macd_trend === 'RISING' ? 'up' : t.macd_trend === 'FALLING' ? 'down' : 'flat';
+    const arrow = dir === 'up' ? '▲' : dir === 'down' ? '▼' : '—';
+    return `<span class="tape-item">
+      <span class="tape-ticker">${t.ticker}</span>
+      <span class="tape-price">${fmtMoney(t.current_price)}</span>
+      <span class="tape-arrow ${dir}">${arrow}</span>
+    </span>`;
+  }).join('');
+  // Duplicated once so the marquee loop (translateX -50%) is seamless
+  track.innerHTML = html + html;
 }
 
 async function load(){
@@ -424,27 +522,19 @@ async function load(){
     gainEl.className = 'pill ' + (p.total_gain >= 0 ? 'up' : 'down');
 
     renderAlerts(p.holdings, data.top20);
-    renderHoldings(p.holdings);
-    renderTop20(data.top20);
 
+    HOLDINGS = p.holdings;
     ALL_TICKERS = data.all_tickers || [];
-    document.getElementById('allTickersCount').textContent = ALL_TICKERS.length ? `(${ALL_TICKERS.length})` : '';
-    renderAllTickers();
+    TOP20_SET = new Set((data.top20 || []).map(r => r.ticker));
+    updateTabCounts();
+    renderTabContent();
+    renderTickerTape((data.top20 || []).length ? data.top20 : ALL_TICKERS.slice(0, 20));
   } catch(e){
     document.getElementById('updated').textContent = 'Could not load dashboard_data.json - ' + e.message;
     document.getElementById('updated').classList.add('stale');
     console.error(e);
   }
 }
-
-document.getElementById('tickerSearch').addEventListener('input', renderAllTickers);
-document.getElementById('signalFilters').addEventListener('click', (e) => {
-  if (!e.target.classList.contains('filter-chip')) return;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  e.target.classList.add('active');
-  activeSignal = e.target.dataset.signal;
-  renderAllTickers();
-});
 
 function initThemeToggle(){
   const btn = document.getElementById('themeToggle');
@@ -479,8 +569,6 @@ function initSectionCollapse(btnId, bodyId, storageKey){
     updateSymbol();
   });
 }
-initSectionCollapse('portfolioCollapseBtn', 'holdingsBody', 'market-desk-portfolio-collapsed');
-
 initThemeToggle();
 
 load();
