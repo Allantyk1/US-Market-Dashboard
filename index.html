@@ -194,6 +194,10 @@
     display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; font-size:12px;
   }
   .detail-grid .dlabel{color:var(--ink-faint);}
+  .caution-note{
+    grid-column:1 / -1; font-size:11px; color:var(--amber); background:var(--amber-dim);
+    border-radius:8px; padding:6px 10px; margin-top:2px;
+  }
   .detail-grid .dval{color:var(--ink); font-family:'IBM Plex Mono',monospace; text-align:right;}
   .expand-hint{font-size:10.5px; color:var(--ink-faint); text-align:center; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
@@ -383,12 +387,14 @@ function screenerCard(t, i){
           <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
           <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
           <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
+          ${t.rr_note ? `<div class="caution-note">⚠ ${t.rr_note}</div>` : ''}
           <span class="dlabel">Intrinsic Value</span><span class="dval">${fmtMoney(t.intrinsic_value)}</span>
           <span class="dlabel">Margin of Safety</span><span class="dval">${t.margin_of_safety || '—'}</span>
           <span class="dlabel">Analyst Upside</span><span class="dval">${t.analyst_upside_pct || '—'}</span>
           <span class="dlabel">Put/Call OI Ratio</span><span class="dval">${t.put_call_ratio ?? '—'}</span>
           <span class="dlabel">Put Wall (Floor)</span><span class="dval">${fmtMoney(t.put_wall_price)} · ${fmtCompact(t.put_wall_oi)} OI</span>
           <span class="dlabel">Call Wall (Ceiling)</span><span class="dval">${fmtMoney(t.call_wall_price)} · ${fmtCompact(t.call_wall_oi)} OI</span>
+          ${t.walls_crossed ? `<div class="caution-note">⚠ Put wall is priced above the call wall - unusual, low-confidence options data (common for thinly-traded names). Floor/Ceiling labels may not hold here.</div>` : ''}
           <span class="dlabel">Category</span><span class="dval">${t.category || '—'}</span>
         </div>
       </div>
