@@ -1,224 +1,6 @@
 {
   "generated_at": "2026-08-14T08:17:35",
   "is_real_data": true,
-  "portfolio": {
-    "total_value": 97933.64,
-    "total_cost": 97077.36,
-    "total_gain": 856.28,
-    "total_gain_pct": 0.0088,
-    "holdings": [
-      {
-        "ticker": "CLS",
-        "company": "Celestica, Inc.",
-        "shares": 12.0,
-        "avg_cost": 318.039,
-        "current_price": 347.63,
-        "market_value": 4171.56,
-        "gain_dollar": 355.09,
-        "gain_pct": 0.093,
-        "weight_pct": 0.0426,
-        "suggested_entry": 311.26,
-        "analyst_target": 473.24,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "DRAM",
-        "company": "Roundhill Memory ETF",
-        "shares": 110.0,
-        "avg_cost": 54.713,
-        "current_price": 56.93,
-        "market_value": 6262.3,
-        "gain_dollar": 243.87,
-        "gain_pct": 0.0405,
-        "weight_pct": 0.0639,
-        "suggested_entry": 49.65,
-        "analyst_target": null,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "GFS",
-        "company": "GlobalFoundries Inc.",
-        "shares": 20.0,
-        "avg_cost": 51.945,
-        "current_price": 52.69,
-        "market_value": 1053.8,
-        "gain_dollar": 14.9,
-        "gain_pct": 0.0143,
-        "weight_pct": 0.0108,
-        "suggested_entry": 48.15,
-        "analyst_target": 76.76,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "HOOD",
-        "company": "Robinhood Markets, I",
-        "shares": 50.0,
-        "avg_cost": 99.616,
-        "current_price": 99.37,
-        "market_value": 4968.5,
-        "gain_dollar": -12.3,
-        "gain_pct": -0.0025,
-        "weight_pct": 0.0507,
-        "suggested_entry": 89.6,
-        "analyst_target": 120.01,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "INTC",
-        "company": "Intel Corporation",
-        "shares": 300.0,
-        "avg_cost": 108.943,
-        "current_price": 104.56,
-        "market_value": 31368.0,
-        "gain_dollar": -1314.9,
-        "gain_pct": -0.0402,
-        "weight_pct": 0.3203,
-        "suggested_entry": 91.09,
-        "analyst_target": 114.05,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "IREN",
-        "company": "IREN LIMITED",
-        "shares": 110.0,
-        "avg_cost": 46.591,
-        "current_price": 44.76,
-        "market_value": 4923.6,
-        "gain_dollar": -201.41,
-        "gain_pct": -0.0393,
-        "weight_pct": 0.0503,
-        "suggested_entry": 36.17,
-        "analyst_target": 81.73,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "IRM",
-        "company": "Iron Mountain Incorp",
-        "shares": 20.0,
-        "avg_cost": 121.105,
-        "current_price": 126.62,
-        "market_value": 2532.4,
-        "gain_dollar": 110.3,
-        "gain_pct": 0.0455,
-        "weight_pct": 0.0259,
-        "suggested_entry": 122.36,
-        "analyst_target": 144.6,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "IWM",
-        "company": "iShares Russell 2000",
-        "shares": 2.0,
-        "avg_cost": 294.63,
-        "current_price": 303.5,
-        "market_value": 607.0,
-        "gain_dollar": 17.74,
-        "gain_pct": 0.0301,
-        "weight_pct": 0.0062,
-        "suggested_entry": 292.83,
-        "analyst_target": null,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "MU",
-        "company": "Micron Technology, I",
-        "shares": 18.021,
-        "avg_cost": 816.839,
-        "current_price": 949.83,
-        "market_value": 17116.89,
-        "gain_dollar": 2396.63,
-        "gain_pct": 0.1628,
-        "weight_pct": 0.1748,
-        "suggested_entry": 830.6,
-        "analyst_target": 1501.98,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "NVDA",
-        "company": "NVIDIA Corporation",
-        "shares": 40.1,
-        "avg_cost": 161.083,
-        "current_price": 225.3,
-        "market_value": 9034.53,
-        "gain_dollar": 2575.1,
-        "gain_pct": 0.3987,
-        "weight_pct": 0.0923,
-        "suggested_entry": 201.25,
-        "analyst_target": 302.83,
-        "macd_trend": "FLAT"
-      },
-      {
-        "ticker": "SKHY",
-        "company": "SKHY",
-        "shares": 25.0,
-        "avg_cost": 155.862,
-        "current_price": 146.76,
-        "market_value": null,
-        "gain_dollar": null,
-        "gain_pct": null,
-        "weight_pct": null,
-        "suggested_entry": null,
-        "analyst_target": null,
-        "macd_trend": "N/A"
-      },
-      {
-        "ticker": "SOFI",
-        "company": "SoFi Technologies, I",
-        "shares": 200.0,
-        "avg_cost": 22.901,
-        "current_price": 18.43,
-        "market_value": 3686.0,
-        "gain_dollar": -894.2,
-        "gain_pct": -0.1952,
-        "weight_pct": 0.0376,
-        "suggested_entry": 16.57,
-        "analyst_target": 19.92,
-        "macd_trend": "FALLING"
-      },
-      {
-        "ticker": "SOXL",
-        "company": "Direxion Daily Semic",
-        "shares": 25.0,
-        "avg_cost": 133.145,
-        "current_price": 145.36,
-        "market_value": 3634.0,
-        "gain_dollar": 305.37,
-        "gain_pct": 0.0917,
-        "weight_pct": 0.0371,
-        "suggested_entry": 114.89,
-        "analyst_target": null,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "VOO",
-        "company": "Vanguard S&P 500 ETF",
-        "shares": 11.0817,
-        "avg_cost": 607.159,
-        "current_price": 714.95,
-        "market_value": 7922.86,
-        "gain_dollar": 1194.51,
-        "gain_pct": 0.1775,
-        "weight_pct": 0.0809,
-        "suggested_entry": 682.28,
-        "analyst_target": null,
-        "macd_trend": "FALLING"
-      },
-      {
-        "ticker": "CMG",
-        "company": "Chipotle Mexican Gri",
-        "shares": 20.0,
-        "avg_cost": 34.504,
-        "current_price": 32.61,
-        "market_value": 652.2,
-        "gain_dollar": -37.88,
-        "gain_pct": -0.0549,
-        "weight_pct": 0.0067,
-        "suggested_entry": 30.88,
-        "analyst_target": 43.95,
-        "macd_trend": "FALLING"
-      }
-    ]
-  },
   "top20": [
     {
       "ticker": "LULU",
@@ -230,8 +12,7 @@
       "analyst_target": 127.92,
       "macd_trend": "FALLING",
       "shares_needed": 294,
-      "capital_required": 33418.98,
-      "already_held": false
+      "capital_required": 33418.98
     },
     {
       "ticker": "CSCO",
@@ -243,8 +24,7 @@
       "analyst_target": 135.64,
       "macd_trend": "FALLING",
       "shares_needed": 304,
-      "capital_required": 33370.08,
-      "already_held": false
+      "capital_required": 33370.08
     },
     {
       "ticker": "STX",
@@ -256,8 +36,7 @@
       "analyst_target": 1115.87,
       "macd_trend": "RISING",
       "shares_needed": 42,
-      "capital_required": 33861.66,
-      "already_held": false
+      "capital_required": 33861.66
     },
     {
       "ticker": "OTIS",
@@ -269,8 +48,7 @@
       "analyst_target": 89.42,
       "macd_trend": "FALLING",
       "shares_needed": 467,
-      "capital_required": 33399.84,
-      "already_held": false
+      "capital_required": 33399.84
     },
     {
       "ticker": "GDDY",
@@ -282,8 +60,7 @@
       "analyst_target": 104.8,
       "macd_trend": "RISING",
       "shares_needed": 376,
-      "capital_required": 33339.92,
-      "already_held": false
+      "capital_required": 33339.92
     },
     {
       "ticker": "TPR",
@@ -295,8 +72,7 @@
       "analyst_target": 167.95,
       "macd_trend": "FALLING",
       "shares_needed": 261,
-      "capital_required": 33342.75,
-      "already_held": false
+      "capital_required": 33342.75
     },
     {
       "ticker": "IDXX",
@@ -308,8 +84,7 @@
       "analyst_target": 698.92,
       "macd_trend": "FALLING",
       "shares_needed": 62,
-      "capital_required": 33875.56,
-      "already_held": false
+      "capital_required": 33875.56
     },
     {
       "ticker": "ULTA",
@@ -321,8 +96,7 @@
       "analyst_target": 623.42,
       "macd_trend": "FALLING",
       "shares_needed": 70,
-      "capital_required": 33448.799999999996,
-      "already_held": false
+      "capital_required": 33448.799999999996
     },
     {
       "ticker": "PDD",
@@ -334,8 +108,7 @@
       "analyst_target": 116.6,
       "macd_trend": "FALLING",
       "shares_needed": 406,
-      "capital_required": 33340.72,
-      "already_held": false
+      "capital_required": 33340.72
     },
     {
       "ticker": "JD",
@@ -347,8 +120,7 @@
       "analyst_target": 39.72,
       "macd_trend": "FALLING",
       "shares_needed": 1147,
-      "capital_required": 33354.759999999995,
-      "already_held": false
+      "capital_required": 33354.759999999995
     },
     {
       "ticker": "NTES",
@@ -360,8 +132,7 @@
       "analyst_target": 161.89,
       "macd_trend": "FALLING",
       "shares_needed": 278,
-      "capital_required": 33410.04,
-      "already_held": false
+      "capital_required": 33410.04
     },
     {
       "ticker": "VTRS",
@@ -373,8 +144,7 @@
       "analyst_target": 18.5,
       "macd_trend": "FALLING",
       "shares_needed": 2097,
-      "capital_required": 33342.3,
-      "already_held": false
+      "capital_required": 33342.3
     },
     {
       "ticker": "WELL",
@@ -386,8 +156,7 @@
       "analyst_target": 255.5,
       "macd_trend": "FLAT",
       "shares_needed": 147,
-      "capital_required": 33530.7,
-      "already_held": false
+      "capital_required": 33530.7
     },
     {
       "ticker": "HST",
@@ -399,8 +168,7 @@
       "analyst_target": 25.12,
       "macd_trend": "FALLING",
       "shares_needed": 1491,
-      "capital_required": 33338.76,
-      "already_held": false
+      "capital_required": 33338.76
     },
     {
       "ticker": "TYL",
@@ -412,8 +180,7 @@
       "analyst_target": 426.64,
       "macd_trend": "RISING",
       "shares_needed": 111,
-      "capital_required": 33402.12,
-      "already_held": false
+      "capital_required": 33402.12
     },
     {
       "ticker": "RPD",
@@ -425,8 +192,7 @@
       "analyst_target": 11.71,
       "macd_trend": "RISING",
       "shares_needed": 3304,
-      "capital_required": 33337.36,
-      "already_held": false
+      "capital_required": 33337.36
     },
     {
       "ticker": "ADSK",
@@ -438,8 +204,7 @@
       "analyst_target": 312.75,
       "macd_trend": "FALLING",
       "shares_needed": 152,
-      "capital_required": 33386.8,
-      "already_held": false
+      "capital_required": 33386.8
     },
     {
       "ticker": "JBHT",
@@ -451,8 +216,7 @@
       "analyst_target": 305.45,
       "macd_trend": "RISING",
       "shares_needed": 126,
-      "capital_required": 33599.16,
-      "already_held": false
+      "capital_required": 33599.16
     },
     {
       "ticker": "PCG",
@@ -464,8 +228,7 @@
       "analyst_target": 22.78,
       "macd_trend": "RISING",
       "shares_needed": 1946,
-      "capital_required": 33334.979999999996,
-      "already_held": false
+      "capital_required": 33334.979999999996
     },
     {
       "ticker": "DOCU",
@@ -477,8 +240,7 @@
       "analyst_target": 59.33,
       "macd_trend": "FLAT",
       "shares_needed": 633,
-      "capital_required": 33384.42,
-      "already_held": false
+      "capital_required": 33384.42
     }
   ],
   "all_tickers": [
