@@ -199,6 +199,9 @@
     border-radius:8px; padding:6px 10px; margin-top:2px;
   }
   .detail-grid .dval{color:var(--ink); font-family:'IBM Plex Mono',monospace; text-align:right;}
+  .chart-panels{display:flex; flex-direction:column; gap:14px; margin-bottom:14px;}
+  .chart-box{background:var(--card-bg, rgba(255,255,255,0.02)); border:1px solid var(--line, rgba(255,255,255,0.08)); border-radius:10px; padding:10px;}
+  .chart-loading{font-size:12px; color:var(--ink-faint); text-align:center; padding:20px 0;}
   .expand-hint{font-size:10.5px; color:var(--ink-faint); text-align:center; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
 
@@ -232,6 +235,7 @@
     if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -376,7 +380,13 @@ function screenerCard(t, i){
         <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value">${fmtMoney(t.suggested_entry)}</div></div>
         <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value">${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class="up">${fmtPct(upside)}</span>` : ''}</div></div>
       </div>
-      <div class="card-detail" id="detail-${i}">
+      <div class="card-detail" id="detail-${i}" data-ticker="${t.ticker}" data-loaded="0">
+        <div class="chart-panels" id="charts-${i}">
+          <div class="chart-box"><canvas id="chart-macd-${i}" height="140"></canvas></div>
+          <div class="chart-box"><canvas id="chart-price-${i}" height="160"></canvas></div>
+          <div class="chart-box"><canvas id="chart-rsi-${i}" height="120"></canvas></div>
+          <div class="chart-box"><canvas id="chart-vol-${i}" height="120"></canvas></div>
+        </div>
         <div class="detail-grid">
           <span class="dlabel">EMA20 / EMA40</span><span class="dval">${fmtMoney(t.ema20)} / ${fmtMoney(t.ema40)}</span>
           <span class="dlabel">Support / Resistance</span><span class="dval">${fmtMoney(t.support_lower_bb)} / ${fmtMoney(t.resistance_upper_bb)}</span>
@@ -462,7 +472,139 @@ function renderTabContent(){
 
 function toggleTickerDetail(i){
   const el = document.getElementById('detail-' + i);
-  if (el) el.classList.toggle('open');
+  if (!el) return;
+  el.classList.toggle('open');
+  if (el.classList.contains('open') && el.dataset.loaded !== '1'){
+    el.dataset.loaded = '1'; // only fetch + render once per card, not every re-open
+    loadTickerCharts(i, el.dataset.ticker);
+  }
+}
+
+// Chart.js instances keyed by card index, so we can destroy/rebuild cleanly
+// if the same card index gets re-rendered after a search/filter change.
+const CHART_INSTANCES = {};
+
+async function loadTickerCharts(i, ticker){
+  const panelsEl = document.getElementById('charts-' + i);
+  if (!panelsEl) return;
+  try {
+    const res = await fetch(`history/${ticker}.json`);
+    if (!res.ok) throw new Error('no history file');
+    const d = await res.json();
+    renderMacdChart(i, d);
+    renderPriceChart(i, d);
+    renderRsiChart(i, d);
+    renderVolumeChart(i, d);
+  } catch (e){
+    panelsEl.innerHTML = '<div class="chart-loading">Chart history unavailable for this ticker.</div>';
+  }
+}
+
+function destroyChart(key){
+  if (CHART_INSTANCES[key]){ CHART_INSTANCES[key].destroy(); delete CHART_INSTANCES[key]; }
+}
+
+function renderMacdChart(i, d){
+  const key = 'macd-' + i;
+  destroyChart(key);
+  const ctx = document.getElementById('chart-macd-' + i);
+  if (!ctx) return;
+  CHART_INSTANCES[key] = new Chart(ctx, {
+    data: {
+      labels: d.labels,
+      datasets: [
+        { type:'bar', label:'Histogram', data: d.histogram,
+          backgroundColor: (d.histogram||[]).map(v => (v ?? 0) >= 0 ? 'rgba(34,197,94,0.55)' : 'rgba(239,68,68,0.55)'),
+          borderRadius:2, order:2 },
+        { type:'line', label:'MACD', data: d.macd, borderColor:'#38bdf8', borderWidth:2, pointRadius:0, tension:0.25, order:1 },
+        { type:'line', label:'Signal', data: d.signal, borderColor:'#f59e0b', borderWidth:2, pointRadius:0, tension:0.25, order:1 }
+      ]
+    },
+    options: baseChartOptions('MACD')
+  });
+}
+
+function renderPriceChart(i, d){
+  const key = 'price-' + i;
+  destroyChart(key);
+  const ctx = document.getElementById('chart-price-' + i);
+  if (!ctx) return;
+  const flat = (v) => (d.labels||[]).map(() => v);
+  const lastVal = (arr) => (arr && arr.length) ? arr[arr.length - 1] : null;
+  CHART_INSTANCES[key] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label:'Price', data: d.price, borderColor:'#e5e7eb', borderWidth:2.5, pointRadius:0, tension:0.2, order:1 },
+        { label:'EMA20', data: d.ema20, borderColor:'#38bdf8', borderWidth:1.5, pointRadius:0, tension:0.2, order:2 },
+        { label:'EMA40', data: d.ema40, borderColor:'#a78bfa', borderWidth:1.5, pointRadius:0, tension:0.2, order:2 },
+        { label:'Support', data: flat(lastVal(d.lower_bb)), borderColor:'rgba(34,197,94,0.6)', borderWidth:1, borderDash:[6,4], pointRadius:0, order:3 },
+        { label:'Resistance', data: flat(lastVal(d.upper_bb)), borderColor:'rgba(239,68,68,0.6)', borderWidth:1, borderDash:[6,4], pointRadius:0, order:3 },
+        { label:'Middle BB', data: flat(lastVal(d.middle_bb)), borderColor:'rgba(245,158,11,0.5)', borderWidth:1, borderDash:[2,3], pointRadius:0, order:3 }
+      ]
+    },
+    options: baseChartOptions('Price / EMA', (v) => `$${v}`)
+  });
+}
+
+function renderRsiChart(i, d){
+  const key = 'rsi-' + i;
+  destroyChart(key);
+  const ctx = document.getElementById('chart-rsi-' + i);
+  if (!ctx) return;
+  const flat = (v) => (d.labels||[]).map(() => v);
+  CHART_INSTANCES[key] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label:'RSI', data: d.rsi, borderColor:'#38bdf8', borderWidth:2, pointRadius:0, tension:0.25 },
+        { label:'Overbought', data: flat(70), borderColor:'rgba(239,68,68,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0 },
+        { label:'Oversold', data: flat(30), borderColor:'rgba(34,197,94,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0 }
+      ]
+    },
+    options: { ...baseChartOptions('RSI'), scales: { ...baseChartOptions('RSI').scales, y: { min:0, max:100, ticks:{ color:'#6b7280' }, grid:{ color:'rgba(255,255,255,0.06)' } } } }
+  });
+}
+
+function renderVolumeChart(i, d){
+  const key = 'vol-' + i;
+  destroyChart(key);
+  const ctx = document.getElementById('chart-vol-' + i);
+  if (!ctx) return;
+  const sma = (d.vol_200sma||[]).filter(v => v != null);
+  const smaLast = sma.length ? sma[sma.length - 1] : null;
+  const flat = (v) => (d.labels||[]).map(() => v);
+  CHART_INSTANCES[key] = new Chart(ctx, {
+    data: {
+      labels: d.labels,
+      datasets: [
+        { type:'bar', label:'Volume (M)', data: d.volume,
+          backgroundColor: (d.volume||[]).map(v => smaLast != null && (v ?? 0) >= smaLast ? 'rgba(34,197,94,0.55)' : 'rgba(107,114,128,0.5)'),
+          borderRadius:3, order:2 },
+        { type:'line', label:'200 SMA', data: flat(smaLast), borderColor:'#f59e0b', borderWidth:1.5, borderDash:[6,4], pointRadius:0, order:1 }
+      ]
+    },
+    options: baseChartOptions('Volume', (v) => `${v}M`)
+  });
+}
+
+function baseChartOptions(title, yTickFmt){
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode:'index', intersect:false },
+    plugins: {
+      legend: { labels:{ color:'#9ca3af', usePointStyle:true, boxWidth:8, font:{ size:10 } } },
+      tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb' },
+      title: { display:true, text:title, color:'#9ca3af', font:{ size:11 }, padding:{ bottom:6 } }
+    },
+    scales: {
+      x: { ticks:{ color:'#6b7280', maxTicksLimit:6, font:{ size:9 } }, grid:{ color:'rgba(255,255,255,0.04)' } },
+      y: { ticks:{ color:'#6b7280', font:{ size:9 }, callback: yTickFmt || undefined }, grid:{ color:'rgba(255,255,255,0.06)' } }
+    }
+  };
 }
 
 function updateTabCounts(){
