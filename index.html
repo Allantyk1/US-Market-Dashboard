@@ -205,6 +205,17 @@
   .expand-hint{font-size:10.5px; color:var(--ink-faint); text-align:center; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
 
+  .back-to-list-btn{
+    display:none; align-items:center; gap:6px; position:fixed; left:50%; bottom:18px;
+    transform:translateX(-50%); z-index:50; background:var(--panel); color:var(--ink);
+    border:1px solid var(--line); border-radius:999px; padding:11px 20px;
+    font-family:'IBM Plex Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+  }
+  .back-to-list-btn.visible{display:flex;}
+  .back-to-list-btn:hover{border-color:var(--amber); color:var(--amber);}
+  .back-to-list-btn .arrow{font-size:15px;}
+
   .search-row{display:flex; gap:8px; margin-bottom:10px;}
   .search-input{
     flex:1; background:var(--panel); border:1px solid var(--line); border-radius:10px;
@@ -238,6 +249,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
+
+<button id="backToListBtn" class="back-to-list-btn" onclick="backToList()" aria-label="Back to all stocks list">
+  <span class="arrow">←</span> Back to list
+</button>
 
 <header>
   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
@@ -442,6 +457,9 @@ function renderTabContent(){
   const el = document.getElementById('tabContent');
   const countEl = document.getElementById('resultCount');
 
+  // Any re-render (tab switch, search) replaces every card, so open detail state goes with it.
+  document.getElementById('backToListBtn').classList.remove('visible');
+
   if (activeTab === 'PORTFOLIO'){
     let rows = HOLDINGS;
     if (q) rows = rows.filter(h => (h.ticker || '').toUpperCase().includes(q) || (h.company || '').toUpperCase().includes(q));
@@ -468,6 +486,8 @@ function renderTabContent(){
   if (rows.length > 150){
     el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
   }
+  // A fresh render replaces every card, so any open detail state is gone too - hide the button.
+  updateBackButton();
 }
 
 function toggleTickerDetail(i){
@@ -478,6 +498,19 @@ function toggleTickerDetail(i){
     el.dataset.loaded = '1'; // only fetch + render once per card, not every re-open
     loadTickerCharts(i, el.dataset.ticker);
   }
+  updateBackButton();
+}
+
+// --- Floating "Back to list" button: shows whenever a stock's detail is open ---
+function updateBackButton(){
+  const anyOpen = !!document.querySelector('.card-detail.open');
+  document.getElementById('backToListBtn').classList.toggle('visible', anyOpen);
+}
+
+function backToList(){
+  document.querySelectorAll('.card-detail.open').forEach(el => el.classList.remove('open'));
+  updateBackButton();
+  document.getElementById('tabContent').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 // Chart.js instances keyed by card index, so we can destroy/rebuild cleanly
