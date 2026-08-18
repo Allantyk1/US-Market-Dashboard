@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-18T08:07:44",
+  "generated_at": "2026-08-18T08:56:51",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 93110.28,
+    "total_value": 95746.68,
     "total_cost": 94461.77,
-    "total_gain": -1351.49,
-    "total_gain_pct": -0.0143,
+    "total_gain": 1284.91,
+    "total_gain_pct": 0.0136,
     "holdings": [
       {
         "ticker": "DRAM",
@@ -16,7 +16,7 @@
         "market_value": 6642.9,
         "gain_dollar": 624.47,
         "gain_pct": 0.1038,
-        "weight_pct": 0.0713,
+        "weight_pct": 0.0694,
         "suggested_entry": 50.61,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -30,7 +30,7 @@
         "market_value": 1068.8,
         "gain_dollar": 29.9,
         "gain_pct": 0.0288,
-        "weight_pct": 0.0115,
+        "weight_pct": 0.0112,
         "suggested_entry": 48.59,
         "analyst_target": 76.76,
         "macd_trend": "RISING"
@@ -44,7 +44,7 @@
         "market_value": 4812.5,
         "gain_dollar": -168.3,
         "gain_pct": -0.0338,
-        "weight_pct": 0.0517,
+        "weight_pct": 0.0503,
         "suggested_entry": 88.55,
         "analyst_target": 120.01,
         "macd_trend": "RISING"
@@ -58,7 +58,7 @@
         "market_value": 31047.0,
         "gain_dollar": -1635.9,
         "gain_pct": -0.0501,
-        "weight_pct": 0.3334,
+        "weight_pct": 0.3243,
         "suggested_entry": 90.78,
         "analyst_target": 114.88,
         "macd_trend": "RISING"
@@ -72,7 +72,7 @@
         "market_value": 4939.0,
         "gain_dollar": -186.01,
         "gain_pct": -0.0363,
-        "weight_pct": 0.053,
+        "weight_pct": 0.0516,
         "suggested_entry": 36.46,
         "analyst_target": 81.73,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 1410.0,
         "gain_dollar": 43.05,
         "gain_pct": 0.0315,
-        "weight_pct": 0.0151,
+        "weight_pct": 0.0147,
         "suggested_entry": 7.28,
         "analyst_target": null,
         "macd_trend": "FLAT"
@@ -100,7 +100,7 @@
         "market_value": 912.18,
         "gain_dollar": 18.8,
         "gain_pct": 0.021,
-        "weight_pct": 0.0098,
+        "weight_pct": 0.0095,
         "suggested_entry": 293.08,
         "analyst_target": null,
         "macd_trend": "FLAT"
@@ -114,7 +114,7 @@
         "market_value": 877.65,
         "gain_dollar": 61.65,
         "gain_pct": 0.0756,
-        "weight_pct": 0.0094,
+        "weight_pct": 0.0092,
         "suggested_entry": 43.39,
         "analyst_target": 75.28,
         "macd_trend": "FLAT"
@@ -128,7 +128,7 @@
         "market_value": 17221.0,
         "gain_dollar": 3317.58,
         "gain_pct": 0.2386,
-        "weight_pct": 0.185,
+        "weight_pct": 0.1799,
         "suggested_entry": 850.73,
         "analyst_target": 1501.98,
         "macd_trend": "RISING"
@@ -142,7 +142,7 @@
         "market_value": 9022.9,
         "gain_dollar": 2563.47,
         "gain_pct": 0.3969,
-        "weight_pct": 0.0969,
+        "weight_pct": 0.0942,
         "suggested_entry": 201.56,
         "analyst_target": 302.83,
         "macd_trend": "FALLING"
@@ -170,7 +170,7 @@
         "market_value": 3662.0,
         "gain_dollar": -918.2,
         "gain_pct": -0.2005,
-        "weight_pct": 0.0393,
+        "weight_pct": 0.0382,
         "suggested_entry": 16.55,
         "analyst_target": 19.92,
         "macd_trend": "FLAT"
@@ -184,7 +184,7 @@
         "market_value": 2272.95,
         "gain_dollar": 275.77,
         "gain_pct": 0.1381,
-        "weight_pct": 0.0244,
+        "weight_pct": 0.0237,
         "suggested_entry": 116.98,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -198,24 +198,24 @@
         "market_value": 7871.0,
         "gain_dollar": 1142.65,
         "gain_pct": 0.1698,
-        "weight_pct": 0.0845,
+        "weight_pct": 0.0822,
         "suggested_entry": 681.91,
         "analyst_target": null,
         "macd_trend": "FALLING"
       },
       {
-        "ticker": "UCCT",
-        "company": "UCCT",
+        "ticker": "UCTT",
+        "company": "Ultra Clean Holdings",
         "shares": 30.0,
         "avg_cost": 87.588,
-        "current_price": null,
-        "market_value": null,
-        "gain_dollar": null,
-        "gain_pct": null,
-        "weight_pct": null,
-        "suggested_entry": null,
-        "analyst_target": null,
-        "macd_trend": "N/A"
+        "current_price": 87.88,
+        "market_value": 2636.4,
+        "gain_dollar": 8.76,
+        "gain_pct": 0.0033,
+        "weight_pct": 0.0275,
+        "suggested_entry": 76.78,
+        "analyst_target": 137.0,
+        "macd_trend": "RISING"
       },
       {
         "ticker": "CMG",
@@ -226,7 +226,7 @@
         "market_value": 1350.4,
         "gain_dollar": 3.76,
         "gain_pct": 0.0028,
-        "weight_pct": 0.0145,
+        "weight_pct": 0.0141,
         "suggested_entry": 31.28,
         "analyst_target": 43.8,
         "macd_trend": "RISING"
