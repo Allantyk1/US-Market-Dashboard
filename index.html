@@ -395,7 +395,7 @@ function screenerCard(t, i){
         <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value">${fmtMoney(t.suggested_entry)}</div></div>
         <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value">${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class="up">${fmtPct(upside)}</span>` : ''}</div></div>
       </div>
-      <div class="card-detail" id="detail-${i}" data-ticker="${t.ticker}" data-loaded="0">
+      <div class="card-detail" id="detail-${i}" data-ticker="${t.ticker}" data-loaded="0" onclick="event.stopPropagation()">
         <div class="chart-panels" id="charts-${i}">
           <div class="chart-box"><canvas id="chart-macd-${i}" height="140"></canvas></div>
           <div class="chart-box"><canvas id="chart-price-${i}" height="160"></canvas></div>
