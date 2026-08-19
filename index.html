@@ -493,10 +493,12 @@ function renderTabContent(){
 function toggleTickerDetail(i){
   const el = document.getElementById('detail-' + i);
   if (!el) return;
-  el.classList.toggle('open');
-  if (el.classList.contains('open') && el.dataset.loaded !== '1'){
-    el.dataset.loaded = '1'; // only fetch + render once per card, not every re-open
-    loadTickerCharts(i, el.dataset.ticker);
+  if (!el.classList.contains('open')){
+    el.classList.add('open');
+    if (el.dataset.loaded !== '1'){
+      el.dataset.loaded = '1'; // only fetch + render once per card, not every re-open
+      loadTickerCharts(i, el.dataset.ticker);
+    }
   }
   updateBackButton();
 }
