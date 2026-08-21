@@ -442,6 +442,32 @@ function destroyChart(key){
   if (CHART_INSTANCES[key]){ CHART_INSTANCES[key].destroy(); delete CHART_INSTANCES[key]; }
 }
 
+// Chart.js's default touch events (touchstart/touchmove) never include
+// touchend, so on mobile the tooltip stays pinned after you lift your
+// finger - it only clears on the next tap. Wire the canvas itself to
+// dismiss the tooltip the moment touch contact ends, same as a normal
+// press-and-release. Looks up CHART_INSTANCES[key] fresh each time (not a
+// closed-over chart reference) so it keeps working after destroyChart()
+// swaps in a new Chart instance on the same canvas element, and the
+// _tooltipDismissBound flag stops listeners from stacking up on re-render.
+function attachTooltipDismiss(key){
+  const chart = CHART_INSTANCES[key];
+  if (!chart) return;
+  const canvas = chart.canvas;
+  if (canvas._tooltipDismissBound) return;
+  canvas._tooltipDismissBound = true;
+  const hide = () => {
+    const c = CHART_INSTANCES[key];
+    if (!c) return;
+    c.tooltip?.setActiveElements([], { x: 0, y: 0 });
+    c.setActiveElements([]);
+    c.update();
+  };
+  canvas.addEventListener('touchend', hide, { passive: true });
+  canvas.addEventListener('touchcancel', hide, { passive: true });
+  canvas.addEventListener('pointerup', (e) => { if (e.pointerType === 'touch') hide(); }, { passive: true });
+}
+
 function renderMacdChart(i, d){
   const key = 'macd-' + i;
   destroyChart(key);
@@ -460,6 +486,7 @@ function renderMacdChart(i, d){
     },
     options: baseChartOptions('MACD')
   });
+  attachTooltipDismiss(key);
 }
 
 function renderPriceChart(i, d){
@@ -484,6 +511,7 @@ function renderPriceChart(i, d){
     },
     options: baseChartOptions('Price / EMA', (v) => `$${v}`)
   });
+  attachTooltipDismiss(key);
 }
 
 function renderRsiChart(i, d){
@@ -504,6 +532,7 @@ function renderRsiChart(i, d){
     },
     options: { ...baseChartOptions('RSI'), scales: { ...baseChartOptions('RSI').scales, y: { min:0, max:100, ticks:{ color:'#6b7280' }, grid:{ color:'rgba(255,255,255,0.06)' } } } }
   });
+  attachTooltipDismiss(key);
 }
 
 function renderVolumeChart(i, d){
@@ -526,6 +555,7 @@ function renderVolumeChart(i, d){
     },
     options: baseChartOptions('Volume', (v) => `${v}M`)
   });
+  attachTooltipDismiss(key);
 }
 
 function baseChartOptions(title, yTickFmt){
