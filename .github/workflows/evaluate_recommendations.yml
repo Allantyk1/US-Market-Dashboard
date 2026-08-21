@@ -1,0 +1,33 @@
+name: Evaluate Recommendations
+
+on:
+  schedule:
+    # Runs 06:00 UTC on the 1st of every month
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+    # Lets you trigger it manually anytime from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run evaluate_recommendations.py
+        run: python evaluate_recommendations.py
+
+      - name: Commit and push scorecard if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add recommendation_scorecard.json recommendation_scorecard.csv 2>/dev/null || true
+          git diff --cached --quiet && echo "No scorecard changes to commit" || (git commit -m "Automated recommendation scorecard update $(date -u +'%Y-%m-%d')" && git push)
