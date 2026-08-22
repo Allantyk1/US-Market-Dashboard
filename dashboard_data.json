@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-22T09:07:12",
+  "generated_at": "2026-08-22T11:03:20",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 93684.74,
-    "total_cost": 97648.21,
-    "total_gain": -3963.47,
-    "total_gain_pct": -0.0406,
+    "total_value": 93022.24,
+    "total_cost": 97108.91,
+    "total_gain": -4086.67,
+    "total_gain_pct": -0.0421,
     "holdings": [
       {
         "ticker": "DRAM",
@@ -16,7 +16,7 @@
         "market_value": 6344.8,
         "gain_dollar": 326.37,
         "gain_pct": 0.0542,
-        "weight_pct": 0.0677,
+        "weight_pct": 0.0682,
         "suggested_entry": 49.85,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -30,7 +30,7 @@
         "market_value": 1779.3,
         "gain_dollar": -7.75,
         "gain_pct": -0.0043,
-        "weight_pct": 0.019,
+        "weight_pct": 0.0191,
         "suggested_entry": 290.21,
         "analyst_target": 473.26,
         "macd_trend": "FALLING"
@@ -44,7 +44,7 @@
         "market_value": 1441.5,
         "gain_dollar": -96.69,
         "gain_pct": -0.0629,
-        "weight_pct": 0.0154,
+        "weight_pct": 0.0155,
         "suggested_entry": 46.86,
         "analyst_target": 76.76,
         "macd_trend": "FALLING"
@@ -52,13 +52,13 @@
       {
         "ticker": "HOOD",
         "company": "Robinhood Markets, I",
-        "shares": 50.0,
+        "shares": 40.0,
         "avg_cost": 99.616,
         "current_price": 108.13,
-        "market_value": 5406.5,
-        "gain_dollar": 425.7,
+        "market_value": 4325.2,
+        "gain_dollar": 340.56,
         "gain_pct": 0.0855,
-        "weight_pct": 0.0577,
+        "weight_pct": 0.0465,
         "suggested_entry": 92.86,
         "analyst_target": 119.93,
         "macd_trend": "RISING"
@@ -72,7 +72,7 @@
         "market_value": 27021.0,
         "gain_dollar": -5661.9,
         "gain_pct": -0.1732,
-        "weight_pct": 0.2884,
+        "weight_pct": 0.2905,
         "suggested_entry": 85.56,
         "analyst_target": 114.88,
         "macd_trend": "FALLING"
@@ -80,13 +80,13 @@
       {
         "ticker": "IREN",
         "company": "IREN LIMITED",
-        "shares": 110.0,
-        "avg_cost": 46.591,
+        "shares": 120.0,
+        "avg_cost": 46.382,
         "current_price": 41.88,
-        "market_value": 4606.8,
-        "gain_dollar": -518.21,
-        "gain_pct": -0.1011,
-        "weight_pct": 0.0492,
+        "market_value": 5025.6,
+        "gain_dollar": -540.24,
+        "gain_pct": -0.0971,
+        "weight_pct": 0.054,
         "suggested_entry": 35.56,
         "analyst_target": 80.19,
         "macd_trend": "FALLING"
@@ -100,7 +100,7 @@
         "market_value": 1237.5,
         "gain_dollar": -129.45,
         "gain_pct": -0.0947,
-        "weight_pct": 0.0132,
+        "weight_pct": 0.0133,
         "suggested_entry": 7.03,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -114,7 +114,7 @@
         "market_value": 899.88,
         "gain_dollar": 6.5,
         "gain_pct": 0.0073,
-        "weight_pct": 0.0096,
+        "weight_pct": 0.0097,
         "suggested_entry": 293.02,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -128,7 +128,7 @@
         "market_value": 900.75,
         "gain_dollar": 83.25,
         "gain_pct": 0.1018,
-        "weight_pct": 0.0096,
+        "weight_pct": 0.0097,
         "suggested_entry": 44.74,
         "analyst_target": 75.38,
         "macd_trend": "FALLING"
@@ -142,7 +142,7 @@
         "market_value": 1220.56,
         "gain_dollar": -17.88,
         "gain_pct": -0.0144,
-        "weight_pct": 0.013,
+        "weight_pct": 0.0131,
         "suggested_entry": 145.69,
         "analyst_target": 211.57,
         "macd_trend": "RISING"
@@ -156,7 +156,7 @@
         "market_value": 16437.29,
         "gain_dollar": 2549.31,
         "gain_pct": 0.1836,
-        "weight_pct": 0.1755,
+        "weight_pct": 0.1767,
         "suggested_entry": 836.47,
         "analyst_target": 1521.62,
         "macd_trend": "FALLING"
@@ -170,7 +170,7 @@
         "market_value": 8610.27,
         "gain_dollar": 2895.58,
         "gain_pct": 0.5067,
-        "weight_pct": 0.0919,
+        "weight_pct": 0.0926,
         "suggested_entry": 198.94,
         "analyst_target": 304.12,
         "macd_trend": "FALLING"
@@ -198,7 +198,7 @@
         "market_value": 3782.0,
         "gain_dollar": -833.8,
         "gain_pct": -0.1806,
-        "weight_pct": 0.0404,
+        "weight_pct": 0.0407,
         "suggested_entry": 16.94,
         "analyst_target": 19.98,
         "macd_trend": "RISING"
@@ -207,12 +207,12 @@
         "ticker": "SOXL",
         "company": "Direxion Daily Semic",
         "shares": 35.0,
-        "avg_cost": 126.26,
+        "avg_cost": 126.718,
         "current_price": 120.6,
         "market_value": 4221.0,
-        "gain_dollar": -198.1,
-        "gain_pct": -0.0448,
-        "weight_pct": 0.0451,
+        "gain_dollar": -214.13,
+        "gain_pct": -0.0483,
+        "weight_pct": 0.0454,
         "suggested_entry": 106.64,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -226,7 +226,7 @@
         "market_value": 1205.0,
         "gain_dollar": 7.4,
         "gain_pct": 0.0062,
-        "weight_pct": 0.0129,
+        "weight_pct": 0.013,
         "suggested_entry": 57.06,
         "analyst_target": 80.18,
         "macd_trend": "RISING"
@@ -240,7 +240,7 @@
         "market_value": 7094.59,
         "gain_dollar": 973.4,
         "gain_pct": 0.159,
-        "weight_pct": 0.0757,
+        "weight_pct": 0.0763,
         "suggested_entry": 684.5,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -254,7 +254,7 @@
         "market_value": 1476.0,
         "gain_dollar": 129.36,
         "gain_pct": 0.0961,
-        "weight_pct": 0.0158,
+        "weight_pct": 0.0159,
         "suggested_entry": 32.78,
         "analyst_target": 43.8,
         "macd_trend": "RISING"
