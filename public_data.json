@@ -201,7 +201,7 @@
       "matrix_score": 3,
       "current_price": 5.46,
       "suggested_entry": -3.21,
-      "analyst_target": NaN,
+      "analyst_target": null,
       "macd_trend": "FALLING",
       "shares_needed": null,
       "capital_required": null
