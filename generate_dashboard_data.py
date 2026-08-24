@@ -18,6 +18,7 @@ JSON_FILE = "top20_calculator_data.json"
 PORTFOLIO_FILE = "Portfolio_Tracker.xlsx"
 REAL_DATA_FILE = "Complete_US_Market_Report.xlsx"
 OUTPUT_FILE = "dashboard_data.json"
+PUBLIC_OUTPUT_FILE = "public_data.json"
 
 
 def _safe_float(v):
@@ -87,6 +88,7 @@ def load_all_tickers():
             "vol_200sma": r.get("Vol 200SMA"),
             "volume_strength": r.get("Volume Driven Strength"),
             "rr_ratio": _safe_float(r.get("R/R Ratio")),
+            "rr_note": r.get("R/R Ratio Note"),
             "intrinsic_value": _safe_float(r.get("Intrinsic (Fair) Value")),
             "margin_of_safety": r.get("Margin of Safety"),
             "analyst_target": _safe_float(r.get("Analyst Target Price")),
@@ -96,6 +98,7 @@ def load_all_tickers():
             "put_wall_oi": r.get("Put Wall Open Interest Volume"),
             "call_wall_price": _safe_float(r.get("Whale Call Wall Price (Ceiling)")),
             "call_wall_oi": r.get("Call Wall Open Interest Volume"),
+            "walls_crossed": bool(r.get("Walls Crossed (Low Confidence)")),
         })
     return tickers
 
@@ -154,11 +157,11 @@ def main():
             "signal": r.get("Signal"),
             "matrix_score": r.get("Matrix Score"),
             "current_price": _safe_float(r.get("Current Price")),
-            "suggested_entry": r.get("This Month Entry Price"),
-            "analyst_target": r.get("Analyst Target Price"),
+            "suggested_entry": _safe_float(r.get("This Month Entry Price")),
+            "analyst_target": _safe_float(r.get("Analyst Target Price")),
             "macd_trend": r.get("MACD Histogram Trend", "N/A"),
-            "shares_needed": r.get("Shares Needed (This Month)"),
-            "capital_required": r.get("Capital Required (This Month)"),
+            "shares_needed": _safe_float(r.get("Shares Needed (This Month)")),
+            "capital_required": _safe_float(r.get("Capital Required (This Month)")),
             "already_held": r["Ticker"] in held_tickers,
         })
 
@@ -201,6 +204,22 @@ def main():
 
     print(f"[SUCCESS] Wrote {OUTPUT_FILE} - {len(holdings)} holdings, {len(top20)} recommended picks, "
           f"{len(all_tickers)} total tickers")
+
+    # --- Public version: genuinely no portfolio data, not just hidden in
+    # the UI. Even 'already_held' is stripped from top20, since it would
+    # otherwise leak which tickers you hold indirectly. This file is safe
+    # to put behind a Cloudflare Access bypass rule and share with anyone -
+    # there is nothing personal in it to find, even by viewing raw JSON. ---
+    public_top20 = [{k: v for k, v in r.items() if k != "already_held"} for r in payload["top20"]]
+    public_payload = {
+        "generated_at": payload["generated_at"],
+        "is_real_data": payload["is_real_data"],
+        "top20": public_top20,
+        "all_tickers": payload["all_tickers"],
+    }
+    with open(PUBLIC_OUTPUT_FILE, "w") as f:
+        json.dump(public_payload, f, indent=2)
+    print(f"[SUCCESS] Wrote {PUBLIC_OUTPUT_FILE} (no portfolio data) - safe to share publicly")
 
 
 if __name__ == "__main__":
