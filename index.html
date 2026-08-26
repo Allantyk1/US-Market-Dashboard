@@ -355,6 +355,23 @@ function trendBadge(trend){
   return `<span class="trend-badge ${cls}">${text}</span>`;
 }
 
+// VWAP standard-deviation badge - only shown once price is at least 1 SD
+// away from the 20-day VWAP (inside that range there's nothing actionable
+// to flag). Negative SD (below VWAP) = oversold = potential buy setup,
+// styled bullish/green; positive SD (above VWAP) = overbought = caution,
+// styled bearish/red - matches the reversal-signal convention (extremely
+// oversold -> look to go long; extremely overbought -> look to short/exit).
+function vwapBadge(sd){
+  if (sd === null || sd === undefined || isNaN(sd)) return '';
+  const abs = Math.abs(sd);
+  if (abs < 1) return '';
+  const cls = sd > 0 ? 'bearish' : 'bullish';
+  const strength = abs >= 2 ? 'Extremely' : 'Moderately';
+  const dir = sd > 0 ? 'Overbought' : 'Oversold';
+  const sign = sd > 0 ? '+' : '';
+  return `<span class="trend-badge ${cls}" title="${strength} ${dir} vs 20d VWAP">${sign}${sd.toFixed(1)}σ</span>`;
+}
+
 function fmtCompact(v){
   if (v === null || v === undefined || v === '') return '—';
   const n = Number(v);
@@ -388,7 +405,7 @@ function screenerCard(t, i){
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
-        ${trendBadge(t.macd_trend)}
+        ${trendBadge(t.macd_trend)}${vwapBadge(t.vwap_sd_distance)}
       </div>
       <div class="stat-grid">
         <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value">${fmtMoney(t.ema20)}</div></div>
@@ -406,6 +423,8 @@ function screenerCard(t, i){
           <span class="dlabel">EMA20 / EMA40</span><span class="dval">${fmtMoney(t.ema20)} / ${fmtMoney(t.ema40)}</span>
           <span class="dlabel">Support / Resistance</span><span class="dval">${fmtMoney(t.support_lower_bb)} / ${fmtMoney(t.resistance_upper_bb)}</span>
           <span class="dlabel">Middle BB</span><span class="dval">${fmtMoney(t.middle_bb)}</span>
+          <span class="dlabel">VWAP (20d)</span><span class="dval">${fmtMoney(t.vwap)}${t.vwap_sd_distance != null ? ` <span class="mono">(${t.vwap_sd_distance > 0 ? '+' : ''}${t.vwap_sd_distance.toFixed(1)}σ)</span>` : ''}</span>
+          <span class="dlabel">VWAP ±2SD Band</span><span class="dval">${fmtMoney(t.vwap_lower2)} – ${fmtMoney(t.vwap_upper2)}</span>
           <span class="dlabel">52W High</span><span class="dval">${fmtMoney(t.high_52w_price)} (${t.high_52w_drop_pct || '—'})</span>
           <span class="dlabel">MACD Line / Signal</span><span class="dval">${t.macd_line ?? '—'} / ${t.macd_signal ?? '—'}</span>
           <span class="dlabel">MACD Histogram</span><span class="dval">${t.macd_histogram ?? '—'}</span>
@@ -601,6 +620,12 @@ function renderPriceChart(i, d){
         { label:'Price', data: d.price, borderColor:'#e5e7eb', borderWidth:2.5, pointRadius:0, tension:0.2, order:1 },
         { label:'EMA20', data: d.ema20, borderColor:'#38bdf8', borderWidth:2, pointRadius:0, tension:0.2, order:2 },
         { label:'EMA40', data: d.ema40, borderColor:'#a78bfa', borderWidth:2, pointRadius:0, tension:0.2, order:2 },
+        // VWAP (20d, volume-weighted) + its ±2SD band - drawn as full moving
+        // lines (not flattened to the latest value, unlike Support/Resistance
+        // below) since the history cache already has the whole rolling series.
+        { label:'VWAP (20d)', data: d.vwap, borderColor:'#f59e0b', borderWidth:2, pointRadius:0, tension:0.15, order:1.5 },
+        { label:'VWAP +2SD', data: d.vwap_upper2, borderColor:'rgba(245,158,11,0.45)', borderWidth:1.5, borderDash:[3,3], pointRadius:0, tension:0.15, order:2.5 },
+        { label:'VWAP -2SD', data: d.vwap_lower2, borderColor:'rgba(245,158,11,0.45)', borderWidth:1.5, borderDash:[3,3], pointRadius:0, tension:0.15, order:2.5 },
         { label:'Support', data: flat(lastVal(d.lower_bb)), borderColor:'rgba(34,197,94,0.6)', borderWidth:1.5, borderDash:[6,4], pointRadius:0, order:3 },
         { label:'Resistance', data: flat(lastVal(d.upper_bb)), borderColor:'rgba(239,68,68,0.6)', borderWidth:1.5, borderDash:[6,4], pointRadius:0, order:3 },
         { label:'Middle BB', data: flat(lastVal(d.middle_bb)), borderColor:'rgba(245,158,11,0.5)', borderWidth:1.5, borderDash:[2,3], pointRadius:0, order:3 }
