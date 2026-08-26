@@ -362,6 +362,7 @@ function screenerCard(t, i){
         <div class="chart-panels" id="charts-${i}">
           <div class="chart-box"><canvas id="chart-macd-${i}" height="140"></canvas></div>
           <div class="chart-box"><canvas id="chart-price-${i}" height="220"></canvas></div>
+          <div class="chart-box"><canvas id="chart-vwapdist-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-rsi-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-vol-${i}" height="120"></canvas></div>
         </div>
@@ -450,6 +451,7 @@ async function loadTickerCharts(i, ticker){
     const d = await res.json();
     renderMacdChart(i, d);
     renderPriceChart(i, d);
+    renderVwapDistChart(i, d);
     renderRsiChart(i, d);
     renderVolumeChart(i, d);
   } catch (e){
@@ -523,23 +525,56 @@ function renderPriceChart(i, d){
         { label:'Price', data: d.price, borderColor:'#e5e7eb', borderWidth:2.5, pointRadius:0, tension:0.2, order:1 },
         { label:'EMA20', data: d.ema20, borderColor:'#38bdf8', borderWidth:2, pointRadius:0, tension:0.2, order:2 },
         { label:'EMA40', data: d.ema40, borderColor:'#a78bfa', borderWidth:2, pointRadius:0, tension:0.2, order:2 },
-        // VWAP (20d, volume-weighted) + its ±2SD band - drawn as full moving
-        // lines (not flattened to the latest value, unlike Support/Resistance
-        // below) since the history cache already has the whole rolling series.
+        // VWAP (20d, volume-weighted) center line only - same $ units as
+        // Price/EMA so it's worth overlaying here. Its ±2SD bands used to
+        // live on this chart too, but that made for 9 crowded lines; they
+        // now have their own "VWAP Distance (σ)" oscillator panel below,
+        // which shows the same stretch-from-fair-value read as a time
+        // series instead of two easily-confused dotted price bands.
         { label:'VWAP (20d)', data: d.vwap, borderColor:'#f59e0b', borderWidth:2, pointRadius:0, tension:0.15, order:1.5 },
-        { label:'VWAP +2SD', data: d.vwap_upper2, borderColor:'rgba(245,158,11,0.45)', borderWidth:1.5, borderDash:[3,3], pointRadius:0, tension:0.15, order:2.5 },
-        { label:'VWAP -2SD', data: d.vwap_lower2, borderColor:'rgba(245,158,11,0.45)', borderWidth:1.5, borderDash:[3,3], pointRadius:0, tension:0.15, order:2.5 },
         { label:'Support', data: flat(lastVal(d.lower_bb)), borderColor:'rgba(34,197,94,0.6)', borderWidth:1.5, borderDash:[6,4], pointRadius:0, order:3 },
         { label:'Resistance', data: flat(lastVal(d.upper_bb)), borderColor:'rgba(239,68,68,0.6)', borderWidth:1.5, borderDash:[6,4], pointRadius:0, order:3 },
         { label:'Middle BB', data: flat(lastVal(d.middle_bb)), borderColor:'rgba(245,158,11,0.5)', borderWidth:1.5, borderDash:[2,3], pointRadius:0, order:3 }
       ]
     },
-    // Tooltip filter drops the ±2SD dashed bands from the hover list (not
-    // the chart itself, which still draws them) - with VWAP added, the
-    // full 9-dataset tooltip no longer fit inside the chart's height and
-    // was getting clipped at the bottom. The exact band values are still
-    // available in the "VWAP ±2SD Band" row of the detail grid below.
-    options: baseChartOptions('Price / EMA', (v) => `$${v}`, (item) => !['VWAP +2SD', 'VWAP -2SD'].includes(item.dataset.label))
+    options: baseChartOptions('Price / EMA', (v) => `$${v}`)
+  });
+  attachTooltipDismiss(key);
+}
+
+// VWAP Distance (σ) oscillator - how many standard deviations price sits
+// above/below the 20-day volume-weighted average, as a time series rather
+// than the single snapshot number shown in the ticker badge. Derived
+// entirely client-side from fields already in the history cache: half the
+// width of the ±2SD band is 1 SD, so (price - VWAP) / SD reproduces the
+// same signed sigma distance used everywhere else on the dashboard.
+function renderVwapDistChart(i, d){
+  const key = 'vwapdist-' + i;
+  destroyChart(key);
+  const ctx = document.getElementById('chart-vwapdist-' + i);
+  if (!ctx) return;
+  const flat = (v) => (d.labels||[]).map(() => v);
+  const dist = (d.price||[]).map((p, idx) => {
+    const vwap = d.vwap ? d.vwap[idx] : null;
+    const upper2 = d.vwap_upper2 ? d.vwap_upper2[idx] : null;
+    if (p == null || vwap == null || upper2 == null) return null;
+    const sd = (upper2 - vwap) / 2;
+    if (!sd || sd <= 0) return null;
+    return (p - vwap) / sd;
+  });
+  CHART_INSTANCES[key] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label:'VWAP Distance (σ)', data: dist, borderColor:'#f59e0b', borderWidth:2, pointRadius:0, tension:0.2, order:1 },
+        { label:'Extreme High (+2σ)', data: flat(2), borderColor:'rgba(239,68,68,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:2 },
+        { label:'Moderate High (+1σ)', data: flat(1), borderColor:'rgba(239,68,68,0.3)', borderWidth:1, borderDash:[2,3], pointRadius:0, order:2 },
+        { label:'Moderate Low (-1σ)', data: flat(-1), borderColor:'rgba(34,197,94,0.3)', borderWidth:1, borderDash:[2,3], pointRadius:0, order:2 },
+        { label:'Extreme Low (-2σ)', data: flat(-2), borderColor:'rgba(34,197,94,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:2 }
+      ]
+    },
+    options: { ...baseChartOptions('VWAP Distance (σ)'), scales: { ...baseChartOptions('VWAP Distance (σ)').scales, y: { min:-3, max:3, ticks:{ color:'#6b7280', font:{ size:9 } }, grid:{ color:'rgba(255,255,255,0.06)' } } } }
   });
   attachTooltipDismiss(key);
 }
@@ -588,14 +623,14 @@ function renderVolumeChart(i, d){
   attachTooltipDismiss(key);
 }
 
-function baseChartOptions(title, yTickFmt, tooltipFilter){
+function baseChartOptions(title, yTickFmt){
   return {
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode:'index', intersect:false },
     plugins: {
       legend: { labels:{ color:'#9ca3af', usePointStyle:true, boxWidth:8, font:{ size:10 } } },
-      tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb', ...(tooltipFilter ? { filter: tooltipFilter } : {}) },
+      tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb' },
       title: { display:true, text:title, color:'#9ca3af', font:{ size:11 }, padding:{ bottom:6 } }
     },
     scales: {
