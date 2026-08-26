@@ -205,6 +205,17 @@
   .expand-hint{font-size:10.5px; color:var(--ink-faint); text-align:center; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
 
+  /* Appears only while a ticker's detail is open AND its own stat-grid
+     (Entry-EMA20 / Entry-Support / Target Price) has scrolled up out of
+     view - keeps those numbers visible while scrolling through the charts
+     below, instead of having to scroll back up to check them. */
+  .sticky-stat-bar{
+    display:none; position:fixed; left:0; right:0; z-index:9; margin-top:0;
+    background:rgba(var(--bg-rgb),0.96); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line); padding:8px 20px;
+  }
+  .sticky-stat-bar.visible{display:grid;}
+
   .back-to-list-btn{
     display:none; align-items:center; gap:6px; position:fixed; left:50%; bottom:18px;
     transform:translateX(-50%); z-index:50; background:var(--panel); color:var(--ink);
@@ -253,6 +264,12 @@
 <button id="backToListBtn" class="back-to-list-btn" onclick="backToList()" aria-label="Back to all stocks list">
   <span class="arrow">←</span> Back to list
 </button>
+
+<div id="stickyStatBar" class="stat-grid sticky-stat-bar">
+  <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value" id="stickyEma20">—</div></div>
+  <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value" id="stickySupport">—</div></div>
+  <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value" id="stickyTarget">—</div></div>
+</div>
 
 <header>
   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
@@ -407,7 +424,10 @@ function screenerCard(t, i){
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
         ${trendBadge(t.macd_trend)}${vwapBadge(t.vwap_sd_distance)}
       </div>
-      <div class="stat-grid">
+      <div class="stat-grid" id="stat-grid-${i}"
+           data-ema20="${fmtMoney(t.ema20)}"
+           data-support="${fmtMoney(t.suggested_entry)}"
+           data-target="${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class='up'>${fmtPct(upside)}</span>` : ''}">
         <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value">${fmtMoney(t.ema20)}</div></div>
         <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value">${fmtMoney(t.suggested_entry)}</div></div>
         <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value">${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class="up">${fmtPct(upside)}</span>` : ''}</div></div>
@@ -519,6 +539,7 @@ function toggleTickerDetail(i){
       el.dataset.loaded = '1'; // only fetch + render once per card, not every re-open
       loadTickerCharts(i, el.dataset.ticker);
     }
+    setupStickyStatBar(i);
   }
   updateBackButton();
 }
@@ -532,7 +553,48 @@ function updateBackButton(){
 function backToList(){
   document.querySelectorAll('.card-detail.open').forEach(el => el.classList.remove('open'));
   updateBackButton();
+  teardownStickyStatBar();
   document.getElementById('tabContent').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// --- Sticky Entry/Target bar: once a ticker's own stat-grid (the row with
+// Entry-EMA20 / Entry-Support / Target Price) scrolls up out of view while
+// its charts are open, a compact copy pins to the top of the screen so you
+// don't lose those reference numbers while reading the charts below.
+// Plain scroll + getBoundingClientRect, not IntersectionObserver - simpler
+// to reason about here (one grid tracked at a time) and avoids relying on
+// IO firing promptly on every scroll frame across all browsers. ---
+let STAT_BAR_GRID = null;
+
+function positionStickyStatBar(){
+  const header = document.querySelector('header');
+  const bar = document.getElementById('stickyStatBar');
+  if (header && bar) bar.style.top = header.getBoundingClientRect().height + 'px';
+}
+window.addEventListener('resize', positionStickyStatBar);
+
+function onScrollForStatBar(){
+  const bar = document.getElementById('stickyStatBar');
+  if (!STAT_BAR_GRID || !bar) return;
+  bar.classList.toggle('visible', STAT_BAR_GRID.getBoundingClientRect().top < 0);
+}
+window.addEventListener('scroll', onScrollForStatBar, { passive: true });
+
+function setupStickyStatBar(i){
+  const grid = document.getElementById('stat-grid-' + i);
+  const bar = document.getElementById('stickyStatBar');
+  if (!grid || !bar) return;
+  document.getElementById('stickyEma20').textContent = grid.dataset.ema20 || '—';
+  document.getElementById('stickySupport').textContent = grid.dataset.support || '—';
+  document.getElementById('stickyTarget').innerHTML = grid.dataset.target || '—';
+  positionStickyStatBar();
+  STAT_BAR_GRID = grid;
+  onScrollForStatBar(); // set correct initial state without waiting for the next scroll
+}
+
+function teardownStickyStatBar(){
+  STAT_BAR_GRID = null;
+  document.getElementById('stickyStatBar').classList.remove('visible');
 }
 
 // Chart.js instances keyed by card index, so we can destroy/rebuild cleanly
