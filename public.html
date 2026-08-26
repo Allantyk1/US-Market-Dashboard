@@ -200,15 +200,17 @@
     font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
 
   /* Appears only while a ticker's detail is open AND its own stat-grid
-     (Entry-EMA20 / Entry-Support / Target Price) has scrolled up out of
-     view - keeps those numbers visible while scrolling through the charts
-     below, instead of having to scroll back up to check them. */
+     (ticker/price/score row + Entry-EMA20 / Entry-Support / Target Price)
+     has scrolled up out of view - keeps those numbers visible while
+     scrolling through the charts below, instead of having to scroll back
+     up to check them. */
   .sticky-stat-bar{
     display:none; position:fixed; left:0; right:0; z-index:9; margin-top:0;
     background:rgba(var(--bg-rgb),0.96); backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line); padding:8px 20px;
   }
-  .sticky-stat-bar.visible{display:grid;}
+  .sticky-stat-bar.visible{display:block;}
+  .sticky-top-row{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;}
 
   .back-to-list-btn{
     display:none; align-items:center; gap:6px; position:fixed; left:50%; bottom:18px;
@@ -259,10 +261,19 @@
   <span class="arrow">←</span> Back to list
 </button>
 
-<div id="stickyStatBar" class="stat-grid sticky-stat-bar">
-  <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value" id="stickyEma20">—</div></div>
-  <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value" id="stickySupport">—</div></div>
-  <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value" id="stickyTarget">—</div></div>
+<div id="stickyStatBar" class="sticky-stat-bar">
+  <div class="sticky-top-row">
+    <span class="ticker" id="stickyTicker">—</span>
+    <div style="text-align:right;">
+      <div class="price mono" id="stickyPrice">—</div>
+      <div class="score-badge" id="stickyScore">Score —</div>
+    </div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value" id="stickyEma20">—</div></div>
+    <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value" id="stickySupport">—</div></div>
+    <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value" id="stickyTarget">—</div></div>
+  </div>
 </div>
 
 <header>
@@ -371,6 +382,9 @@ function screenerCard(t, i){
         ${trendBadge(t.macd_trend)}${vwapBadge(t.vwap_sd_distance)}
       </div>
       <div class="stat-grid" id="stat-grid-${i}"
+           data-ticker="${t.ticker}"
+           data-price="${fmtMoney(t.current_price)}"
+           data-score="${t.matrix_score ?? '—'}"
            data-ema20="${fmtMoney(t.ema20)}"
            data-support="${fmtMoney(t.suggested_entry)}"
            data-target="${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class='up'>${fmtPct(upside)}</span>` : ''}">
@@ -489,6 +503,9 @@ function setupStickyStatBar(i){
   const grid = document.getElementById('stat-grid-' + i);
   const bar = document.getElementById('stickyStatBar');
   if (!grid || !bar) return;
+  document.getElementById('stickyTicker').textContent = grid.dataset.ticker || '—';
+  document.getElementById('stickyPrice').textContent = grid.dataset.price || '—';
+  document.getElementById('stickyScore').textContent = 'Score ' + (grid.dataset.score || '—');
   document.getElementById('stickyEma20').textContent = grid.dataset.ema20 || '—';
   document.getElementById('stickySupport').textContent = grid.dataset.support || '—';
   document.getElementById('stickyTarget').innerHTML = grid.dataset.target || '—';
