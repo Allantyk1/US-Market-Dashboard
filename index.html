@@ -415,7 +415,7 @@ function screenerCard(t, i){
       <div class="card-detail" id="detail-${i}" data-ticker="${t.ticker}" data-loaded="0" onclick="event.stopPropagation()">
         <div class="chart-panels" id="charts-${i}">
           <div class="chart-box"><canvas id="chart-macd-${i}" height="140"></canvas></div>
-          <div class="chart-box"><canvas id="chart-price-${i}" height="160"></canvas></div>
+          <div class="chart-box"><canvas id="chart-price-${i}" height="220"></canvas></div>
           <div class="chart-box"><canvas id="chart-rsi-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-vol-${i}" height="120"></canvas></div>
         </div>
@@ -631,7 +631,12 @@ function renderPriceChart(i, d){
         { label:'Middle BB', data: flat(lastVal(d.middle_bb)), borderColor:'rgba(245,158,11,0.5)', borderWidth:1.5, borderDash:[2,3], pointRadius:0, order:3 }
       ]
     },
-    options: baseChartOptions('Price / EMA', (v) => `$${v}`)
+    // Tooltip filter drops the ±2SD dashed bands from the hover list (not
+    // the chart itself, which still draws them) - with VWAP added, the
+    // full 9-dataset tooltip no longer fit inside the chart's height and
+    // was getting clipped at the bottom. The exact band values are still
+    // available in the "VWAP ±2SD Band" row of the detail grid below.
+    options: baseChartOptions('Price / EMA', (v) => `$${v}`, (item) => !['VWAP +2SD', 'VWAP -2SD'].includes(item.dataset.label))
   });
   attachTooltipDismiss(key);
 }
@@ -680,14 +685,14 @@ function renderVolumeChart(i, d){
   attachTooltipDismiss(key);
 }
 
-function baseChartOptions(title, yTickFmt){
+function baseChartOptions(title, yTickFmt, tooltipFilter){
   return {
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode:'index', intersect:false },
     plugins: {
       legend: { labels:{ color:'#9ca3af', usePointStyle:true, boxWidth:8, font:{ size:10 } } },
-      tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb' },
+      tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb', ...(tooltipFilter ? { filter: tooltipFilter } : {}) },
       title: { display:true, text:title, color:'#9ca3af', font:{ size:11 }, padding:{ bottom:6 } }
     },
     scales: {
