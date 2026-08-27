@@ -616,7 +616,7 @@ function renderPriceChart(i, d){
         { label:'Middle BB', data: flat(lastVal(d.middle_bb)), borderColor:'rgba(245,158,11,0.5)', borderWidth:1.5, borderDash:[2,3], pointRadius:0, order:3 }
       ]
     },
-    options: baseChartOptions('Price / EMA', (v) => `$${v}`)
+    options: baseChartOptions('Price / EMA', (v) => `$${Number(v).toFixed(2)}`)
   });
   attachTooltipDismiss(key);
 }
