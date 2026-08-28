@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-27T14:00:29",
+  "generated_at": "2026-08-28T11:09:11",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 93435.45,
-    "total_cost": 99112.29,
-    "total_gain": -5676.84,
-    "total_gain_pct": -0.0573,
+    "total_value": 92698.55,
+    "total_cost": 98233.27,
+    "total_gain": -5534.72,
+    "total_gain_pct": -0.0563,
     "holdings": [
       {
         "ticker": "DRAM",
@@ -16,7 +16,7 @@
         "market_value": 6202.9,
         "gain_dollar": 184.47,
         "gain_pct": 0.0307,
-        "weight_pct": 0.0664,
+        "weight_pct": 0.0669,
         "suggested_entry": 51.16,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -30,7 +30,7 @@
         "market_value": 1843.92,
         "gain_dollar": 56.87,
         "gain_pct": 0.0318,
-        "weight_pct": 0.0197,
+        "weight_pct": 0.0199,
         "suggested_entry": 289.17,
         "analyst_target": 477.22,
         "macd_trend": "RISING"
@@ -44,7 +44,7 @@
         "market_value": 1218.0,
         "gain_dollar": -14.3,
         "gain_pct": -0.0116,
-        "weight_pct": 0.013,
+        "weight_pct": 0.0131,
         "suggested_entry": 11.14,
         "analyst_target": 23.81,
         "macd_trend": "RISING"
@@ -52,13 +52,13 @@
       {
         "ticker": "GFS",
         "company": "GlobalFoundries Inc.",
-        "shares": 40.0,
-        "avg_cost": 50.023,
+        "shares": 50.0,
+        "avg_cost": 46.39,
         "current_price": 45.67,
-        "market_value": 1826.8,
-        "gain_dollar": -174.12,
-        "gain_pct": -0.087,
-        "weight_pct": 0.0196,
+        "market_value": 2283.5,
+        "gain_dollar": -36.0,
+        "gain_pct": -0.0155,
+        "weight_pct": 0.0246,
         "suggested_entry": 45.07,
         "analyst_target": 76.76,
         "macd_trend": "FALLING"
@@ -72,7 +72,7 @@
         "market_value": 4341.6,
         "gain_dollar": 356.96,
         "gain_pct": 0.0896,
-        "weight_pct": 0.0465,
+        "weight_pct": 0.0468,
         "suggested_entry": 91.46,
         "analyst_target": 120.08,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 26472.0,
         "gain_dollar": -6210.9,
         "gain_pct": -0.19,
-        "weight_pct": 0.2833,
+        "weight_pct": 0.2856,
         "suggested_entry": 85.59,
         "analyst_target": 114.88,
         "macd_trend": "FALLING"
@@ -100,7 +100,7 @@
         "market_value": 4749.6,
         "gain_dollar": -816.24,
         "gain_pct": -0.1467,
-        "weight_pct": 0.0508,
+        "weight_pct": 0.0512,
         "suggested_entry": 37.45,
         "analyst_target": 80.19,
         "macd_trend": "FALLING"
@@ -114,7 +114,7 @@
         "market_value": 1616.0,
         "gain_dollar": -144.4,
         "gain_pct": -0.082,
-        "weight_pct": 0.0173,
+        "weight_pct": 0.0174,
         "suggested_entry": 7.4,
         "analyst_target": 14.75,
         "macd_trend": "FALLING"
@@ -128,7 +128,7 @@
         "market_value": 896.79,
         "gain_dollar": 3.41,
         "gain_pct": 0.0038,
-        "weight_pct": 0.0096,
+        "weight_pct": 0.0097,
         "suggested_entry": 294.89,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -156,7 +156,7 @@
         "market_value": 1252.72,
         "gain_dollar": 14.28,
         "gain_pct": 0.0115,
-        "weight_pct": 0.0134,
+        "weight_pct": 0.0135,
         "suggested_entry": 147.91,
         "analyst_target": 211.57,
         "macd_trend": "RISING"
@@ -170,7 +170,7 @@
         "market_value": 15954.77,
         "gain_dollar": 2066.79,
         "gain_pct": 0.1488,
-        "weight_pct": 0.1708,
+        "weight_pct": 0.1721,
         "suggested_entry": 856.21,
         "analyst_target": 1513.41,
         "macd_trend": "FALLING"
@@ -184,7 +184,7 @@
         "market_value": 9455.67,
         "gain_dollar": 3028.42,
         "gain_pct": 0.4712,
-        "weight_pct": 0.1012,
+        "weight_pct": 0.102,
         "suggested_entry": 202.74,
         "analyst_target": 305.79,
         "macd_trend": "FALLING"
@@ -212,7 +212,7 @@
         "market_value": 3768.0,
         "gain_dollar": -847.8,
         "gain_pct": -0.1837,
-        "weight_pct": 0.0403,
+        "weight_pct": 0.0406,
         "suggested_entry": 17.48,
         "analyst_target": 19.98,
         "macd_trend": "RISING"
@@ -226,23 +226,9 @@
         "market_value": 5247.0,
         "gain_dollar": -255.47,
         "gain_pct": -0.0464,
-        "weight_pct": 0.0562,
+        "weight_pct": 0.0566,
         "suggested_entry": 108.46,
         "analyst_target": null,
-        "macd_trend": "FALLING"
-      },
-      {
-        "ticker": "TRMB",
-        "company": "Trimble Inc.",
-        "shares": 20.0,
-        "avg_cost": 59.88,
-        "current_price": 59.68,
-        "market_value": 1193.6,
-        "gain_dollar": -4.0,
-        "gain_pct": -0.0033,
-        "weight_pct": 0.0128,
-        "suggested_entry": 57.0,
-        "analyst_target": 80.18,
         "macd_trend": "FALLING"
       },
       {
@@ -254,7 +240,7 @@
         "market_value": 7099.53,
         "gain_dollar": 978.34,
         "gain_pct": 0.1598,
-        "weight_pct": 0.076,
+        "weight_pct": 0.0766,
         "suggested_entry": 693.72,
         "analyst_target": null,
         "macd_trend": "FALLING"
