@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-28T14:00:42",
+  "generated_at": "2026-08-29T06:35:55",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 95432.66,
-    "total_cost": 98233.27,
-    "total_gain": -2800.61,
-    "total_gain_pct": -0.0285,
+    "total_value": 92619.37,
+    "total_cost": 95752.47,
+    "total_gain": -3133.1,
+    "total_gain_pct": -0.0327,
     "holdings": [
       {
         "ticker": "DRAM",
@@ -16,9 +16,23 @@
         "market_value": 6251.3,
         "gain_dollar": 232.87,
         "gain_pct": 0.0387,
-        "weight_pct": 0.0655,
+        "weight_pct": 0.0675,
         "suggested_entry": 51.45,
         "analyst_target": null,
+        "macd_trend": "FALLING"
+      },
+      {
+        "ticker": "BSX",
+        "company": "Boston Scientific Co",
+        "shares": 10.0,
+        "avg_cost": 46.9,
+        "current_price": 46.67,
+        "market_value": 466.7,
+        "gain_dollar": -2.3,
+        "gain_pct": -0.0049,
+        "weight_pct": 0.005,
+        "suggested_entry": 46.44,
+        "analyst_target": 62.69,
         "macd_trend": "FALLING"
       },
       {
@@ -30,7 +44,7 @@
         "market_value": 1904.28,
         "gain_dollar": 117.23,
         "gain_pct": 0.0656,
-        "weight_pct": 0.02,
+        "weight_pct": 0.0206,
         "suggested_entry": 292.72,
         "analyst_target": 477.22,
         "macd_trend": "RISING"
@@ -44,7 +58,7 @@
         "market_value": 1295.0,
         "gain_dollar": 62.7,
         "gain_pct": 0.0509,
-        "weight_pct": 0.0136,
+        "weight_pct": 0.014,
         "suggested_entry": 11.49,
         "analyst_target": 23.81,
         "macd_trend": "RISING"
@@ -58,24 +72,10 @@
         "market_value": 2317.0,
         "gain_dollar": -2.5,
         "gain_pct": -0.0011,
-        "weight_pct": 0.0243,
+        "weight_pct": 0.025,
         "suggested_entry": 45.03,
         "analyst_target": 76.76,
         "macd_trend": "FALLING"
-      },
-      {
-        "ticker": "HOOD",
-        "company": "Robinhood Markets, I",
-        "shares": 40.0,
-        "avg_cost": 99.616,
-        "current_price": 109.76,
-        "market_value": 4390.4,
-        "gain_dollar": 405.76,
-        "gain_pct": 0.1018,
-        "weight_pct": 0.046,
-        "suggested_entry": 92.32,
-        "analyst_target": 120.08,
-        "macd_trend": "RISING"
       },
       {
         "ticker": "INTC",
@@ -86,7 +86,7 @@
         "market_value": 27627.0,
         "gain_dollar": -5055.9,
         "gain_pct": -0.1547,
-        "weight_pct": 0.2895,
+        "weight_pct": 0.2983,
         "suggested_entry": 87.02,
         "analyst_target": 114.88,
         "macd_trend": "RISING"
@@ -94,13 +94,13 @@
       {
         "ticker": "IREN",
         "company": "IREN LIMITED",
-        "shares": 120.0,
-        "avg_cost": 46.382,
+        "shares": 140.0,
+        "avg_cost": 45.028,
         "current_price": 40.53,
-        "market_value": 4863.6,
-        "gain_dollar": -702.24,
-        "gain_pct": -0.1262,
-        "weight_pct": 0.051,
+        "market_value": 5674.2,
+        "gain_dollar": -629.72,
+        "gain_pct": -0.0999,
+        "weight_pct": 0.0613,
         "suggested_entry": 37.97,
         "analyst_target": 80.19,
         "macd_trend": "FALLING"
@@ -114,7 +114,7 @@
         "market_value": 1638.0,
         "gain_dollar": -122.4,
         "gain_pct": -0.0695,
-        "weight_pct": 0.0172,
+        "weight_pct": 0.0177,
         "suggested_entry": 7.53,
         "analyst_target": 14.75,
         "macd_trend": "FALLING"
@@ -122,13 +122,13 @@
       {
         "ticker": "IWM",
         "company": "iShares Russell 2000",
-        "shares": 3.0,
-        "avg_cost": 297.793,
+        "shares": 4.0,
+        "avg_cost": 297.535,
         "current_price": 299.81,
-        "market_value": 899.43,
-        "gain_dollar": 6.05,
-        "gain_pct": 0.0068,
-        "weight_pct": 0.0094,
+        "market_value": 1199.24,
+        "gain_dollar": 9.1,
+        "gain_pct": 0.0076,
+        "weight_pct": 0.0129,
         "suggested_entry": 295.98,
         "analyst_target": null,
         "macd_trend": "FLAT"
@@ -142,7 +142,7 @@
         "market_value": 295.15,
         "gain_dollar": -4.0,
         "gain_pct": -0.0134,
-        "weight_pct": 0.0031,
+        "weight_pct": 0.0032,
         "suggested_entry": 48.49,
         "analyst_target": 75.38,
         "macd_trend": "FALLING"
@@ -156,7 +156,7 @@
         "market_value": 1247.36,
         "gain_dollar": 8.92,
         "gain_pct": 0.0072,
-        "weight_pct": 0.0131,
+        "weight_pct": 0.0135,
         "suggested_entry": 150.32,
         "analyst_target": 211.57,
         "macd_trend": "RISING"
@@ -170,7 +170,7 @@
         "market_value": 15903.59,
         "gain_dollar": 2015.61,
         "gain_pct": 0.1451,
-        "weight_pct": 0.1666,
+        "weight_pct": 0.1717,
         "suggested_entry": 857.86,
         "analyst_target": 1513.41,
         "macd_trend": "FALLING"
@@ -184,7 +184,7 @@
         "market_value": 10281.9,
         "gain_dollar": 3854.65,
         "gain_pct": 0.5997,
-        "weight_pct": 0.1077,
+        "weight_pct": 0.111,
         "suggested_entry": 211.65,
         "analyst_target": 305.79,
         "macd_trend": "RISING"
@@ -212,7 +212,7 @@
         "market_value": 3836.0,
         "gain_dollar": -779.8,
         "gain_pct": -0.1689,
-        "weight_pct": 0.0402,
+        "weight_pct": 0.0414,
         "suggested_entry": 17.79,
         "analyst_target": 20.02,
         "macd_trend": "RISING"
@@ -226,7 +226,7 @@
         "market_value": 5537.25,
         "gain_dollar": 34.78,
         "gain_pct": 0.0063,
-        "weight_pct": 0.058,
+        "weight_pct": 0.0598,
         "suggested_entry": 111.46,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -240,7 +240,7 @@
         "market_value": 7145.4,
         "gain_dollar": 1024.21,
         "gain_pct": 0.1673,
-        "weight_pct": 0.0749,
+        "weight_pct": 0.0771,
         "suggested_entry": 698.73,
         "analyst_target": null,
         "macd_trend": "RISING"
