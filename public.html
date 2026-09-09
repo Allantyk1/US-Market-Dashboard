@@ -109,6 +109,7 @@
   .trend-badge.bullish{background:var(--green-dim); color:var(--green);}
   .trend-badge.bearish{background:var(--red-dim); color:var(--red);}
   .trend-badge.neutral{background:var(--panel-2); color:var(--ink-faint);}
+  .trend-badge.caution{background:var(--amber-dim); color:var(--amber);}
   .recommended-tag{
     font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--amber);
     border:1px solid var(--amber-dim); border-radius:5px; padding:1px 6px; margin-left:6px;
@@ -324,10 +325,29 @@ const signalTag = (s) => {
   return `<span class="tag ${cls}">${s || '—'}</span>`;
 };
 
-function trendBadge(trend){
-  const cls = trend === 'RISING' ? 'bullish' : trend === 'FALLING' ? 'bearish' : 'neutral';
-  const text = trend === 'RISING' ? 'Strengthening (Bullish)' : trend === 'FALLING' ? 'Weakening (Bearish)' : 'Neutral';
-  return `<span class="trend-badge ${cls}">${text}</span>`;
+// trend = MACD Histogram Trend (RISING/FALLING/FLAT) - short-term (3-day)
+// momentum direction, NOT price direction. ema20/ema40 give the actual
+// medium-term trend (price trend), so the badge text conditions on BOTH:
+// momentum can be "rising" (less selling pressure) while price is still
+// in a confirmed downtrend (EMA20 < EMA40) - that's a possible bottoming
+// setup, not a "bullish" trend, and the label should say so rather than
+// implying the stock has turned upward.
+function trendBadge(trend, ema20, ema40){
+  const haveEma = ema20 !== null && ema20 !== undefined && !isNaN(ema20)
+                && ema40 !== null && ema40 !== undefined && !isNaN(ema40);
+  const emaUp = haveEma ? ema20 > ema40 : null;
+
+  if (trend === 'RISING'){
+    if (emaUp === true) return `<span class="trend-badge bullish">Bullish (confirmed uptrend)</span>`;
+    if (emaUp === false) return `<span class="trend-badge caution" title="MACD momentum improving, but EMA20 is still below EMA40">Momentum Turning (still in downtrend)</span>`;
+    return `<span class="trend-badge bullish">Strengthening (Bullish)</span>`; // EMA data unavailable - fall back to momentum-only label
+  }
+  if (trend === 'FALLING'){
+    if (emaUp === false) return `<span class="trend-badge bearish">Bearish (confirmed downtrend)</span>`;
+    if (emaUp === true) return `<span class="trend-badge caution" title="MACD momentum fading, but EMA20 is still above EMA40">Momentum Fading (still in uptrend)</span>`;
+    return `<span class="trend-badge bearish">Weakening (Bearish)</span>`; // EMA data unavailable - fall back to momentum-only label
+  }
+  return `<span class="trend-badge neutral">Neutral</span>`;
 }
 
 // VWAP standard-deviation badge - only shown once price is at least 1 SD
@@ -379,7 +399,7 @@ function screenerCard(t, i){
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
-        ${trendBadge(t.macd_trend)}${vwapBadge(t.vwap_sd_distance)}
+        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}
       </div>
       <div class="stat-grid" id="stat-grid-${i}"
            data-ticker="${t.ticker}"
