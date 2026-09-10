@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-09T15:38:06",
+  "generated_at": "2026-09-10T08:41:51",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 96280.36,
-    "total_cost": 94033.43,
-    "total_gain": 2246.93,
-    "total_gain_pct": 0.0239,
+    "total_value": 91939.22,
+    "total_cost": 90088.89,
+    "total_gain": 1850.33,
+    "total_gain_pct": 0.0205,
     "holdings": [
       {
         "ticker": "DRAM",
@@ -16,7 +16,7 @@
         "market_value": 6721.0,
         "gain_dollar": 702.57,
         "gain_pct": 0.1167,
-        "weight_pct": 0.0698,
+        "weight_pct": 0.0731,
         "suggested_entry": 55.2,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -30,23 +30,9 @@
         "market_value": 1105.68,
         "gain_dollar": 37.68,
         "gain_pct": 0.0353,
-        "weight_pct": 0.0115,
+        "weight_pct": 0.012,
         "suggested_entry": 346.55,
         "analyst_target": 533.41,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "CLS",
-        "company": "Celestica, Inc.",
-        "shares": 4.0,
-        "avg_cost": 294.151,
-        "current_price": 329.97,
-        "market_value": 1319.88,
-        "gain_dollar": 143.28,
-        "gain_pct": 0.1218,
-        "weight_pct": 0.0137,
-        "suggested_entry": 294.1,
-        "analyst_target": 477.22,
         "macd_trend": "RISING"
       },
       {
@@ -58,7 +44,7 @@
         "market_value": 2022.0,
         "gain_dollar": 234.75,
         "gain_pct": 0.1313,
-        "weight_pct": 0.021,
+        "weight_pct": 0.022,
         "suggested_entry": 11.78,
         "analyst_target": 23.81,
         "macd_trend": "RISING"
@@ -72,7 +58,7 @@
         "market_value": 31341.0,
         "gain_dollar": -1341.9,
         "gain_pct": -0.0411,
-        "weight_pct": 0.3255,
+        "weight_pct": 0.3409,
         "suggested_entry": 90.04,
         "analyst_target": 115.88,
         "macd_trend": "RISING"
@@ -86,7 +72,7 @@
         "market_value": 6570.2,
         "gain_dollar": 266.28,
         "gain_pct": 0.0422,
-        "weight_pct": 0.0682,
+        "weight_pct": 0.0715,
         "suggested_entry": 39.55,
         "analyst_target": 77.84,
         "macd_trend": "RISING"
@@ -100,7 +86,7 @@
         "market_value": 1662.0,
         "gain_dollar": -98.4,
         "gain_pct": -0.0559,
-        "weight_pct": 0.0173,
+        "weight_pct": 0.0181,
         "suggested_entry": 7.35,
         "analyst_target": 14.75,
         "macd_trend": "RISING"
@@ -114,7 +100,7 @@
         "market_value": 1473.35,
         "gain_dollar": -9.35,
         "gain_pct": -0.0063,
-        "weight_pct": 0.0153,
+        "weight_pct": 0.016,
         "suggested_entry": 292.19,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -128,7 +114,7 @@
         "market_value": 1241.04,
         "gain_dollar": 2.6,
         "gain_pct": 0.0021,
-        "weight_pct": 0.0129,
+        "weight_pct": 0.0135,
         "suggested_entry": 151.88,
         "analyst_target": 211.72,
         "macd_trend": "FLAT"
@@ -136,13 +122,13 @@
       {
         "ticker": "MU",
         "company": "Micron Technology, I",
-        "shares": 17.0021,
+        "shares": 16.0021,
         "avg_cost": 816.839,
         "current_price": 1000.26,
-        "market_value": 17006.52,
-        "gain_dollar": 3118.54,
+        "market_value": 16006.26,
+        "gain_dollar": 2935.12,
         "gain_pct": 0.2245,
-        "weight_pct": 0.1766,
+        "weight_pct": 0.1741,
         "suggested_entry": 922.09,
         "analyst_target": 1513.11,
         "macd_trend": "RISING"
@@ -156,7 +142,7 @@
         "market_value": 7923.12,
         "gain_dollar": 2920.98,
         "gain_pct": 0.5839,
-        "weight_pct": 0.0823,
+        "weight_pct": 0.0862,
         "suggested_entry": 214.22,
         "analyst_target": 327.65,
         "macd_trend": "RISING"
@@ -170,7 +156,7 @@
         "market_value": 858.9,
         "gain_dollar": -26.0,
         "gain_pct": -0.0294,
-        "weight_pct": 0.0089,
+        "weight_pct": 0.0093,
         "suggested_entry": 85.46,
         "analyst_target": 107.8,
         "macd_trend": "FLAT"
@@ -198,7 +184,7 @@
         "market_value": 3602.0,
         "gain_dollar": -1013.8,
         "gain_pct": -0.2196,
-        "weight_pct": 0.0374,
+        "weight_pct": 0.0392,
         "suggested_entry": 17.5,
         "analyst_target": 20.34,
         "macd_trend": "RISING"
@@ -212,23 +198,9 @@
         "market_value": 4314.45,
         "gain_dollar": 159.32,
         "gain_pct": 0.0383,
-        "weight_pct": 0.0448,
+        "weight_pct": 0.0469,
         "suggested_entry": 105.06,
         "analyst_target": null,
-        "macd_trend": "RISING"
-      },
-      {
-        "ticker": "TGLS",
-        "company": "Tecnoglass Holdings ",
-        "shares": 50.0,
-        "avg_cost": 39.022,
-        "current_price": 40.42,
-        "market_value": 2021.0,
-        "gain_dollar": 69.9,
-        "gain_pct": 0.0358,
-        "weight_pct": 0.021,
-        "suggested_entry": 38.92,
-        "analyst_target": 56.33,
         "macd_trend": "RISING"
       },
       {
@@ -240,7 +212,7 @@
         "market_value": 7098.22,
         "gain_dollar": 977.03,
         "gain_pct": 0.1596,
-        "weight_pct": 0.0737,
+        "weight_pct": 0.0772,
         "suggested_entry": 700.48,
         "analyst_target": null,
         "macd_trend": "RISING"
