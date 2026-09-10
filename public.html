@@ -167,7 +167,7 @@
   .ticker{font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:16px;}
   .company{font-size:12px; color:var(--ink-faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
   .price{font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:600;}
-  .card-mid{display:flex; justify-content:space-between; margin-top:8px; font-size:12px; color:var(--ink-dim);}
+  .card-mid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px 10px; margin-top:8px; font-size:12px; color:var(--ink-dim);}
   .card-mid .val{color:var(--ink); font-family:'IBM Plex Mono',monospace;}
   .card-bottom{display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;}
   .tag{
@@ -270,6 +270,7 @@
       <div class="score-badge" id="stickyScore">Score —</div>
     </div>
   </div>
+  <div class="card-mid" id="stickyMid" style="margin-top:0; margin-bottom:8px;"></div>
   <div class="stat-grid">
     <div class="stat-box"><div class="stat-label">Entry - EMA20</div><div class="stat-value" id="stickyEma20">—</div></div>
     <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value" id="stickySupport">—</div></div>
@@ -526,6 +527,13 @@ function setupStickyStatBar(i){
   document.getElementById('stickyTicker').textContent = grid.dataset.ticker || '—';
   document.getElementById('stickyPrice').textContent = grid.dataset.price || '—';
   document.getElementById('stickyScore').textContent = 'Score ' + (grid.dataset.score || '—');
+  // RSI/Trend line + the trend-badge (Bullish/Bearish/Momentum…) and VWAP-SD
+  // badge live in the card's own .card-mid, right above this stat-grid -
+  // copy it into the sticky bar too so those labels stay visible while
+  // scrolling through the charts, not just the price/EMA/target numbers.
+  const cardMid = grid.previousElementSibling;
+  document.getElementById('stickyMid').innerHTML =
+    (cardMid && cardMid.classList.contains('card-mid')) ? cardMid.innerHTML : '';
   document.getElementById('stickyEma20').textContent = grid.dataset.ema20 || '—';
   document.getElementById('stickySupport').textContent = grid.dataset.support || '—';
   document.getElementById('stickyTarget').innerHTML = grid.dataset.target || '—';
