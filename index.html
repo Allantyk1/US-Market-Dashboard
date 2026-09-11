@@ -200,8 +200,8 @@
   .tag.watch{background:#3A3320; color:var(--amber);}
   .tag.rising{background:var(--green-dim); color:var(--green);}
   .tag.falling{background:var(--red-dim); color:var(--red);}
-  .tag.flat{background:#20293D; color:var(--ink-dim);}
-  .tag.held{background:#20293D; color:var(--ink-dim); border:1px solid var(--line);}
+  .tag.flat{background:var(--panel-2); color:var(--ink-dim);}
+  .tag.held{background:var(--panel-2); color:var(--ink-dim); border:1px solid var(--line);}
 
   .empty{color:var(--ink-faint); font-size:13px; padding:16px 0; text-align:center;}
 
@@ -484,15 +484,39 @@ function fmtCompact(v){
 }
 
 let ALL_TICKERS = [];
+let ALL_TICKERS_MAP = new Map(); // ticker -> full screener record, for merging technical data onto portfolio holdings
 let TOP20_SET = new Set();
 let HOLDINGS = [];
 let activeTab = 'BUY';
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
-// --- Screener-style card: Buy / Watch / Sell / All Stocks tabs ---
+// Portfolio holdings joined with their screener technical record (RSI, trend,
+// VWAP SD, KDJ Action, Matrix Score, etc.) by ticker, so the Portfolio tab's
+// cards can show the same labelling as the All Stocks tab. Portfolio-only
+// fields (shares, avg_cost, gain_dollar, gain_pct, weight_pct, market_value)
+// take priority on overlap since they're what you actually hold. Falls back
+// to the holding alone (screenerCard()'s '—' fallbacks handle the gaps) if a
+// ticker isn't in the current screener universe (e.g. sold off the watch-
+// list, or a category the screener doesn't cover).
+function mergedHoldings(){
+  return HOLDINGS.map(h => {
+    const t = ALL_TICKERS_MAP.get(h.ticker);
+    return t ? { ...t, ...h } : h;
+  });
+}
+
+// --- Screener-style card: Buy / Watch / Sell / All Stocks / Portfolio tabs ---
 function screenerCard(t, i){
   const upside = (t.analyst_target && t.current_price) ? (t.analyst_target - t.current_price) / t.current_price : null;
   const isRecommended = TOP20_SET.has(t.ticker);
+  const isHolding = t.shares !== undefined; // merged portfolio record (see mergedHoldings())
+  const holdingLine = isHolding ? `
+      <div class="card-mid" style="margin-top:-4px;">
+        <span>${t.shares} sh · avg ${fmtMoney(t.avg_cost)}</span>
+        <span class="val" style="color:${t.gain_dollar >= 0 ? 'var(--green)' : 'var(--red)'}">
+          ${fmtMoney(t.gain_dollar)} (${fmtPct(t.gain_pct)})
+        </span>
+      </div>` : '';
   return `
     <div class="card expandable" onclick="toggleTickerDetail(${i})">
       <div class="card-top">
@@ -506,6 +530,7 @@ function screenerCard(t, i){
         </div>
       </div>
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
+      ${holdingLine}
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
         ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}
@@ -530,6 +555,9 @@ function screenerCard(t, i){
           <div class="chart-box"><canvas id="chart-vol-${i}" height="120"></canvas></div>
         </div>
         <div class="detail-grid">
+          ${isHolding ? `<span class="dlabel">Shares Held</span><span class="dval">${t.shares} @ avg ${fmtMoney(t.avg_cost)}</span>
+          <span class="dlabel">Market Value</span><span class="dval">${fmtMoney(t.market_value)}</span>
+          <span class="dlabel">Portfolio Weight</span><span class="dval">${t.weight_pct ? (t.weight_pct*100).toFixed(1)+'%' : '—'}</span>` : ''}
           <span class="dlabel">EMA20 / EMA40</span><span class="dval">${fmtMoney(t.ema20)} / ${fmtMoney(t.ema40)}</span>
           <span class="dlabel">Support / Resistance</span><span class="dval">${fmtMoney(t.support_lower_bb)} / ${fmtMoney(t.resistance_upper_bb)}</span>
           <span class="dlabel">Middle BB</span><span class="dval">${fmtMoney(t.middle_bb)}</span>
@@ -557,31 +585,6 @@ function screenerCard(t, i){
     </div>`;
 }
 
-// --- Holdings-style card: Portfolio tab (your actual position, not screening metrics) ---
-function holdingCard(h){
-  return `
-    <div class="card">
-      <div class="card-top">
-        <div class="ticker-block">
-          <span class="ticker">${h.ticker}</span>
-          <span class="company">${h.company || ''}</span>
-        </div>
-        <span class="price mono">${fmtMoney(h.current_price)}</span>
-      </div>
-      <div class="card-mid">
-        <span>${h.shares} sh · avg ${fmtMoney(h.avg_cost)}</span>
-        <span class="val" style="color:${h.gain_dollar >= 0 ? 'var(--green)' : 'var(--red)'}">
-          ${fmtMoney(h.gain_dollar)} (${fmtPct(h.gain_pct)})
-        </span>
-      </div>
-      <div class="card-bottom">
-        ${trendTag(h.macd_trend)}
-        <span class="tag flat">Target ${fmtMoney(h.analyst_target)}</span>
-        <span class="tag flat">Weight ${h.weight_pct ? (h.weight_pct*100).toFixed(1)+'%' : '—'}</span>
-      </div>
-    </div>`;
-}
-
 function renderTabContent(){
   const q = document.getElementById('tickerSearch').value.trim().toUpperCase();
   const el = document.getElementById('tabContent');
@@ -592,7 +595,11 @@ function renderTabContent(){
   updateKdjChipCounts(); // keep chip counts scoped to whichever Signal tab is now active
 
   if (activeTab === 'PORTFOLIO'){
-    let rows = HOLDINGS;
+    // Merged with each holding's screener technical record so Portfolio
+    // cards get the same RSI/Trend/VWAP/KDJ Action labelling as All Stocks -
+    // see mergedHoldings(). Same KDJ chip filter as the other tabs applies here too.
+    let rows = mergedHoldings();
+    if (activeKdjFilter !== 'ALL') rows = rows.filter(h => h.kdj_action === activeKdjFilter);
     if (q) rows = rows.filter(h => (h.ticker || '').toUpperCase().includes(q) || (h.company || '').toUpperCase().includes(q));
     countEl.textContent = `${rows.length} of ${HOLDINGS.length} holdings`;
     if (!rows.length){
@@ -600,7 +607,8 @@ function renderTabContent(){
         : '<div class="empty">No holdings yet — add them in Portfolio_Tracker.xlsx.</div>';
       return;
     }
-    el.innerHTML = rows.map(holdingCard).join('');
+    el.innerHTML = rows.map((h, i) => screenerCard(h, i)).join('');
+    updateBackButton();
     return;
   }
 
@@ -919,7 +927,8 @@ function updateTabCounts(){
 function updateKdjChipCounts(){
   const base = (activeTab === 'BUY' || activeTab === 'WATCHLIST' || activeTab === 'SELL')
     ? ALL_TICKERS.filter(t => t.signal === activeTab)
-    : ALL_TICKERS; // ALL / PORTFOLIO tabs - KDJ filter isn't applied against holdings anyway
+    : activeTab === 'PORTFOLIO' ? mergedHoldings() // scoped to your 15 holdings, not the full universe
+    : ALL_TICKERS; // ALL tab
   document.getElementById('countKdjBuyZone').textContent = base.filter(t => t.kdj_action === 'Buy Zone').length;
   document.getElementById('countKdjAccum').textContent = base.filter(t => t.kdj_action === 'Accumulate on Dip').length;
   document.getElementById('countKdjPullback').textContent = base.filter(t => t.kdj_action === 'Pullback Watch').length;
@@ -994,6 +1003,7 @@ async function load(){
 
     HOLDINGS = p.holdings;
     ALL_TICKERS = data.all_tickers || [];
+    ALL_TICKERS_MAP = new Map(ALL_TICKERS.map(t => [t.ticker, t]));
     TOP20_SET = new Set((data.top20 || []).map(r => r.ticker));
     updateTabCounts();
     renderTabContent();
