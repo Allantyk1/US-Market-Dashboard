@@ -112,6 +112,12 @@
   .trend-badge.bearish{background:var(--red-dim); color:var(--red);}
   .trend-badge.neutral{background:var(--panel-2); color:var(--ink-faint);}
   .trend-badge.caution{background:var(--amber-dim); color:var(--amber);}
+  /* KDJ Action badge reuses the same color language as trend-badge above
+     (bullish/bearish/caution/neutral) so it reads as part of the same
+     system, with a thin outline to mark it as a distinct layer: trend-badge
+     = trend HEALTH, kdj-action = entry/exit TIMING. Informational only -
+     does not affect Matrix Score/Signal or the Buy/Watch/Sell tab counts. */
+  .trend-badge.kdj-action{border:1px solid currentColor; background:transparent;}
   .recommended-tag{
     font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--amber);
     border:1px solid var(--amber-dim); border-radius:5px; padding:1px 6px; margin-left:6px;
@@ -421,6 +427,27 @@ function vwapBadge(sd){
   return `<span class="trend-badge ${cls}" title="${strength} ${dir} vs 20d VWAP">${sign}${sd.toFixed(1)}σ</span>`;
 }
 
+// KDJ Action badge - entry/exit TIMING layer, computed in stock_screener_us.py
+// (determine_kdj_action) from a KDJ K/D crossover + EMA/BB confluence. This
+// is a SEPARATE question from trendBadge() (trend health) and Matrix
+// Score/Signal (is this attractive) - it answers "is it time to act".
+// Purely informational: does not change Matrix Score, Signal, or which
+// Buy/Watch/Sell tab a ticker falls into.
+function kdjActionBadge(action, k, d){
+  if (!action) return '';
+  const style = {
+    'Buy Zone':         { cls: 'bullish', icon: '▲' },
+    'Accumulate on Dip':{ cls: 'bullish', icon: '▲' },
+    'Trim Zone':        { cls: 'caution', icon: '▼' },
+    'Exit':             { cls: 'bearish', icon: '✕' },
+    'Pullback Watch':   { cls: 'caution', icon: '…' },
+    'Waiting':          { cls: 'neutral', icon: '…' },
+  }[action] || { cls: 'neutral', icon: '…' };
+  const kd = (k !== null && k !== undefined && d !== null && d !== undefined)
+    ? ` <span class="mono" style="opacity:0.7;">K${k.toFixed ? k.toFixed(0) : k} D${d.toFixed ? d.toFixed(0) : d}</span>` : '';
+  return `<span class="trend-badge kdj-action ${style.cls}" title="KDJ entry/exit timing signal - separate from Matrix Score">${style.icon} ${action}${kd}</span>`;
+}
+
 function fmtCompact(v){
   if (v === null || v === undefined || v === '') return '—';
   const n = Number(v);
@@ -454,7 +481,7 @@ function screenerCard(t, i){
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
-        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}
+        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}
       </div>
       <div class="stat-grid" id="stat-grid-${i}"
            data-ticker="${t.ticker}"
@@ -484,6 +511,7 @@ function screenerCard(t, i){
           <span class="dlabel">52W High</span><span class="dval">${fmtMoney(t.high_52w_price)} (${t.high_52w_drop_pct || '—'})</span>
           <span class="dlabel">MACD Line / Signal</span><span class="dval">${t.macd_line ?? '—'} / ${t.macd_signal ?? '—'}</span>
           <span class="dlabel">MACD Histogram</span><span class="dval">${t.macd_histogram ?? '—'}</span>
+          <span class="dlabel">KDJ (K/D/J)</span><span class="dval">${t.kdj_k ?? '—'} / ${t.kdj_d ?? '—'} / ${t.kdj_j ?? '—'}${t.kdj_cross && t.kdj_cross !== 'NONE' ? ` <span class="mono">(${t.kdj_cross === 'GOLDEN' ? 'Golden Cross' : 'Death Cross'})</span>` : ''}</span>
           <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
           <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
           <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
