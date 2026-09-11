@@ -589,6 +589,7 @@ function renderTabContent(){
 
   // Any re-render (tab switch, search) replaces every card, so open detail state goes with it.
   document.getElementById('backToListBtn').classList.remove('visible');
+  updateKdjChipCounts(); // keep chip counts scoped to whichever Signal tab is now active
 
   if (activeTab === 'PORTFOLIO'){
     let rows = HOLDINGS;
@@ -906,13 +907,25 @@ function updateTabCounts(){
   document.getElementById('countSell').textContent = ALL_TICKERS.filter(t => t.signal === 'SELL').length;
   document.getElementById('countAll').textContent = ALL_TICKERS.length;
   document.getElementById('countPortfolio').textContent = HOLDINGS.length;
+}
 
-  document.getElementById('countKdjBuyZone').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Buy Zone').length;
-  document.getElementById('countKdjAccum').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Accumulate on Dip').length;
-  document.getElementById('countKdjPullback').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Pullback Watch').length;
-  document.getElementById('countKdjTrim').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Trim Zone').length;
-  document.getElementById('countKdjExit').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Exit').length;
-  document.getElementById('countKdjWaiting').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Waiting').length;
+// KDJ chip counts are scoped to the currently active Signal tab (Buy/Watch/
+// Sell) - NOT the full ticker universe - because that's the base set
+// renderTabContent() actually filters from. Showing a global count here
+// while the click result is tab-scoped was the bug: a chip could say "62"
+// while clicking it, on the Buy tab, showed only 4 - the other 58 were
+// sitting in Watch/Sell. Called from renderTabContent() so it stays correct
+// across tab switches, not just once at page load.
+function updateKdjChipCounts(){
+  const base = (activeTab === 'BUY' || activeTab === 'WATCHLIST' || activeTab === 'SELL')
+    ? ALL_TICKERS.filter(t => t.signal === activeTab)
+    : ALL_TICKERS; // ALL / PORTFOLIO tabs - KDJ filter isn't applied against holdings anyway
+  document.getElementById('countKdjBuyZone').textContent = base.filter(t => t.kdj_action === 'Buy Zone').length;
+  document.getElementById('countKdjAccum').textContent = base.filter(t => t.kdj_action === 'Accumulate on Dip').length;
+  document.getElementById('countKdjPullback').textContent = base.filter(t => t.kdj_action === 'Pullback Watch').length;
+  document.getElementById('countKdjTrim').textContent = base.filter(t => t.kdj_action === 'Trim Zone').length;
+  document.getElementById('countKdjExit').textContent = base.filter(t => t.kdj_action === 'Exit').length;
+  document.getElementById('countKdjWaiting').textContent = base.filter(t => t.kdj_action === 'Waiting').length;
 }
 
 document.getElementById('tabNav').addEventListener('click', (e) => {
