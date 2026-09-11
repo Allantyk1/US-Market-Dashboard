@@ -38,6 +38,27 @@ def _safe_float(v):
         return None
 
 
+def _safe_str(v, default):
+    """Like _safe_float's NaN guard, but for text columns such as
+    'KDJ Action'/'KDJ Cross'. pandas Series.get(key, default) only falls
+    back to `default` when the COLUMN is missing - a present column with a
+    blank/NaN CELL (e.g. a stale row from before KDJ was added, never
+    re-run through stock_screener_us.py) comes back as float('nan'), not
+    the default. That NaN survives into the JSON as null (see sanitize()
+    below), and null matches none of index.html's exact-string KDJ chip
+    filters (=== 'Buy Zone', etc.) - so the ticker silently drops out of
+    every chip count while still counting toward the ALL_TICKERS total,
+    which is why the six KDJ categories didn't sum to 668."""
+    if v is None:
+        return default
+    if isinstance(v, float) and math.isnan(v):
+        return default
+    s = str(v).strip()
+    if s == "" or s.lower() == "nan":
+        return default
+    return s
+
+
 def compute_suggested_entry(current_price, lower_bb):
     """Same formula used in generate_vlookup_calculator.py - the raw
     screener output (Complete_US_Market_Report.xlsx) never has a
@@ -94,8 +115,8 @@ def load_all_tickers():
             "kdj_k": _safe_float(r.get("KDJ K")),
             "kdj_d": _safe_float(r.get("KDJ D")),
             "kdj_j": _safe_float(r.get("KDJ J")),
-            "kdj_cross": r.get("KDJ Cross", "NONE"),
-            "kdj_action": r.get("KDJ Action", "Waiting"),
+            "kdj_cross": _safe_str(r.get("KDJ Cross"), "NONE"),
+            "kdj_action": _safe_str(r.get("KDJ Action"), "Waiting"),
             "current_vol": r.get("Current Vol"),
             "vol_200sma": r.get("Vol 200SMA"),
             "volume_strength": r.get("Volume Driven Strength"),
