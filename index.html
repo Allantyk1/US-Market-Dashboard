@@ -118,6 +118,19 @@
      = trend HEALTH, kdj-action = entry/exit TIMING. Informational only -
      does not affect Matrix Score/Signal or the Buy/Watch/Sell tab counts. */
   .trend-badge.kdj-action{border:1px solid currentColor; background:transparent;}
+  .kdj-filter-row{display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
+  .kdj-chip{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:600;
+    padding:4px 9px; border-radius:999px; border:1px solid var(--panel-2);
+    background:var(--panel-2); color:var(--ink-dim); cursor:pointer;
+  }
+  .kdj-chip .kdj-chip-count{opacity:0.65; margin-left:3px;}
+  .kdj-chip.active{border-color:currentColor; color:var(--ink);}
+  .kdj-chip.active[data-kdj="Buy Zone"],
+  .kdj-chip.active[data-kdj="Accumulate on Dip"]{background:var(--green-dim); color:var(--green);}
+  .kdj-chip.active[data-kdj="Trim Zone"],
+  .kdj-chip.active[data-kdj="Pullback Watch"]{background:var(--amber-dim); color:var(--amber);}
+  .kdj-chip.active[data-kdj="Exit"]{background:var(--red-dim); color:var(--red);}
   .recommended-tag{
     font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--amber);
     border:1px solid var(--amber-dim); border-radius:5px; padding:1px 6px; margin-left:6px;
@@ -329,6 +342,19 @@
   <div class="search-row">
     <input type="text" class="search-input" id="tickerSearch" placeholder="Search by ticker or name…">
   </div>
+  <!-- KDJ Action filter - a SECOND, independent filter (entry/exit timing)
+       layered on top of the Buy/Watch/Sell/All tabs above (attractiveness).
+       Combines with whichever tab + search are active; purely a client-side
+       filter, does not touch Matrix Score/Signal or the tab counts above. -->
+  <div class="kdj-filter-row" id="kdjFilterNav">
+    <button class="kdj-chip active" data-kdj="ALL">All KDJ</button>
+    <button class="kdj-chip" data-kdj="Buy Zone">▲ Buy Zone <span class="kdj-chip-count" id="countKdjBuyZone">0</span></button>
+    <button class="kdj-chip" data-kdj="Accumulate on Dip">▲ Accumulate <span class="kdj-chip-count" id="countKdjAccum">0</span></button>
+    <button class="kdj-chip" data-kdj="Pullback Watch">… Pullback <span class="kdj-chip-count" id="countKdjPullback">0</span></button>
+    <button class="kdj-chip" data-kdj="Trim Zone">▼ Trim <span class="kdj-chip-count" id="countKdjTrim">0</span></button>
+    <button class="kdj-chip" data-kdj="Exit">✕ Exit <span class="kdj-chip-count" id="countKdjExit">0</span></button>
+    <button class="kdj-chip" data-kdj="Waiting">… Waiting <span class="kdj-chip-count" id="countKdjWaiting">0</span></button>
+  </div>
   <div class="result-count" id="resultCount"></div>
   <div id="tabContent"><div class="empty">No data loaded yet.</div></div>
 </section>
@@ -461,6 +487,7 @@ let ALL_TICKERS = [];
 let TOP20_SET = new Set();
 let HOLDINGS = [];
 let activeTab = 'BUY';
+let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
 // --- Screener-style card: Buy / Watch / Sell / All Stocks tabs ---
 function screenerCard(t, i){
@@ -578,6 +605,7 @@ function renderTabContent(){
 
   let rows = ALL_TICKERS;
   if (activeTab !== 'ALL') rows = rows.filter(t => t.signal === activeTab);
+  if (activeKdjFilter !== 'ALL') rows = rows.filter(t => t.kdj_action === activeKdjFilter);
   if (q) rows = rows.filter(t => (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
 
   countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : rows.length} tickers`;
@@ -878,6 +906,13 @@ function updateTabCounts(){
   document.getElementById('countSell').textContent = ALL_TICKERS.filter(t => t.signal === 'SELL').length;
   document.getElementById('countAll').textContent = ALL_TICKERS.length;
   document.getElementById('countPortfolio').textContent = HOLDINGS.length;
+
+  document.getElementById('countKdjBuyZone').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Buy Zone').length;
+  document.getElementById('countKdjAccum').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Accumulate on Dip').length;
+  document.getElementById('countKdjPullback').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Pullback Watch').length;
+  document.getElementById('countKdjTrim').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Trim Zone').length;
+  document.getElementById('countKdjExit').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Exit').length;
+  document.getElementById('countKdjWaiting').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Waiting').length;
 }
 
 document.getElementById('tabNav').addEventListener('click', (e) => {
@@ -889,6 +924,14 @@ document.getElementById('tabNav').addEventListener('click', (e) => {
   renderTabContent();
 });
 document.getElementById('tickerSearch').addEventListener('input', renderTabContent);
+document.getElementById('kdjFilterNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.kdj-chip');
+  if (!btn) return;
+  document.querySelectorAll('.kdj-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeKdjFilter = btn.dataset.kdj;
+  renderTabContent();
+});
 
 // --- Scrolling ticker tape ---
 function renderTickerTape(items){
