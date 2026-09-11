@@ -70,6 +70,23 @@ def calculate_indicators(df):
     # shrinking bars (even while still positive/above zero) signal weakening
     # momentum, often before the price itself turns down
 
+    # KDJ (9,3,3) - a stochastic-derived momentum oscillator. %K is the fast
+    # line (where today's close sits within the last 9 trading days' high/low
+    # range), %D is a 3-period smoothing of %K, %J = 3*%K - 2*%D is the more
+    # sensitive/unbounded "divergence" line. This is informational/timing
+    # only - it does NOT feed into Matrix Score or Signal (see KDJ Action
+    # below, computed in evaluate_ticker).
+    # NOTE: the classic KDJ smoothing factor of 1/3 is exactly com=2 in a
+    # pandas ewm (alpha = 1/(1+com) = 1/3), so this matches the standard
+    # (9,3,3) recursive definition rather than approximating it.
+    kdj_window = min(9, len(df))
+    kdj_low = df['Low'].rolling(window=kdj_window).min()
+    kdj_high = df['High'].rolling(window=kdj_window).max()
+    rsv = ((df['Close'] - kdj_low) / (kdj_high - kdj_low + 1e-9)) * 100
+    df['KDJ_K'] = rsv.ewm(com=2, adjust=False).mean()
+    df['KDJ_D'] = df['KDJ_K'].ewm(com=2, adjust=False).mean()
+    df['KDJ_J'] = 3 * df['KDJ_K'] - 2 * df['KDJ_D']
+
     vol_window = min(200, len(df))
     df['Vol_200SMA'] = df['Volume'].rolling(window=vol_window).mean()
 
@@ -205,6 +222,50 @@ def fetch_history_with_retry(ticker_obj, retries=3, base_delay=2.0):
             time.sleep(base_delay * (attempt + 1))  # 2s, 4s, ...
     return pd.DataFrame(), last_err
 
+def determine_kdj_action(current_price, ema20, ema40, lower_bb, middle_bb, upper_bb,
+                          rsi_val, k_now, d_now, k_prior, d_prior, open_now, close_now):
+    """Entry/exit TIMING layer, separate from Matrix Score/Signal (which
+    answers "is this attractive"). This answers "is it time to act", by
+    combining a KDJ K/D crossover with trend context (EMA20/40) and price's
+    position relative to support/resistance (Bollinger Bands) - confluence
+    over any single indicator, same principle as the manual VWAP/BB/RSI/MACD
+    checklist already in use. Informational only: does not read or write
+    Matrix Score/Signal, and callers should not use it to change the
+    Buy/Watch/Sell bucket a ticker falls into.
+
+    Returns one of: "Buy Zone", "Accumulate on Dip", "Trim Zone", "Exit",
+    "Pullback Watch", "Waiting".
+    """
+    have = lambda *vals: all(v is not None and not (isinstance(v, float) and np.isnan(v)) for v in vals)
+
+    ema_up = have(ema20, ema40) and ema20 > ema40
+    near_support = have(lower_bb) and lower_bb > 0 and abs(current_price - lower_bb) / lower_bb <= 0.02
+    below_middle = have(middle_bb) and current_price < middle_bb
+    near_resistance = have(upper_bb) and upper_bb > 0 and (upper_bb - current_price) / upper_bb <= 0.01
+    hot_momentum = (have(k_now) and k_now >= 70) or (have(rsi_val) and rsi_val >= 68)
+    k_turning_down = have(k_now, k_prior) and k_now < k_prior
+    red_candle = have(open_now, close_now) and close_now < open_now
+
+    golden_cross = have(k_now, d_now, k_prior, d_prior) and k_prior <= d_prior and k_now > d_now
+    death_cross = have(k_now, d_now, k_prior, d_prior) and k_prior >= d_prior and k_now < d_now
+
+    # --- Buy: support bounce - oversold KDJ cross right at a known support level ---
+    if golden_cross and have(k_now) and k_now <= 40 and (near_support or below_middle):
+        return "Buy Zone"
+    # --- Buy: trend continuation - established uptrend, KDJ cross on a normal pullback ---
+    if ema_up and golden_cross and have(k_now) and k_now <= 55:
+        return "Accumulate on Dip"
+    # --- Sell: overextended - hot momentum right at resistance, just starting to roll over ---
+    if near_resistance and hot_momentum and k_turning_down:
+        return "Trim Zone"
+    # --- Sell: breakdown - no trend support, death cross, confirmed by a red candle ---
+    if not ema_up and death_cross and have(k_now) and k_now >= 50 and red_candle:
+        return "Exit"
+    # --- Watch: bearish/no trend but sitting at support - waiting for a cross to confirm ---
+    if not ema_up and (near_support or below_middle):
+        return "Pullback Watch"
+    return "Waiting"
+
 def evaluate_ticker(symbol, category_map=None):
     """Returns (data_dict_or_None, failure_reason_or_None)."""
     ticker = yf.Ticker(symbol)
@@ -232,6 +293,11 @@ def evaluate_ticker(symbol, category_map=None):
     hist = calculate_indicators(hist)
     save_ticker_history(symbol, hist)
     last_row = hist.iloc[-1]
+    # The actual trading date of the close being reported. This is what
+    # resume mode keys on - NOT the local calendar date - so a run that
+    # happened before Yahoo finalized yesterday's bar gets refreshed by the
+    # next run instead of being locked in for the rest of the day.
+    price_date = hist.index[-1].date().isoformat()
     current_price = float(last_row['Close'])
     lookback_window = min(252, len(hist))
     high_52wk = float(hist['High'].iloc[-lookback_window:].max())
@@ -285,6 +351,34 @@ def evaluate_ticker(symbol, category_map=None):
                 macd_hist_trend = "FALLING"
             else:
                 macd_hist_trend = "FLAT"
+
+    # KDJ Action - entry/exit TIMING layer, informational only, computed
+    # entirely separately from Matrix Score/Signal below (does not read or
+    # feed into that calculation). See determine_kdj_action() docstring.
+    k_now = last_row.get('KDJ_K', np.nan)
+    d_now = last_row.get('KDJ_D', np.nan)
+    j_now = last_row.get('KDJ_J', np.nan)
+    k_prior = hist['KDJ_K'].iloc[-2] if len(hist) > 1 else np.nan
+    d_prior = hist['KDJ_D'].iloc[-2] if len(hist) > 1 else np.nan
+    open_now = last_row.get('Open', np.nan)
+    close_now = current_price
+
+    if k_prior is not np.nan and d_prior is not np.nan and not np.isnan(k_prior) and not np.isnan(d_prior) \
+       and not np.isnan(k_now) and not np.isnan(d_now):
+        if k_prior <= d_prior and k_now > d_now:
+            kdj_cross = "GOLDEN"
+        elif k_prior >= d_prior and k_now < d_now:
+            kdj_cross = "DEATH"
+        else:
+            kdj_cross = "NONE"
+    else:
+        kdj_cross = "NONE"
+
+    kdj_action = determine_kdj_action(
+        current_price, last_row.get('EMA20', np.nan), last_row.get('EMA40', np.nan),
+        lower_bb, middle_bb, upper_bb, rsi_val, k_now, d_now, k_prior, d_prior,
+        open_now, close_now,
+    )
 
     dist_to_lower = current_price - lower_bb if not np.isnan(lower_bb) else 0
     dist_to_upper = upper_bb - current_price if not np.isnan(upper_bb) else 0
@@ -352,7 +446,7 @@ def evaluate_ticker(symbol, category_map=None):
 
     return {
         "Ticker": symbol, "Category": category, "Name": stock_name[:20],
-        "Current Price": round(current_price, 2),
+        "Current Price": round(current_price, 2), "Price Date": price_date,
         "52W High Price": round(high_52wk, 2), "52W High Drop %": f"{round(pct_from_high, 1)}%",
         "EMA20": round(last_row['EMA20'], 2) if not np.isnan(last_row.get('EMA20', np.nan)) else "N/A",
         "EMA40": round(last_row['EMA40'], 2) if not np.isnan(last_row.get('EMA40', np.nan)) else "N/A",
@@ -376,36 +470,78 @@ def evaluate_ticker(symbol, category_map=None):
         "Put Wall Open Interest Volume": put_wall_oi, "Whale Call Wall Price (Ceiling)": whale_call_wall,
         "Walls Crossed (Low Confidence)": walls_crossed,
         "Call Wall Open Interest Volume": call_wall_oi, "Matrix Score": score, "Signal": signal,
+        "KDJ K": round(k_now, 1) if not np.isnan(k_now) else "N/A",
+        "KDJ D": round(d_now, 1) if not np.isnan(d_now) else "N/A",
+        "KDJ J": round(j_now, 1) if not np.isnan(j_now) else "N/A",
+        "KDJ Cross": kdj_cross, "KDJ Action": kdj_action,
         "Analyst Target Price": analyst_target, "Analyst Upside %": analyst_upside_pct,
         "Num Analyst Opinions": num_analysts if num_analysts else "N/A",
         "Last Updated": datetime.date.today().isoformat(),
     }, None
 
-def load_existing_results():
-    """Resume support: if a report already exists AND was last written TODAY,
-    skip tickers already in it so a re-run only chases down what's still
-    missing (e.g. after a rate-limit wall cut a run short earlier today).
+def load_existing_results(latest_bar_date):
+    """Resume support: returns (existing_df, set_of_tickers_to_skip).
 
-    Critically: if the existing file is from a PREVIOUS day, it's stale -
-    we do a full fresh fetch instead of reusing yesterday's (or last week's)
-    prices forever. Without this check, any ticker that succeeded even once
-    would never be re-fetched again on any future day, silently going stale."""
+    A ticker is only skipped if the report already holds a price for the
+    LATEST trading date Yahoo currently serves (`latest_bar_date`, found by
+    the pre-flight check). Anything carrying an older Price Date gets
+    re-fetched, even if the file was written five minutes ago.
+
+    Why this matters: the old logic keyed on "was the file written today?"
+    (local Malaysia date). The US session closes ~4am MYT and Yahoo takes a
+    while to finalize the daily bar, so a run at 8-9am MYT could come back
+    with the PREVIOUS day's close for every ticker - and then every re-run
+    for the rest of the day resumed from that file and skipped everything.
+    (That is exactly what happened on 2026-09-04: the 08:51 run cached
+    Sep 2 closes; a 10:37 re-run only refreshed the one failed ticker.)
+
+    All rows of the old report are still returned so tickers that FAIL to
+    refresh keep carrying their previous price (visible via Price Date /
+    Last Updated columns) rather than vanishing from the report."""
     if not os.path.exists(OUTPUT_NAME):
-        return None
+        return None, set()
     try:
-        mtime = datetime.date.fromtimestamp(os.path.getmtime(OUTPUT_NAME))
-        if mtime != datetime.date.today():
-            print(f"[NOTE] Existing '{OUTPUT_NAME}' is from {mtime}, not today - "
-                  f"treating as stale and re-fetching everything fresh (not resuming).")
-            return None
         df = pd.read_excel(OUTPUT_NAME)
-        if 'Ticker' in df.columns and len(df) > 0:
-            print(f"[NOTE] Existing '{OUTPUT_NAME}' is from today - resuming "
-                  f"(only fetching tickers not already done today).")
-            return df
+        if 'Ticker' not in df.columns or len(df) == 0:
+            return None, set()
+        if 'Price Date' not in df.columns or latest_bar_date is None:
+            print(f"[NOTE] Existing '{OUTPUT_NAME}' has no 'Price Date' column (older "
+                  f"format) - treating as stale and re-fetching everything fresh.")
+            return df, set()
+        price_dates = df['Price Date'].astype(str).str[:10]
+        fresh_mask = price_dates == latest_bar_date.isoformat()
+        skip = set(df.loc[fresh_mask, 'Ticker'].astype(str).str.upper())
+        stale = int((~fresh_mask).sum())
+        if skip:
+            print(f"[NOTE] Existing '{OUTPUT_NAME}': {len(skip)} ticker(s) already have the "
+                  f"{latest_bar_date} close - resuming, will re-fetch the other {stale}.")
+        else:
+            print(f"[NOTE] Existing '{OUTPUT_NAME}' holds prices up to "
+                  f"{price_dates.max()}, but Yahoo now serves {latest_bar_date} - "
+                  f"re-fetching everything fresh.")
+        return df, skip
+    except Exception as e:
+        print(f"[NOTE] Could not read existing '{OUTPUT_NAME}' for resume ({e}) - "
+              f"fetching everything fresh.")
+    return None, set()
+
+
+def expected_latest_us_trading_date():
+    """Most recent weekday whose 4pm ET close has already happened. Ignores
+    US market holidays, so on the day after a holiday this will be one day
+    ahead of what Yahoo can possibly serve - that's why the pre-flight only
+    WARNS on a mismatch instead of aborting."""
+    try:
+        import zoneinfo
+        now_et = datetime.datetime.now(zoneinfo.ZoneInfo("America/New_York"))
     except Exception:
-        pass
-    return None
+        now_et = datetime.datetime.utcnow() - datetime.timedelta(hours=4)
+    d = now_et.date()
+    if now_et.hour < 16:          # session not closed yet today (ET)
+        d -= datetime.timedelta(days=1)
+    while d.weekday() >= 5:       # roll back over Sat/Sun
+        d -= datetime.timedelta(days=1)
+    return d
 
 def preflight_check():
     """Tests ONE well-known, always-liquid ticker (AAPL) before touching the
@@ -444,13 +580,25 @@ def preflight_check():
                   "%USERPROFILE%\\AppData\\Local\\py-yfinance\\) and retry")
             return False
         last_close = complete_hist['Close'].iloc[-1]
+        latest_bar_date = complete_hist.index[-1].date()
         if len(complete_hist) < len(hist):
             print(f"[NOTE] {len(hist) - len(complete_hist)} trailing row(s) dropped - "
                   f"in-progress trading day(s) with no Close yet. Normal, not an error.")
-        print(f"[PRE-FLIGHT OK] AAPL last close: ${last_close:.2f} ({len(complete_hist)} "
-              f"complete rows). yfinance is working correctly - proceeding with full scan.")
+        print(f"[PRE-FLIGHT OK] AAPL last close: ${last_close:.2f} on {latest_bar_date} "
+              f"({len(complete_hist)} complete rows). yfinance is working correctly.")
+
+        expected = expected_latest_us_trading_date()
+        if latest_bar_date < expected:
+            print(f"[WARNING] Yahoo's latest COMPLETE bar is {latest_bar_date}, but the most "
+                  f"recent US session that has closed is {expected}.")
+            print(f"          Either (a) {expected} was a US market holiday - fine, ignore this - or")
+            print(f"          (b) Yahoo hasn't finalized the {expected} close yet. The US close is "
+                  f"~4am Malaysia time; Yahoo usually needs 1-3 hours after that.")
+            print(f"          If (b): this run will fill in {latest_bar_date} prices. Re-run "
+                  f"after ~10am MYT and resume mode will now re-fetch every ticker "
+                  f"whose Price Date is older than what Yahoo serves.")
         print("=" * 60)
-        return True
+        return latest_bar_date
     except Exception as e:
         print(f"[PRE-FLIGHT FAILED] AAPL fetch raised an exception: {e}")
         print("This points to a connectivity, library version, or authentication issue.")
@@ -458,7 +606,8 @@ def preflight_check():
 
 
 def main():
-    if not preflight_check():
+    latest_bar_date = preflight_check()
+    if not latest_bar_date:
         print("\n[CANCELLED] Pre-flight check failed - fix the yfinance/environment "
               "issue above before running the full 634-ticker scan (no point waiting "
               "15 minutes just to see the same failure 633 times).")
@@ -470,12 +619,7 @@ def main():
         return
     category_map = read_category_map()
 
-    existing_df = load_existing_results()
-    already_done = set()
-    if existing_df is not None:
-        already_done = set(existing_df['Ticker'].astype(str).str.upper())
-        print(f"Found existing '{OUTPUT_NAME}' with {len(already_done)} tickers already done - "
-              f"resuming, will only fetch what's missing.", flush=True)
+    existing_df, already_done = load_existing_results(latest_bar_date)
 
     tickers_to_process = [t for t in tickers if t not in already_done]
     print(f"Loaded {len(tickers)} US assets from reference map "
@@ -521,13 +665,14 @@ def main():
         # Staleness summary - some tickers may be carrying over an OLDER
         # successful fetch if they've been failing on recent runs. This
         # makes that visible immediately instead of silently persisting.
-        if "Last Updated" in df_final.columns:
-            today_str = datetime.date.today().isoformat()
-            fresh_count = (df_final["Last Updated"] == today_str).sum()
+        if "Price Date" in df_final.columns:
+            latest_str = latest_bar_date.isoformat()
+            fresh_count = int((df_final["Price Date"].astype(str).str[:10] == latest_str).sum())
             stale_count = len(df_final) - fresh_count
-            print(f"[INFO] {fresh_count} ticker(s) updated today, {stale_count} carrying over "
-                  f"an older price (check the 'Last Updated' column in {OUTPUT_NAME} - "
-                  f"or 'Screener_Failed_Tickers.txt' for why they're not refreshing).")
+            print(f"[INFO] {fresh_count} ticker(s) carry the {latest_str} close, {stale_count} "
+                  f"carrying over an older price (check the 'Price Date' column in "
+                  f"{OUTPUT_NAME} - or 'Screener_Failed_Tickers.txt' for why they're "
+                  f"not refreshing). Just re-run to retry the stale ones.")
 
         # Archive a timestamped copy every run - a verifiable paper trail so
         # you (or I) can always check exactly what data existed at exactly
