@@ -110,6 +110,23 @@
   .trend-badge.bearish{background:var(--red-dim); color:var(--red);}
   .trend-badge.neutral{background:var(--panel-2); color:var(--ink-faint);}
   .trend-badge.caution{background:var(--amber-dim); color:var(--amber);}
+  /* KDJ Action badge - entry/exit TIMING layer, informational only, separate
+     from trend-badge (trend HEALTH) and Matrix Score/Signal. Reuses the same
+     colors, with a thin outline to mark it as a distinct layer. */
+  .trend-badge.kdj-action{border:1px solid currentColor; background:transparent;}
+  .kdj-filter-row{display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
+  .kdj-chip{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:600;
+    padding:4px 9px; border-radius:999px; border:1px solid var(--panel-2);
+    background:var(--panel-2); color:var(--ink-dim); cursor:pointer;
+  }
+  .kdj-chip .kdj-chip-count{opacity:0.65; margin-left:3px;}
+  .kdj-chip.active{border-color:currentColor; color:var(--ink);}
+  .kdj-chip.active[data-kdj="Buy Zone"],
+  .kdj-chip.active[data-kdj="Accumulate on Dip"]{background:var(--green-dim); color:var(--green);}
+  .kdj-chip.active[data-kdj="Trim Zone"],
+  .kdj-chip.active[data-kdj="Pullback Watch"]{background:var(--amber-dim); color:var(--amber);}
+  .kdj-chip.active[data-kdj="Exit"]{background:var(--red-dim); color:var(--red);}
   .recommended-tag{
     font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--amber);
     border:1px solid var(--amber-dim); border-radius:5px; padding:1px 6px; margin-left:6px;
@@ -303,6 +320,18 @@
   <div class="search-row">
     <input type="text" class="search-input" id="tickerSearch" placeholder="Search by ticker or name…">
   </div>
+  <!-- KDJ Action filter - second, independent filter (entry/exit timing) on
+       top of the Buy/Watch/Sell/All tabs above (attractiveness). See
+       index.html for the full rationale comment. -->
+  <div class="kdj-filter-row" id="kdjFilterNav">
+    <button class="kdj-chip active" data-kdj="ALL">All KDJ</button>
+    <button class="kdj-chip" data-kdj="Buy Zone">▲ Buy Zone <span class="kdj-chip-count" id="countKdjBuyZone">0</span></button>
+    <button class="kdj-chip" data-kdj="Accumulate on Dip">▲ Accumulate <span class="kdj-chip-count" id="countKdjAccum">0</span></button>
+    <button class="kdj-chip" data-kdj="Pullback Watch">… Pullback <span class="kdj-chip-count" id="countKdjPullback">0</span></button>
+    <button class="kdj-chip" data-kdj="Trim Zone">▼ Trim <span class="kdj-chip-count" id="countKdjTrim">0</span></button>
+    <button class="kdj-chip" data-kdj="Exit">✕ Exit <span class="kdj-chip-count" id="countKdjExit">0</span></button>
+    <button class="kdj-chip" data-kdj="Waiting">… Waiting <span class="kdj-chip-count" id="countKdjWaiting">0</span></button>
+  </div>
   <div class="result-count" id="resultCount"></div>
   <div id="tabContent"><div class="empty">No data loaded yet.</div></div>
 </section>
@@ -368,6 +397,27 @@ function vwapBadge(sd){
   return `<span class="trend-badge ${cls}" title="${strength} ${dir} vs 20d VWAP">${sign}${sd.toFixed(1)}σ</span>`;
 }
 
+// KDJ Action badge - entry/exit TIMING layer, computed in stock_screener_us.py
+// (determine_kdj_action) from a KDJ K/D crossover + EMA/BB confluence. This
+// is a SEPARATE question from trendBadge() (trend health) and Matrix
+// Score/Signal (is this attractive) - it answers "is it time to act".
+// Purely informational: does not change Matrix Score, Signal, or which
+// Buy/Watch/Sell tab a ticker falls into.
+function kdjActionBadge(action, k, d){
+  if (!action) return '';
+  const style = {
+    'Buy Zone':         { cls: 'bullish', icon: '▲' },
+    'Accumulate on Dip':{ cls: 'bullish', icon: '▲' },
+    'Trim Zone':        { cls: 'caution', icon: '▼' },
+    'Exit':             { cls: 'bearish', icon: '✕' },
+    'Pullback Watch':   { cls: 'caution', icon: '…' },
+    'Waiting':          { cls: 'neutral', icon: '…' },
+  }[action] || { cls: 'neutral', icon: '…' };
+  const kd = (k !== null && k !== undefined && d !== null && d !== undefined)
+    ? ` <span class="mono" style="opacity:0.7;">K${k.toFixed ? k.toFixed(0) : k} D${d.toFixed ? d.toFixed(0) : d}</span>` : '';
+  return `<span class="trend-badge kdj-action ${style.cls}" title="KDJ entry/exit timing signal - separate from Matrix Score">${style.icon} ${action}${kd}</span>`;
+}
+
 function fmtCompact(v){
   if (v === null || v === undefined || v === '') return '—';
   const n = Number(v);
@@ -380,6 +430,7 @@ function fmtCompact(v){
 let ALL_TICKERS = [];
 let TOP20_SET = new Set();
 let activeTab = 'BUY';
+let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
 // --- Screener-style card: Buy / Watch / Sell / All Stocks tabs ---
 function screenerCard(t, i){
@@ -400,7 +451,7 @@ function screenerCard(t, i){
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
-        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}
+        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}
       </div>
       <div class="stat-grid" id="stat-grid-${i}"
            data-ticker="${t.ticker}"
@@ -430,6 +481,7 @@ function screenerCard(t, i){
           <span class="dlabel">52W High</span><span class="dval">${fmtMoney(t.high_52w_price)} (${t.high_52w_drop_pct || '—'})</span>
           <span class="dlabel">MACD Line / Signal</span><span class="dval">${t.macd_line ?? '—'} / ${t.macd_signal ?? '—'}</span>
           <span class="dlabel">MACD Histogram</span><span class="dval">${t.macd_histogram ?? '—'}</span>
+          <span class="dlabel">KDJ (K/D/J)</span><span class="dval">${t.kdj_k ?? '—'} / ${t.kdj_d ?? '—'} / ${t.kdj_j ?? '—'}${t.kdj_cross && t.kdj_cross !== 'NONE' ? ` <span class="mono">(${t.kdj_cross === 'GOLDEN' ? 'Golden Cross' : 'Death Cross'})</span>` : ''}</span>
           <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
           <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
           <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
@@ -457,6 +509,7 @@ function renderTabContent(){
 
   let rows = ALL_TICKERS;
   if (activeTab !== 'ALL') rows = rows.filter(t => t.signal === activeTab);
+  if (activeKdjFilter !== 'ALL') rows = rows.filter(t => t.kdj_action === activeKdjFilter);
   if (q) rows = rows.filter(t => (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
 
   countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : rows.length} tickers`;
@@ -752,6 +805,13 @@ function updateTabCounts(){
   document.getElementById('countWatch').textContent = ALL_TICKERS.filter(t => t.signal === 'WATCHLIST').length;
   document.getElementById('countSell').textContent = ALL_TICKERS.filter(t => t.signal === 'SELL').length;
   document.getElementById('countAll').textContent = ALL_TICKERS.length;
+
+  document.getElementById('countKdjBuyZone').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Buy Zone').length;
+  document.getElementById('countKdjAccum').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Accumulate on Dip').length;
+  document.getElementById('countKdjPullback').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Pullback Watch').length;
+  document.getElementById('countKdjTrim').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Trim Zone').length;
+  document.getElementById('countKdjExit').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Exit').length;
+  document.getElementById('countKdjWaiting').textContent = ALL_TICKERS.filter(t => t.kdj_action === 'Waiting').length;
 }
 
 document.getElementById('tabNav').addEventListener('click', (e) => {
@@ -763,6 +823,14 @@ document.getElementById('tabNav').addEventListener('click', (e) => {
   renderTabContent();
 });
 document.getElementById('tickerSearch').addEventListener('input', renderTabContent);
+document.getElementById('kdjFilterNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.kdj-chip');
+  if (!btn) return;
+  document.querySelectorAll('.kdj-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeKdjFilter = btn.dataset.kdj;
+  renderTabContent();
+});
 
 // --- Scrolling ticker tape ---
 function renderTickerTape(items){
