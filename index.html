@@ -553,6 +553,7 @@ function screenerCard(t, i){
           <div class="chart-box"><canvas id="chart-vwapdist-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-rsi-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-vol-${i}" height="120"></canvas></div>
+          <div class="chart-box" id="pricedist-box-${i}"><canvas id="chart-pricedist-${i}" height="200"></canvas></div>
         </div>
         <div class="detail-grid">
           ${isHolding ? `<span class="dlabel">Shares Held</span><span class="dval">${t.shares} @ avg ${fmtMoney(t.avg_cost)}</span>
@@ -723,6 +724,7 @@ async function loadTickerCharts(i, ticker){
     renderVwapDistChart(i, d);
     renderRsiChart(i, d);
     renderVolumeChart(i, d);
+    renderPriceDistChart(i, d);
   } catch (e){
     panelsEl.innerHTML = '<div class="chart-loading">Chart history unavailable for this ticker.</div>';
   }
@@ -890,6 +892,73 @@ function renderVolumeChart(i, d){
     options: baseChartOptions('Volume', (v) => `${v}M`)
   });
   attachTooltipDismiss(key);
+}
+
+// Price Distribution ("Volume Profile") - a volume-weighted proxy for how
+// much recent trading happened below vs above today's price, computed
+// server-side in stock_screener_us.py (compute_price_distribution) from up
+// to the last 252 trading days already in memory - no extra fetch here.
+// NOT real shareholder cost-basis data (no such source exists for public
+// equities): it uses each day's Close as a stand-in for "the price that
+// day's volume traded at" (same simplification the VWAP badge already
+// makes), so read the headline % as "of the shares that changed hands over
+// the lookback window, this much changed hands below today's price" - not a
+// literal claim about what current holders paid. Degrades to a plain note
+// if the pipeline hasn't populated `price_dist` yet (older cached files, or
+// before the next screener run).
+function renderPriceDistChart(i, d){
+  const key = 'pricedist-' + i;
+  destroyChart(key);
+  const box = document.getElementById('pricedist-box-' + i);
+  const ctx = document.getElementById('chart-pricedist-' + i);
+  if (!box || !ctx) return;
+  const pd = d.price_dist;
+  if (!pd || !pd.bin_edges || !pd.bin_edges.length){
+    box.innerHTML = '<div class="chart-loading">Price distribution not available yet - populates on the next data refresh.</div>';
+    return;
+  }
+  const currentPrice = (d.price && d.price.length) ? d.price[d.price.length - 1] : null;
+  const edges = pd.bin_edges;
+  const volumes = pd.bin_volume || [];
+  const labels = volumes.map((_, idx) => `$${edges[idx].toFixed(0)}-${edges[idx+1].toFixed(0)}`);
+  const colors = volumes.map((_, idx) => {
+    const mid = (edges[idx] + edges[idx+1]) / 2;
+    return (currentPrice != null && mid < currentPrice) ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.55)';
+  });
+  CHART_INSTANCES[key] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Volume (M)', data: volumes, backgroundColor: colors, borderRadius: 0, barPercentage: 0.9, categoryPercentage: 0.95 }] },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb' },
+        title: { display:true, text:`Price Distribution (${pd.lookback_days}d volume by price)`, color:'#9ca3af', font:{ size:11 }, padding:{ bottom:6 } }
+      },
+      scales: {
+        x: { ticks:{ color:'#6b7280', font:{ size:9 } }, grid:{ color:'rgba(255,255,255,0.04)' } },
+        y: { ticks:{ color:'#6b7280', font:{ size:8 }, maxTicksLimit: 12 }, grid:{ display:false } }
+      }
+    }
+  });
+  attachTooltipDismiss(key);
+  const pctBelow = pd.pct_volume_below_current;
+  if (pctBelow != null){
+    const pctAbove = Math.max(0, Math.round((100 - pctBelow) * 10) / 10);
+    const statEl = document.createElement('div');
+    statEl.style.cssText = 'display:flex; justify-content:space-between; gap:8px; margin-top:6px; font-size:11px; font-family:IBM Plex Mono,monospace;';
+    statEl.innerHTML = `
+      <span style="color:var(--green);">▼ ${pctBelow}% of volume below current price</span>
+      <span style="color:var(--red);">${pctAbove}% above ▲</span>`;
+    box.appendChild(statEl);
+    const capEl = document.createElement('div');
+    capEl.className = 'expand-hint';
+    capEl.style.marginTop = '2px';
+    capEl.textContent = `Based on the last ${pd.lookback_days} trading days' volume by price - a rough volume-weighted proxy for who's likely still in gain vs underwater at today's price, not actual holder cost basis.`;
+    box.appendChild(capEl);
+  }
 }
 
 function baseChartOptions(title, yTickFmt){
