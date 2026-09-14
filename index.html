@@ -952,8 +952,8 @@ function renderPriceDistChart(i, d){
     const statEl = document.createElement('div');
     statEl.style.cssText = 'display:flex; justify-content:space-between; gap:8px; margin-top:6px; font-size:11px; font-family:IBM Plex Mono,monospace;';
     statEl.innerHTML = `
-      <span style="color:var(--green);">▼ ${pctBelow}% of volume below current price</span>
-      <span style="color:var(--red);">${pctAbove}% above ▲</span>`;
+      <span style="color:var(--red);">▼ ${pctBelow}% of volume below current price</span>
+      <span style="color:var(--green);">${pctAbove}% above ▲</span>`;
     box.appendChild(statEl);
     const capEl = document.createElement('div');
     capEl.className = 'expand-hint';
