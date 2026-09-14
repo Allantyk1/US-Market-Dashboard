@@ -221,6 +221,8 @@
   .detail-grid .dval{color:var(--ink); font-family:'IBM Plex Mono',monospace; text-align:right;}
   .chart-panels{display:flex; flex-direction:column; gap:14px; margin-bottom:14px;}
   .chart-box{background:var(--card-bg, rgba(255,255,255,0.02)); border:1px solid var(--line, rgba(255,255,255,0.08)); border-radius:10px; padding:10px;}
+  .pricedist-canvas-wrap{position:relative; height:120px; overflow:hidden;}
+  .pricedist-canvas-wrap canvas{position:absolute; inset:0; width:100% !important; height:100% !important;}
   .chart-loading{font-size:12px; color:var(--ink-faint); text-align:center; padding:20px 0;}
   .expand-hint{font-size:10.5px; color:var(--ink-faint); text-align:center; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; letter-spacing:0.03em;}
@@ -553,7 +555,7 @@ function screenerCard(t, i){
           <div class="chart-box"><canvas id="chart-vwapdist-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-rsi-${i}" height="120"></canvas></div>
           <div class="chart-box"><canvas id="chart-vol-${i}" height="120"></canvas></div>
-          <div class="chart-box" id="pricedist-box-${i}"><canvas id="chart-pricedist-${i}" height="200"></canvas></div>
+          <div class="chart-box" id="pricedist-box-${i}"><div class="pricedist-canvas-wrap"><canvas id="chart-pricedist-${i}"></canvas></div></div>
         </div>
         <div class="detail-grid">
           ${isHolding ? `<span class="dlabel">Shares Held</span><span class="dval">${t.shares} @ avg ${fmtMoney(t.avg_cost)}</span>
@@ -927,7 +929,7 @@ function renderPriceDistChart(i, d){
   });
   CHART_INSTANCES[key] = new Chart(ctx, {
     type: 'bar',
-    data: { labels, datasets: [{ label: 'Volume (M)', data: volumes, backgroundColor: colors, borderRadius: 0, barPercentage: 0.9, categoryPercentage: 0.95 }] },
+    data: { labels, datasets: [{ label: 'Volume (M)', data: volumes, backgroundColor: colors, borderRadius: 0, barPercentage: 0.85, categoryPercentage: 0.9 }] },
     options: {
       indexAxis: 'y',
       responsive: true,
@@ -935,11 +937,11 @@ function renderPriceDistChart(i, d){
       plugins: {
         legend: { display: false },
         tooltip: { backgroundColor:'#1f2937', titleColor:'#e5e7eb', bodyColor:'#e5e7eb' },
-        title: { display:true, text:`Price Distribution (${pd.lookback_days}d volume by price)`, color:'#9ca3af', font:{ size:11 }, padding:{ bottom:6 } }
+        title: { display:true, text:`Price Distribution (${pd.lookback_days}d volume by price)`, color:'#9ca3af', font:{ size:10 }, padding:{ bottom:4 } }
       },
       scales: {
-        x: { ticks:{ color:'#6b7280', font:{ size:9 } }, grid:{ color:'rgba(255,255,255,0.04)' } },
-        y: { ticks:{ color:'#6b7280', font:{ size:8 }, maxTicksLimit: 12 }, grid:{ display:false } }
+        x: { ticks:{ color:'#6b7280', font:{ size:8 } }, grid:{ color:'rgba(255,255,255,0.04)' } },
+        y: { ticks:{ color:'#6b7280', font:{ size:7 }, maxTicksLimit: 8 }, grid:{ display:false } }
       }
     }
   });
