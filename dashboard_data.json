@@ -1,12 +1,26 @@
 {
-  "generated_at": "2026-09-16T18:59:08",
+  "generated_at": "2026-09-17T15:19:29",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 87577.46,
-    "total_cost": 88224.7,
-    "total_gain": -647.24,
-    "total_gain_pct": -0.0073,
+    "total_value": 89794.26,
+    "total_cost": 90463.77,
+    "total_gain": -669.51,
+    "total_gain_pct": -0.0074,
     "holdings": [
+      {
+        "ticker": "DD",
+        "company": "DuPont de Nemours, I",
+        "shares": 5.0,
+        "avg_cost": 128.32,
+        "current_price": 128.04,
+        "market_value": 640.2,
+        "gain_dollar": -1.4,
+        "gain_pct": -0.0022,
+        "weight_pct": 0.0071,
+        "suggested_entry": 125.54,
+        "analyst_target": 170.0,
+        "macd_trend": "RISING"
+      },
       {
         "ticker": "DRAM",
         "company": "Roundhill Memory ETF",
@@ -16,7 +30,7 @@
         "market_value": 6051.1,
         "gain_dollar": 32.67,
         "gain_pct": 0.0054,
-        "weight_pct": 0.0691,
+        "weight_pct": 0.0674,
         "suggested_entry": 53.55,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -30,10 +44,24 @@
         "market_value": 370.0,
         "gain_dollar": 8.96,
         "gain_pct": 0.0248,
-        "weight_pct": 0.0042,
+        "weight_pct": 0.0041,
         "suggested_entry": 71.19,
         "analyst_target": 88.27,
         "macd_trend": "RISING"
+      },
+      {
+        "ticker": "GLD",
+        "company": "SPDR Gold Shares",
+        "shares": 4.0,
+        "avg_cost": 399.368,
+        "current_price": 394.15,
+        "market_value": 1576.6,
+        "gain_dollar": -20.87,
+        "gain_pct": -0.0131,
+        "weight_pct": 0.0176,
+        "suggested_entry": 388.69,
+        "analyst_target": null,
+        "macd_trend": "FLAT"
       },
       {
         "ticker": "INTC",
@@ -44,7 +72,7 @@
         "market_value": 29142.0,
         "gain_dollar": -3540.9,
         "gain_pct": -0.1083,
-        "weight_pct": 0.3328,
+        "weight_pct": 0.3245,
         "suggested_entry": 87.56,
         "analyst_target": 115.74,
         "macd_trend": "FALLING"
@@ -58,7 +86,7 @@
         "market_value": 5821.2,
         "gain_dollar": -482.72,
         "gain_pct": -0.0766,
-        "weight_pct": 0.0665,
+        "weight_pct": 0.0648,
         "suggested_entry": 37.8,
         "analyst_target": 79.03,
         "macd_trend": "FALLING"
@@ -72,7 +100,7 @@
         "market_value": 1442.0,
         "gain_dollar": -318.4,
         "gain_pct": -0.1809,
-        "weight_pct": 0.0165,
+        "weight_pct": 0.0161,
         "suggested_entry": 7.05,
         "analyst_target": 14.75,
         "macd_trend": "FALLING"
@@ -86,7 +114,7 @@
         "market_value": 1200.16,
         "gain_dollar": -38.28,
         "gain_pct": -0.0309,
-        "weight_pct": 0.0137,
+        "weight_pct": 0.0134,
         "suggested_entry": 149.27,
         "analyst_target": 210.79,
         "macd_trend": "FALLING"
@@ -100,7 +128,7 @@
         "market_value": 14843.55,
         "gain_dollar": 1772.41,
         "gain_pct": 0.1356,
-        "weight_pct": 0.1695,
+        "weight_pct": 0.1653,
         "suggested_entry": 905.23,
         "analyst_target": 1513.11,
         "macd_trend": "FALLING"
@@ -114,7 +142,7 @@
         "market_value": 7447.17,
         "gain_dollar": 2445.03,
         "gain_pct": 0.4888,
-        "weight_pct": 0.085,
+        "weight_pct": 0.0829,
         "suggested_entry": 208.11,
         "analyst_target": 328.66,
         "macd_trend": "FALLING"
@@ -128,7 +156,7 @@
         "market_value": 1703.2,
         "gain_dollar": -40.7,
         "gain_pct": -0.0233,
-        "weight_pct": 0.0194,
+        "weight_pct": 0.019,
         "suggested_entry": 84.65,
         "analyst_target": 107.8,
         "macd_trend": "RISING"
@@ -142,7 +170,7 @@
         "market_value": 3496.6,
         "gain_dollar": 379.36,
         "gain_pct": 0.1217,
-        "weight_pct": 0.0399,
+        "weight_pct": 0.0389,
         "suggested_entry": 154.19,
         "analyst_target": 248.43,
         "macd_trend": "FALLING"
@@ -156,7 +184,7 @@
         "market_value": 3414.0,
         "gain_dollar": -1201.8,
         "gain_pct": -0.2604,
-        "weight_pct": 0.039,
+        "weight_pct": 0.038,
         "suggested_entry": 16.84,
         "analyst_target": 20.34,
         "macd_trend": "FLAT"
@@ -170,7 +198,7 @@
         "market_value": 5627.6,
         "gain_dollar": -560.56,
         "gain_pct": -0.0906,
-        "weight_pct": 0.0643,
+        "weight_pct": 0.0627,
         "suggested_entry": 100.42,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -184,7 +212,7 @@
         "market_value": 7018.88,
         "gain_dollar": 897.69,
         "gain_pct": 0.1467,
-        "weight_pct": 0.0801,
+        "weight_pct": 0.0782,
         "suggested_entry": 692.72,
         "analyst_target": null,
         "macd_trend": "FLAT"
