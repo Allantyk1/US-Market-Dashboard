@@ -314,10 +314,10 @@
 
 <section style="padding-top:16px;">
   <div class="tab-nav" id="tabNav">
-    <button class="tab-btn active" data-tab="BUY">Buy <span class="tab-count" id="countBuy">0</span></button>
+    <button class="tab-btn" data-tab="BUY">Buy <span class="tab-count" id="countBuy">0</span></button>
     <button class="tab-btn" data-tab="WATCHLIST">Watch <span class="tab-count" id="countWatch">0</span></button>
     <button class="tab-btn" data-tab="SELL">Sell <span class="tab-count" id="countSell">0</span></button>
-    <button class="tab-btn" data-tab="ALL">All Stocks <span class="tab-count" id="countAll">0</span></button>
+    <button class="tab-btn active" data-tab="ALL">All Stocks <span class="tab-count" id="countAll">0</span></button>
   </div>
   <div class="search-row">
     <input type="text" class="search-input" id="tickerSearch" placeholder="Search by ticker or name…">
@@ -431,7 +431,7 @@ function fmtCompact(v){
 
 let ALL_TICKERS = [];
 let TOP20_SET = new Set();
-let activeTab = 'BUY';
+let activeTab = 'ALL';
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
 // --- Screener-style card: Buy / Watch / Sell / All Stocks tabs ---

@@ -335,10 +335,10 @@
 
 <section>
   <div class="tab-nav" id="tabNav">
-    <button class="tab-btn active" data-tab="BUY">Buy <span class="tab-count" id="countBuy">0</span></button>
+    <button class="tab-btn" data-tab="BUY">Buy <span class="tab-count" id="countBuy">0</span></button>
     <button class="tab-btn" data-tab="WATCHLIST">Watch <span class="tab-count" id="countWatch">0</span></button>
     <button class="tab-btn" data-tab="SELL">Sell <span class="tab-count" id="countSell">0</span></button>
-    <button class="tab-btn" data-tab="ALL">All Stocks <span class="tab-count" id="countAll">0</span></button>
+    <button class="tab-btn active" data-tab="ALL">All Stocks <span class="tab-count" id="countAll">0</span></button>
     <button class="tab-btn" data-tab="PORTFOLIO">Portfolio <span class="tab-count" id="countPortfolio">0</span></button>
   </div>
   <div class="search-row">
@@ -489,7 +489,7 @@ let ALL_TICKERS = [];
 let ALL_TICKERS_MAP = new Map(); // ticker -> full screener record, for merging technical data onto portfolio holdings
 let TOP20_SET = new Set();
 let HOLDINGS = [];
-let activeTab = 'BUY';
+let activeTab = 'ALL';
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
 // Portfolio holdings joined with their screener technical record (RSI, trend,
