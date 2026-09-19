@@ -1,22 +1,50 @@
 {
-  "generated_at": "2026-09-18T14:28:48",
+  "generated_at": "2026-09-19T11:02:32",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 95824.23,
-    "total_cost": 90463.77,
-    "total_gain": 5360.46,
-    "total_gain_pct": 0.0593,
+    "total_value": 110801.19,
+    "total_cost": 93812.2,
+    "total_gain": 16988.99,
+    "total_gain_pct": 0.1811,
     "holdings": [
+      {
+        "ticker": "CLSK",
+        "company": "CleanSpark, Inc.",
+        "shares": 50.0,
+        "avg_cost": 12.937,
+        "current_price": 13.35,
+        "market_value": 667.5,
+        "gain_dollar": 20.65,
+        "gain_pct": 0.0319,
+        "weight_pct": 0.006,
+        "suggested_entry": 11.86,
+        "analyst_target": 23.81,
+        "macd_trend": "FALLING"
+      },
+      {
+        "ticker": "CRDO",
+        "company": "Credo Technology Gro",
+        "shares": 10.0,
+        "avg_cost": 167.25,
+        "current_price": 168.25,
+        "market_value": 1682.5,
+        "gain_dollar": 10.0,
+        "gain_pct": 0.006,
+        "weight_pct": 0.0152,
+        "suggested_entry": 139.54,
+        "analyst_target": 282.47,
+        "macd_trend": "RISING"
+      },
       {
         "ticker": "DD",
         "company": "DuPont de Nemours, I",
-        "shares": 5.0,
-        "avg_cost": 128.32,
+        "shares": 13.0,
+        "avg_cost": 128.514,
         "current_price": 128.46,
-        "market_value": 642.3,
-        "gain_dollar": 0.7,
-        "gain_pct": 0.0011,
-        "weight_pct": 0.0067,
+        "market_value": 1669.98,
+        "gain_dollar": -0.7,
+        "gain_pct": -0.0004,
+        "weight_pct": 0.0151,
         "suggested_entry": 125.2,
         "analyst_target": 170.0,
         "macd_trend": "RISING"
@@ -30,7 +58,7 @@
         "market_value": 6355.8,
         "gain_dollar": 337.37,
         "gain_pct": 0.0561,
-        "weight_pct": 0.0663,
+        "weight_pct": 0.0574,
         "suggested_entry": 54.67,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -44,7 +72,7 @@
         "market_value": 361.7,
         "gain_dollar": 0.66,
         "gain_pct": 0.0018,
-        "weight_pct": 0.0038,
+        "weight_pct": 0.0033,
         "suggested_entry": 69.68,
         "analyst_target": 88.27,
         "macd_trend": "RISING"
@@ -58,7 +86,7 @@
         "market_value": 1593.44,
         "gain_dollar": -4.03,
         "gain_pct": -0.0025,
-        "weight_pct": 0.0166,
+        "weight_pct": 0.0144,
         "suggested_entry": 388.77,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -72,7 +100,7 @@
         "market_value": 32640.0,
         "gain_dollar": -42.9,
         "gain_pct": -0.0013,
-        "weight_pct": 0.3406,
+        "weight_pct": 0.2946,
         "suggested_entry": 91.01,
         "analyst_target": 116.37,
         "macd_trend": "FLAT"
@@ -86,7 +114,7 @@
         "market_value": 6087.2,
         "gain_dollar": -216.72,
         "gain_pct": -0.0344,
-        "weight_pct": 0.0635,
+        "weight_pct": 0.0549,
         "suggested_entry": 38.47,
         "analyst_target": 79.03,
         "macd_trend": "FALLING"
@@ -100,7 +128,7 @@
         "market_value": 1502.0,
         "gain_dollar": -258.4,
         "gain_pct": -0.1468,
-        "weight_pct": 0.0157,
+        "weight_pct": 0.0136,
         "suggested_entry": 7.15,
         "analyst_target": 14.75,
         "macd_trend": "FALLING"
@@ -114,7 +142,7 @@
         "market_value": 1214.64,
         "gain_dollar": -23.8,
         "gain_pct": -0.0192,
-        "weight_pct": 0.0127,
+        "weight_pct": 0.011,
         "suggested_entry": 150.45,
         "analyst_target": 209.52,
         "macd_trend": "FALLING"
@@ -128,7 +156,7 @@
         "market_value": 15642.05,
         "gain_dollar": 2570.91,
         "gain_pct": 0.1967,
-        "weight_pct": 0.1632,
+        "weight_pct": 0.1412,
         "suggested_entry": 922.8,
         "analyst_target": 1513.11,
         "macd_trend": "FALLING"
@@ -142,7 +170,7 @@
         "market_value": 7698.83,
         "gain_dollar": 2696.69,
         "gain_pct": 0.5391,
-        "weight_pct": 0.0803,
+        "weight_pct": 0.0695,
         "suggested_entry": 210.4,
         "analyst_target": 328.49,
         "macd_trend": "FLAT"
@@ -156,7 +184,7 @@
         "market_value": 1697.8,
         "gain_dollar": -46.1,
         "gain_pct": -0.0264,
-        "weight_pct": 0.0177,
+        "weight_pct": 0.0153,
         "suggested_entry": 84.05,
         "analyst_target": 107.8,
         "macd_trend": "FALLING"
@@ -170,7 +198,7 @@
         "market_value": 3659.8,
         "gain_dollar": 542.56,
         "gain_pct": 0.1741,
-        "weight_pct": 0.0382,
+        "weight_pct": 0.033,
         "suggested_entry": 159.11,
         "analyst_target": 248.43,
         "macd_trend": "FALLING"
@@ -184,7 +212,7 @@
         "market_value": 3346.0,
         "gain_dollar": -1269.8,
         "gain_pct": -0.2751,
-        "weight_pct": 0.0349,
+        "weight_pct": 0.0302,
         "suggested_entry": 16.52,
         "analyst_target": 20.34,
         "macd_trend": "FALLING"
@@ -198,7 +226,7 @@
         "market_value": 6315.1,
         "gain_dollar": 126.94,
         "gain_pct": 0.0205,
-        "weight_pct": 0.0659,
+        "weight_pct": 0.057,
         "suggested_entry": 104.35,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -212,10 +240,24 @@
         "market_value": 7067.57,
         "gain_dollar": 946.38,
         "gain_pct": 0.1546,
-        "weight_pct": 0.0738,
+        "weight_pct": 0.0638,
         "suggested_entry": 696.41,
         "analyst_target": null,
         "macd_trend": "FLAT"
+      },
+      {
+        "ticker": "XYL",
+        "company": "Xylem Inc.",
+        "shares": 107.8,
+        "avg_cost": null,
+        "current_price": 107.6,
+        "market_value": 11599.28,
+        "gain_dollar": 11599.28,
+        "gain_pct": null,
+        "weight_pct": 0.1047,
+        "suggested_entry": 105.14,
+        "analyst_target": 153.88,
+        "macd_trend": "RISING"
       }
     ]
   },
@@ -257,7 +299,7 @@
       "macd_trend": "RISING",
       "shares_needed": 318.0,
       "capital_required": 33434.52,
-      "already_held": false
+      "already_held": true
     },
     {
       "ticker": "INTU",
