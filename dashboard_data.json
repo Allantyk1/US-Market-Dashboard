@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-19T11:15:40",
+  "generated_at": "2026-09-22T09:11:44",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 112894.12,
-    "total_cost": 93812.2,
-    "total_gain": 19081.92,
-    "total_gain_pct": 0.2034,
+    "total_value": 101353.11,
+    "total_cost": 93809.34,
+    "total_gain": 7543.77,
+    "total_gain_pct": 0.0804,
     "holdings": [
       {
         "ticker": "CLSK",
@@ -16,7 +16,7 @@
         "market_value": 723.5,
         "gain_dollar": 76.65,
         "gain_pct": 0.1185,
-        "weight_pct": 0.0064,
+        "weight_pct": 0.0071,
         "suggested_entry": 12.16,
         "analyst_target": 23.81,
         "macd_trend": "RISING"
@@ -30,7 +30,7 @@
         "market_value": 1758.9,
         "gain_dollar": 86.4,
         "gain_pct": 0.0517,
-        "weight_pct": 0.0156,
+        "weight_pct": 0.0174,
         "suggested_entry": 141.94,
         "analyst_target": 282.47,
         "macd_trend": "RISING"
@@ -44,7 +44,7 @@
         "market_value": 1677.13,
         "gain_dollar": 6.45,
         "gain_pct": 0.0039,
-        "weight_pct": 0.0149,
+        "weight_pct": 0.0165,
         "suggested_entry": 125.32,
         "analyst_target": 170.0,
         "macd_trend": "RISING"
@@ -58,7 +58,7 @@
         "market_value": 6557.1,
         "gain_dollar": 538.67,
         "gain_pct": 0.0895,
-        "weight_pct": 0.0581,
+        "weight_pct": 0.0647,
         "suggested_entry": 55.28,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -72,7 +72,7 @@
         "market_value": 363.0,
         "gain_dollar": 1.96,
         "gain_pct": 0.0054,
-        "weight_pct": 0.0032,
+        "weight_pct": 0.0036,
         "suggested_entry": 69.34,
         "analyst_target": 88.27,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 1604.68,
         "gain_dollar": 7.21,
         "gain_pct": 0.0045,
-        "weight_pct": 0.0142,
+        "weight_pct": 0.0158,
         "suggested_entry": 389.39,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -100,7 +100,7 @@
         "market_value": 32580.0,
         "gain_dollar": -102.9,
         "gain_pct": -0.0031,
-        "weight_pct": 0.2886,
+        "weight_pct": 0.3215,
         "suggested_entry": 90.7,
         "analyst_target": 116.37,
         "macd_trend": "RISING"
@@ -114,7 +114,7 @@
         "market_value": 6535.2,
         "gain_dollar": 231.28,
         "gain_pct": 0.0367,
-        "weight_pct": 0.0579,
+        "weight_pct": 0.0645,
         "suggested_entry": 39.45,
         "analyst_target": 79.03,
         "macd_trend": "RISING"
@@ -128,24 +128,10 @@
         "market_value": 1560.0,
         "gain_dollar": -200.4,
         "gain_pct": -0.1138,
-        "weight_pct": 0.0138,
+        "weight_pct": 0.0154,
         "suggested_entry": 7.25,
         "analyst_target": 14.75,
         "macd_trend": "RISING"
-      },
-      {
-        "ticker": "NBIX",
-        "company": "Neurocrine Bioscienc",
-        "shares": 8.0,
-        "avg_cost": 154.805,
-        "current_price": 146.23,
-        "market_value": 1169.84,
-        "gain_dollar": -68.6,
-        "gain_pct": -0.0554,
-        "weight_pct": 0.0104,
-        "suggested_entry": 145.5,
-        "analyst_target": 209.52,
-        "macd_trend": "FALLING"
       },
       {
         "ticker": "MU",
@@ -156,7 +142,7 @@
         "market_value": 16254.93,
         "gain_dollar": 3183.79,
         "gain_pct": 0.2436,
-        "weight_pct": 0.144,
+        "weight_pct": 0.1604,
         "suggested_entry": 934.43,
         "analyst_target": 1513.11,
         "macd_trend": "RISING"
@@ -170,7 +156,7 @@
         "market_value": 7801.68,
         "gain_dollar": 2799.54,
         "gain_pct": 0.5597,
-        "weight_pct": 0.0691,
+        "weight_pct": 0.077,
         "suggested_entry": 211.56,
         "analyst_target": 328.49,
         "macd_trend": "RISING"
@@ -178,13 +164,13 @@
       {
         "ticker": "ORLY",
         "company": "O'Reilly Automotive,",
-        "shares": 20.0,
-        "avg_cost": 87.195,
+        "shares": 30.0,
+        "avg_cost": 82.92,
         "current_price": 84.71,
-        "market_value": 1694.2,
-        "gain_dollar": -49.7,
-        "gain_pct": -0.0285,
-        "weight_pct": 0.015,
+        "market_value": 2541.3,
+        "gain_dollar": 53.7,
+        "gain_pct": 0.0216,
+        "weight_pct": 0.0251,
         "suggested_entry": 83.79,
         "analyst_target": 107.8,
         "macd_trend": "FLAT"
@@ -198,7 +184,7 @@
         "market_value": 3750.0,
         "gain_dollar": 632.76,
         "gain_pct": 0.203,
-        "weight_pct": 0.0332,
+        "weight_pct": 0.037,
         "suggested_entry": 161.03,
         "analyst_target": 248.43,
         "macd_trend": "FALLING"
@@ -212,7 +198,7 @@
         "market_value": 3392.0,
         "gain_dollar": -1223.8,
         "gain_pct": -0.2651,
-        "weight_pct": 0.03,
+        "weight_pct": 0.0335,
         "suggested_entry": 16.53,
         "analyst_target": 20.34,
         "macd_trend": "FLAT"
@@ -220,13 +206,13 @@
       {
         "ticker": "SOXL",
         "company": "Direxion Daily Semic",
-        "shares": 55.0,
+        "shares": 45.0,
         "avg_cost": 112.512,
         "current_price": 123.67,
-        "market_value": 6801.85,
-        "gain_dollar": 613.69,
+        "market_value": 5565.15,
+        "gain_dollar": 502.11,
         "gain_pct": 0.0992,
-        "weight_pct": 0.0602,
+        "weight_pct": 0.0549,
         "suggested_entry": 107.37,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -240,7 +226,7 @@
         "market_value": 7075.14,
         "gain_dollar": 953.95,
         "gain_pct": 0.1558,
-        "weight_pct": 0.0627,
+        "weight_pct": 0.0698,
         "suggested_entry": 696.72,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -248,13 +234,13 @@
       {
         "ticker": "XYL",
         "company": "Xylem Inc.",
-        "shares": 107.8,
-        "avg_cost": null,
+        "shares": 15.0,
+        "avg_cost": 107.8,
         "current_price": 107.56,
-        "market_value": 11594.97,
-        "gain_dollar": 11594.97,
-        "gain_pct": null,
-        "weight_pct": 0.1027,
+        "market_value": 1613.4,
+        "gain_dollar": -3.6,
+        "gain_pct": -0.0022,
+        "weight_pct": 0.0159,
         "suggested_entry": 105.11,
         "analyst_target": 153.88,
         "macd_trend": "RISING"
