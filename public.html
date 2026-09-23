@@ -800,12 +800,101 @@ function renderVolumeChart(i, d){
 // literal claim about what current holders paid. Degrades to a plain note
 // if the pipeline hasn't populated `price_dist` yet (older cached files, or
 // before the next screener run).
+//
+// The Resistance/Avg Cost/Support/Range rows below the chart are an
+// informal approximation of the "chip distribution" summary popularized by
+// apps like moomoo, computed server-side from the same histogram (see
+// compute_price_distribution()'s docstring for the exact method and its
+// limits) - not a reproduction of any broker's proprietary calculation.
+
+// Resolves the dashboard's theme CSS variables to actual colors, since a
+// <canvas> 2D context can't read var(--x) directly - and re-resolving per
+// render (rather than caching) means the reference lines stay correct if
+// the user flips light/dark mode without reloading.
+function themeColor(varName){
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
+// Draws the Resistance/Avg Cost/Support reference lines directly on the
+// price-distribution canvas, snapped to the nearest histogram bin's row
+// (the y-axis is a category scale, not a continuous price axis, so an exact
+// pixel position for an arbitrary price isn't otherwise available). Scoped
+// to a single chart instance via the `plugins:[...]` array rather than
+// Chart.register(), so it never affects any other chart on the page.
+function priceDistLinesPlugin(edges){
+  return {
+    id: 'priceDistLines',
+    afterDatasetsDraw(chart){
+      const lines = chart.$priceDistLines;
+      if (!lines || !lines.length) return;
+      const n = edges.length - 1;
+      const { ctx, chartArea, scales } = chart;
+      const textColor = themeColor('--bg'); // see themeColor() - calibrated to contrast against these accent colors in both themes
+
+      const binIndexFor = (value) => {
+        let idx = edges.findIndex((e, bi) => bi < n && value >= edges[bi] && value < edges[bi + 1]);
+        return idx === -1 ? (value >= edges[n] ? n - 1 : 0) : idx;
+      };
+
+      // Resistance/Avg Cost/Support can land in the same (or an adjacent)
+      // bin when the histogram has few bins or the three values sit close
+      // together - drawing two lines/labels on the exact same row hides
+      // whichever gets painted first. Nudge Resistance up and Support down
+      // by one row when that happens, so all three always stay visible;
+      // the exact numeric values in the stat rows below are unaffected.
+      const byRole = {};
+      lines.forEach(line => { if (line.value != null) byRole[line.role] = binIndexFor(line.value); });
+      if (byRole.avgCost != null){
+        if (byRole.resistance === byRole.avgCost) byRole.resistance = Math.min(n - 1, byRole.resistance + 1);
+        if (byRole.support === byRole.avgCost) byRole.support = Math.max(0, byRole.support - 1);
+      }
+
+      ctx.save();
+      lines.forEach(line => {
+        if (line.value == null) return;
+        const idx = byRole[line.role];
+        const y = scales.y.getPixelForValue(idx);
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash(line.dash || []);
+        ctx.beginPath();
+        ctx.moveTo(chartArea.left, y);
+        ctx.lineTo(chartArea.right, y);
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+        ctx.font = '600 9px "IBM Plex Mono", monospace';
+        const textW = ctx.measureText(line.label).width;
+        const padX = 4, boxH = 13;
+        const boxX = chartArea.right - textW - padX * 2;
+        const boxY = y - boxH / 2;
+        ctx.fillStyle = line.color;
+        ctx.fillRect(boxX, boxY, textW + padX * 2, boxH);
+        ctx.fillStyle = textColor;
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'left';
+        ctx.fillText(line.label, boxX + padX, y + 0.5);
+      });
+      ctx.restore();
+    }
+  };
+}
+
+function priceDistStatRow(label, value, color){
+  const swatch = color ? `<span style="display:inline-block; width:10px; height:2px; background:${color}; margin-right:6px; vertical-align:middle;"></span>` : '';
+  return `<div style="display:flex; justify-content:space-between; padding:2px 0;">
+    <span style="color:var(--ink-dim);">${swatch}${label}</span>
+    <span class="mono" style="color:var(--ink);">${value}</span>
+  </div>`;
+}
+
 function renderPriceDistChart(i, d){
   const key = 'pricedist-' + i;
   destroyChart(key);
   const box = document.getElementById('pricedist-box-' + i);
   const ctx = document.getElementById('chart-pricedist-' + i);
   if (!box || !ctx) return;
+  box.querySelectorAll('.pricedist-extra').forEach(el => el.remove()); // clear any stat rows from a prior render - destroyChart() only tears down the canvas
   const pd = d.price_dist;
   if (!pd || !pd.bin_edges || !pd.bin_edges.length){
     box.innerHTML = '<div class="chart-loading">Price distribution not available yet - populates on the next data refresh.</div>';
@@ -822,6 +911,7 @@ function renderPriceDistChart(i, d){
   CHART_INSTANCES[key] = new Chart(ctx, {
     type: 'bar',
     data: { labels, datasets: [{ label: 'Volume (M)', data: volumes, backgroundColor: colors, borderRadius: 0, barPercentage: 0.85, categoryPercentage: 0.9 }] },
+    plugins: [priceDistLinesPlugin(edges)],
     options: {
       indexAxis: 'y',
       responsive: true,
@@ -837,18 +927,40 @@ function renderPriceDistChart(i, d){
       }
     }
   });
+  CHART_INSTANCES[key].$priceDistLines = [
+    { role: 'resistance', value: pd.resistance, color: themeColor('--red'), label: pd.resistance != null ? pd.resistance.toFixed(2) : '' },
+    { role: 'avgCost', value: pd.avg_cost, color: themeColor('--amber'), label: pd.avg_cost != null ? pd.avg_cost.toFixed(2) : '', dash: [4, 3] },
+    { role: 'support', value: pd.support, color: themeColor('--green'), label: pd.support != null ? pd.support.toFixed(2) : '' }
+  ];
+  CHART_INSTANCES[key].update();
   attachTooltipDismiss(key);
+
+  const summary = document.createElement('div');
+  summary.className = 'pricedist-extra';
+  summary.style.cssText = 'margin-top:8px; font-size:11px;';
+  let html = '';
+  if (pd.resistance != null) html += priceDistStatRow('Resistance', `$${pd.resistance.toFixed(2)}`, themeColor('--red'));
+  if (pd.avg_cost != null) html += priceDistStatRow('Avg Cost', `$${pd.avg_cost.toFixed(2)}`, themeColor('--amber'));
+  if (pd.support != null) html += priceDistStatRow('Support', `$${pd.support.toFixed(2)}`, themeColor('--green'));
+  if (pd.pct_volume_below_current != null) html += priceDistStatRow('Profit Ratio', `${pd.pct_volume_below_current}%`);
+  if (pd.range_overlap_pct != null) html += priceDistStatRow('Range Overlap', `${pd.range_overlap_pct}%`);
+  if (pd.range_90) html += priceDistStatRow('90% Range', `$${pd.range_90[0].toFixed(2)} ~ $${pd.range_90[1].toFixed(2)}`);
+  if (pd.range_70) html += priceDistStatRow('70% Range', `$${pd.range_70[0].toFixed(2)} ~ $${pd.range_70[1].toFixed(2)}`);
+  summary.innerHTML = html;
+  box.appendChild(summary);
+
   const pctBelow = pd.pct_volume_below_current;
   if (pctBelow != null){
     const pctAbove = Math.max(0, Math.round((100 - pctBelow) * 10) / 10);
     const statEl = document.createElement('div');
-    statEl.style.cssText = 'display:flex; justify-content:space-between; gap:8px; margin-top:6px; font-size:11px; font-family:IBM Plex Mono,monospace;';
+    statEl.className = 'pricedist-extra';
+    statEl.style.cssText = 'display:flex; justify-content:space-between; gap:8px; margin-top:8px; padding-top:6px; border-top:1px solid var(--line); font-size:11px; font-family:IBM Plex Mono,monospace;';
     statEl.innerHTML = `
       <span style="color:var(--green);">▼ ${pctBelow}% of volume below current price</span>
       <span style="color:var(--red);">${pctAbove}% above ▲</span>`;
     box.appendChild(statEl);
     const capEl = document.createElement('div');
-    capEl.className = 'expand-hint';
+    capEl.className = 'expand-hint pricedist-extra';
     capEl.style.marginTop = '2px';
     capEl.textContent = `Based on the last ${pd.lookback_days} trading days' volume by price - a rough volume-weighted proxy for who's likely still in gain vs underwater at today's price, not actual holder cost basis.`;
     box.appendChild(capEl);

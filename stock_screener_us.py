@@ -130,6 +130,21 @@ def compute_price_distribution(hist, current_price, n_bins=24, lookback=252):
     not a literal claim about what current holders paid (some of that volume
     has since changed hands again, possibly repeatedly).
 
+    Also returns a moomoo-chip-distribution-style summary (avg_cost,
+    resistance, support, range_90/range_70 "value areas", range_overlap_pct)
+    approximated from the same volume-by-price histogram:
+    - avg_cost: volume-weighted average Close over the window - same daily-
+      Close-as-price simplification as the rest of this function, not a
+      reproduction of any broker's actual cost-basis calculation.
+    - resistance/support: the single busiest bin above/below avg_cost - an
+      informal "where sellers/buyers cluster" heuristic, not moomoo's
+      (undisclosed) exact algorithm. None if one side has no volume.
+    - range_90/range_70: "value areas" - the narrowest contiguous price band
+      holding >=90%/70% of total volume, expanding outward from the busiest
+      bin (a standard volume-profile technique).
+    - range_overlap_pct: width(range_70) / width(range_90) * 100 - how much
+      of the wider 90% band the tighter 70% band takes up.
+
     Returns None if there isn't enough usable data to be meaningful.
     """
     try:
@@ -150,11 +165,53 @@ def compute_price_distribution(hist, current_price, n_bins=24, lookback=252):
         if total_vol <= 0:
             return None
         below_vol = float(vols[closes < current_price].sum())
+
+        bin_mids = (edges[:-1] + edges[1:]) / 2
+        avg_cost = float((closes.values * vols.values).sum() / vols.values.sum())
+
+        above_mask = bin_mids > avg_cost
+        below_mask = bin_mids < avg_cost
+        resistance = (float(bin_mids[above_mask][int(np.argmax(bin_volume[above_mask]))])
+                      if above_mask.any() and bin_volume[above_mask].sum() > 0 else None)
+        support = (float(bin_mids[below_mask][int(np.argmax(bin_volume[below_mask]))])
+                   if below_mask.any() and bin_volume[below_mask].sum() > 0 else None)
+
+        def value_area(target_pct):
+            """Expands outward from the point-of-control (busiest bin) to
+            the narrowest contiguous bin range holding >= target_pct of
+            total volume. Returns (lo_price, hi_price)."""
+            poc = int(np.argmax(bin_volume))
+            lo_i = hi_i = poc
+            cum = float(bin_volume[poc])
+            target = total_vol * target_pct
+            while cum < target and (lo_i > 0 or hi_i < n_bins - 1):
+                vol_below = bin_volume[lo_i - 1] if lo_i > 0 else -1
+                vol_above = bin_volume[hi_i + 1] if hi_i < n_bins - 1 else -1
+                if vol_above >= vol_below:
+                    hi_i += 1
+                    cum += bin_volume[hi_i]
+                else:
+                    lo_i -= 1
+                    cum += bin_volume[lo_i]
+            return float(edges[lo_i]), float(edges[hi_i + 1])
+
+        range_90 = value_area(0.90)
+        range_70 = value_area(0.70)
+        width_90 = range_90[1] - range_90[0]
+        width_70 = range_70[1] - range_70[0]
+        range_overlap_pct = round((width_70 / width_90) * 100, 2) if width_90 > 0 else None
+
         return {
             "bin_edges": [round(float(e), 2) for e in edges],
             "bin_volume": [round(float(v) / 1e6, 3) for v in bin_volume],  # millions, matches other volume fields
             "pct_volume_below_current": round((below_vol / total_vol) * 100, 1),
             "lookback_days": int(len(closes)),
+            "avg_cost": round(avg_cost, 2),
+            "resistance": round(resistance, 2) if resistance is not None else None,
+            "support": round(support, 2) if support is not None else None,
+            "range_90": [round(range_90[0], 2), round(range_90[1], 2)],
+            "range_70": [round(range_70[0], 2), round(range_70[1], 2)],
+            "range_overlap_pct": range_overlap_pct,
         }
     except Exception:
         return None
