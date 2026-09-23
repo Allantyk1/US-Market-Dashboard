@@ -1,26 +1,12 @@
 {
-  "generated_at": "2026-09-23T18:02:24",
+  "generated_at": "2026-09-23T23:02:48",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 110088.91,
-    "total_cost": 93809.34,
-    "total_gain": 16279.57,
-    "total_gain_pct": 0.1735,
+    "total_value": 107531.05,
+    "total_cost": 92076.34,
+    "total_gain": 15454.71,
+    "total_gain_pct": 0.1678,
     "holdings": [
-      {
-        "ticker": "CLSK",
-        "company": "CleanSpark, Inc.",
-        "shares": 50.0,
-        "avg_cost": 12.937,
-        "current_price": 15.14,
-        "market_value": 757.0,
-        "gain_dollar": 110.15,
-        "gain_pct": 0.1703,
-        "weight_pct": 0.0069,
-        "suggested_entry": 12.34,
-        "analyst_target": 23.81,
-        "macd_trend": "RISING"
-      },
       {
         "ticker": "CRDO",
         "company": "Credo Technology Gro",
@@ -30,7 +16,7 @@
         "market_value": 1925.6,
         "gain_dollar": 253.1,
         "gain_pct": 0.1513,
-        "weight_pct": 0.0175,
+        "weight_pct": 0.0179,
         "suggested_entry": 148.33,
         "analyst_target": 280.1,
         "macd_trend": "RISING"
@@ -44,7 +30,7 @@
         "market_value": 1713.4,
         "gain_dollar": 42.72,
         "gain_pct": 0.0256,
-        "weight_pct": 0.0156,
+        "weight_pct": 0.0159,
         "suggested_entry": 126.33,
         "analyst_target": 170.0,
         "macd_trend": "RISING"
@@ -58,7 +44,7 @@
         "market_value": 6998.2,
         "gain_dollar": 979.77,
         "gain_pct": 0.1628,
-        "weight_pct": 0.0636,
+        "weight_pct": 0.0651,
         "suggested_entry": 56.53,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -72,7 +58,7 @@
         "market_value": 375.7,
         "gain_dollar": 14.66,
         "gain_pct": 0.0406,
-        "weight_pct": 0.0034,
+        "weight_pct": 0.0035,
         "suggested_entry": 69.93,
         "analyst_target": 88.33,
         "macd_trend": "RISING"
@@ -86,7 +72,7 @@
         "market_value": 1600.28,
         "gain_dollar": 2.81,
         "gain_pct": 0.0018,
-        "weight_pct": 0.0145,
+        "weight_pct": 0.0149,
         "suggested_entry": 388.92,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -100,9 +86,23 @@
         "market_value": 37158.0,
         "gain_dollar": 4475.1,
         "gain_pct": 0.1369,
-        "weight_pct": 0.3375,
+        "weight_pct": 0.3456,
         "suggested_entry": 94.66,
         "analyst_target": 116.37,
+        "macd_trend": "RISING"
+      },
+      {
+        "ticker": "IONQ",
+        "company": "IonQ, Inc.",
+        "shares": 20.0,
+        "avg_cost": 42.79,
+        "current_price": 40.74,
+        "market_value": 814.8,
+        "gain_dollar": -41.0,
+        "gain_pct": -0.0479,
+        "weight_pct": 0.0076,
+        "suggested_entry": 37.4,
+        "analyst_target": 67.14,
         "macd_trend": "RISING"
       },
       {
@@ -114,7 +114,7 @@
         "market_value": 6797.0,
         "gain_dollar": 493.08,
         "gain_pct": 0.0782,
-        "weight_pct": 0.0617,
+        "weight_pct": 0.0632,
         "suggested_entry": 39.99,
         "analyst_target": 77.97,
         "macd_trend": "RISING"
@@ -122,13 +122,13 @@
       {
         "ticker": "MU",
         "company": "Micron Technology, I",
-        "shares": 16.0021,
+        "shares": 15.0021,
         "avg_cost": 816.839,
         "current_price": 1096.16,
-        "market_value": 17540.86,
-        "gain_dollar": 4469.72,
+        "market_value": 16444.7,
+        "gain_dollar": 4190.4,
         "gain_pct": 0.342,
-        "weight_pct": 0.1593,
+        "weight_pct": 0.1529,
         "suggested_entry": 958.8,
         "analyst_target": 1515.0,
         "macd_trend": "RISING"
@@ -142,7 +142,7 @@
         "market_value": 8033.34,
         "gain_dollar": 3031.2,
         "gain_pct": 0.606,
-        "weight_pct": 0.073,
+        "weight_pct": 0.0747,
         "suggested_entry": 214.03,
         "analyst_target": 327.7,
         "macd_trend": "RISING"
@@ -156,7 +156,7 @@
         "market_value": 2574.6,
         "gain_dollar": 87.0,
         "gain_pct": 0.035,
-        "weight_pct": 0.0234,
+        "weight_pct": 0.0239,
         "suggested_entry": 83.75,
         "analyst_target": 107.8,
         "macd_trend": "FLAT"
@@ -170,7 +170,7 @@
         "market_value": 1634.0,
         "gain_dollar": -126.4,
         "gain_pct": -0.0718,
-        "weight_pct": 0.0148,
+        "weight_pct": 0.0152,
         "suggested_entry": 7.37,
         "analyst_target": 14.75,
         "macd_trend": "RISING"
@@ -184,7 +184,7 @@
         "market_value": 3907.4,
         "gain_dollar": 790.16,
         "gain_pct": 0.2535,
-        "weight_pct": 0.0355,
+        "weight_pct": 0.0363,
         "suggested_entry": 164.19,
         "analyst_target": 248.64,
         "macd_trend": "RISING"
@@ -198,7 +198,7 @@
         "market_value": 3432.0,
         "gain_dollar": -1183.8,
         "gain_pct": -0.2565,
-        "weight_pct": 0.0312,
+        "weight_pct": 0.0319,
         "suggested_entry": 16.56,
         "analyst_target": 20.34,
         "macd_trend": "RISING"
@@ -206,13 +206,13 @@
       {
         "ticker": "SOXL",
         "company": "Direxion Daily Semic",
-        "shares": 45.0,
+        "shares": 35.0,
         "avg_cost": 112.512,
         "current_price": 151.95,
-        "market_value": 6837.75,
-        "gain_dollar": 1774.71,
+        "market_value": 5318.25,
+        "gain_dollar": 1380.33,
         "gain_pct": 0.3505,
-        "weight_pct": 0.0621,
+        "weight_pct": 0.0495,
         "suggested_entry": 115.15,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -226,7 +226,7 @@
         "market_value": 7186.03,
         "gain_dollar": 1064.84,
         "gain_pct": 0.174,
-        "weight_pct": 0.0653,
+        "weight_pct": 0.0668,
         "suggested_entry": 700.14,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -240,7 +240,7 @@
         "market_value": 1617.75,
         "gain_dollar": 0.75,
         "gain_pct": 0.0005,
-        "weight_pct": 0.0147,
+        "weight_pct": 0.015,
         "suggested_entry": 105.21,
         "analyst_target": 153.88,
         "macd_trend": "RISING"
