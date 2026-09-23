@@ -114,12 +114,59 @@ def calculate_indicators(df):
     df['VWAP_Lower2'] = df['VWAP'] - 2 * df['VWAP_SD']
     return df
 
-def save_ticker_history(symbol, hist):
+def compute_price_distribution(hist, current_price, n_bins=24, lookback=252):
+    """Volume-at-price 'cost basis' proxy: buckets the last `lookback` trading
+    days' Close prices into n_bins price bins and sums each bin's Volume, to
+    approximate how much recent trading volume happened below vs above
+    today's price. Lookback matches the existing 52-week-high window
+    (min(252, len(hist))) and needs no extra yfinance calls - hist already
+    has this much history in memory.
+
+    NOT real shareholder cost-basis data - no such data source exists for
+    public equities. This uses daily Close as a stand-in for "the price that
+    day's volume traded at," the same simplification the VWAP Typical Price
+    above already makes. Read the output as "of the shares that changed
+    hands over the lookback window, X% changed hands below today's price" -
+    not a literal claim about what current holders paid (some of that volume
+    has since changed hands again, possibly repeatedly).
+
+    Returns None if there isn't enough usable data to be meaningful.
+    """
+    try:
+        window = hist.tail(min(lookback, len(hist)))
+        closes = window['Close'].dropna()
+        vols = window.loc[closes.index, 'Volume'].fillna(0)
+        if len(closes) < 20 or vols.sum() <= 0:
+            return None
+        lo, hi = float(closes.min()), float(closes.max())
+        if hi <= lo:
+            return None
+        edges = np.linspace(lo, hi, n_bins + 1)
+        bin_idx = np.clip(np.digitize(closes.values, edges[1:-1]), 0, n_bins - 1)
+        bin_volume = np.zeros(n_bins)
+        for idx, v in zip(bin_idx, vols.values):
+            bin_volume[idx] += v
+        total_vol = float(bin_volume.sum())
+        if total_vol <= 0:
+            return None
+        below_vol = float(vols[closes < current_price].sum())
+        return {
+            "bin_edges": [round(float(e), 2) for e in edges],
+            "bin_volume": [round(float(v) / 1e6, 3) for v in bin_volume],  # millions, matches other volume fields
+            "pct_volume_below_current": round((below_vol / total_vol) * 100, 1),
+            "lookback_days": int(len(closes)),
+        }
+    except Exception:
+        return None
+
+def save_ticker_history(symbol, hist, current_price=None):
     """Writes a compact per-ticker JSON of recent daily indicator values for
-    dashboard charting (MACD panel, Price/EMA panel, RSI panel, Volume panel).
-    Called with the SAME `hist` DataFrame already computed in evaluate_ticker -
-    no extra yfinance calls, just persisting data that was already being
-    fetched and then discarded after grabbing the latest row."""
+    dashboard charting (MACD panel, Price/EMA panel, RSI panel, Volume panel,
+    Price Distribution panel). Called with the SAME `hist` DataFrame already
+    computed in evaluate_ticker - no extra yfinance calls, just persisting
+    data that was already being fetched and then discarded after grabbing
+    the latest row. `current_price` is optional (only needed for the price-
+    distribution panel) so existing callers keep working unchanged."""
     try:
         os.makedirs(HISTORY_DIR, exist_ok=True)
         tail = hist.tail(HISTORY_DAYS).copy()
@@ -154,6 +201,10 @@ def save_ticker_history(symbol, hist):
             "vwap_upper2": col("VWAP_Upper2"),
             "vwap_lower2": col("VWAP_Lower2"),
         }
+        if current_price is not None:
+            price_dist = compute_price_distribution(hist, current_price)
+            if price_dist:
+                payload["price_dist"] = price_dist
         with open(os.path.join(HISTORY_DIR, f"{symbol}.json"), "w") as f:
             json.dump(payload, f)
     except Exception as e:
@@ -222,6 +273,35 @@ def fetch_history_with_retry(ticker_obj, retries=3, base_delay=2.0):
             time.sleep(base_delay * (attempt + 1))  # 2s, 4s, ...
     return pd.DataFrame(), last_err
 
+def _try_get_live_price(ticker_obj):
+    """Best-effort live/last-traded price, used ONLY as a display fallback
+    when Yahoo's daily-bar history endpoint is running behind Yahoo's own
+    real-time quote (confirmed to happen independently of yfinance/this
+    script - see yahoo_historical_lag_2026-09-23.md). Never raises; returns
+    None on any failure so callers can silently keep the last confirmed
+    close instead.
+
+    Deliberately NOT used to touch 'Price Date' or history/*.json - those
+    stay keyed on the last CONFIRMED complete bar, so resume mode can never
+    mistake a live quote for a final close (same class of bug guarded
+    against by _session_not_yet_closed() above)."""
+    try:
+        fi = ticker_obj.fast_info
+        for key in ("last_price", "lastPrice", "regular_market_price"):
+            val = fi.get(key) if hasattr(fi, "get") else getattr(fi, key, None)
+            if val is not None and not np.isnan(val) and val > 0:
+                return float(val)
+    except Exception:
+        pass
+    try:
+        info = ticker_obj.get_info()
+        val = info.get("regularMarketPrice") or info.get("currentPrice")
+        if val is not None and val > 0:
+            return float(val)
+    except Exception:
+        pass
+    return None
+
 def determine_kdj_action(current_price, ema20, ema40, lower_bb, middle_bb, upper_bb,
                           rsi_val, k_now, d_now, k_prior, d_prior, open_now, close_now):
     """Entry/exit TIMING layer, separate from Matrix Score/Signal (which
@@ -266,6 +346,38 @@ def determine_kdj_action(current_price, ema20, ema40, lower_bb, middle_bb, upper
         return "Pullback Watch"
     return "Waiting"
 
+def _now_et():
+    try:
+        import zoneinfo
+        return datetime.datetime.now(zoneinfo.ZoneInfo("America/New_York"))
+    except Exception:
+        return datetime.datetime.utcnow() - datetime.timedelta(hours=4)
+
+def _session_not_yet_closed(bar_date, now_et=None):
+    """True if `bar_date` is TODAY's US trading date (ET) and that session's
+    4pm ET close has not actually happened yet by the wall clock.
+
+    Fixes a gap the NaN-Close guard below doesn't cover: Yahoo does not
+    always leave Close as NaN for a still-open session - for liquid tickers
+    it commonly fills the in-progress day's Close with the live/last-traded
+    price, which is a real number and sails straight through
+    dropna(subset=['Close']). That live price then gets locked in as if it
+    were the final close, with today's date - and because resume mode keys
+    off that date matching, every later run THE SAME DAY (including one
+    hours after the market genuinely closes) sees "already have today's
+    close" and skips re-fetching, permanently missing the real close.
+    (Confirmed 2026-09-12: a screener run at ~9:45pm MYT, ~2h into the US
+    session, cached live intraday prices as the "2026-09-11" close for most
+    tickers; a re-run at 5:45pm MYT the next day - 13+ hours after the real
+    close - skipped nearly everything because that fake same-day date
+    already matched.)
+
+    This check is wall-clock based, not data-shape based, so it catches the
+    live-quote case the NaN check misses. now_et is an injectable param for
+    testability only - callers should leave it as None in production."""
+    now_et = now_et or _now_et()
+    return bar_date == now_et.date() and now_et.hour < 16
+
 def evaluate_ticker(symbol, category_map=None):
     """Returns (data_dict_or_None, failure_reason_or_None)."""
     ticker = yf.Ticker(symbol)
@@ -282,6 +394,13 @@ def evaluate_ticker(symbol, category_map=None):
     _rows_before_dropna = len(hist)
     _last_raw_date = hist.index[-1].date() if _rows_before_dropna else None
     hist = hist.dropna(subset=['Close'])
+    # Belt-and-suspenders: also drop a trailing row that Yahoo DID fill in
+    # with a live (non-NaN) Close, if that row is for today's US session and
+    # the session hasn't actually closed yet. See _session_not_yet_closed().
+    if len(hist) and _session_not_yet_closed(hist.index[-1].date()):
+        print(f"[DIAG] {symbol}: dropping still-open session {hist.index[-1].date()} "
+              f"(Yahoo returned a live Close, but the US market hasn't closed yet).")
+        hist = hist.iloc[:-1]
     if len(hist) < _rows_before_dropna:
         _last_complete_date = hist.index[-1].date() if len(hist) else "N/A"
         print(f"[DIAG] {symbol}: dropped {_rows_before_dropna - len(hist)} row(s) with NaN Close. "
@@ -291,7 +410,10 @@ def evaluate_ticker(symbol, category_map=None):
         return None, err or f"insufficient COMPLETE history ({len(hist)} rows, need 45+)"
 
     hist = calculate_indicators(hist)
-    save_ticker_history(symbol, hist)
+    # hist['Close'].iloc[-1] here is guaranteed non-NaN (dropna above) and is
+    # the same value `current_price` gets set to a few lines down - computed
+    # inline rather than reordering the current_price/high_52wk block below.
+    save_ticker_history(symbol, hist, current_price=float(hist['Close'].iloc[-1]))
     last_row = hist.iloc[-1]
     # The actual trading date of the close being reported. This is what
     # resume mode keys on - NOT the local calendar date - so a run that
@@ -447,6 +569,12 @@ def evaluate_ticker(symbol, category_map=None):
     return {
         "Ticker": symbol, "Category": category, "Name": stock_name[:20],
         "Current Price": round(current_price, 2), "Price Date": price_date,
+        # Overwritten to "Live quote (history pending)" by the centralized
+        # refresh_stale_prices_with_live_quotes() pass in main() when Yahoo's
+        # history is lagging - see that function's docstring. Defaulting to
+        # "Confirmed Close" here since this value always comes from a
+        # confirmed daily bar at this point in evaluate_ticker().
+        "Price Freshness": "Confirmed Close",
         "52W High Price": round(high_52wk, 2), "52W High Drop %": f"{round(pct_from_high, 1)}%",
         "EMA20": round(last_row['EMA20'], 2) if not np.isnan(last_row.get('EMA20', np.nan)) else "N/A",
         "EMA40": round(last_row['EMA40'], 2) if not np.isnan(last_row.get('EMA40', np.nan)) else "N/A",
@@ -543,6 +671,56 @@ def expected_latest_us_trading_date():
         d -= datetime.timedelta(days=1)
     return d
 
+def refresh_stale_prices_with_live_quotes(df, latest_bar_date):
+    """Runs ONCE per script invocation, over the FINAL merged report (both
+    freshly-evaluated and resume-mode-skipped tickers) - not per-ticker
+    inside evaluate_ticker(). That distinction matters: resume mode skips
+    any ticker whose Price Date already matches `latest_bar_date`, so on a
+    day Yahoo's history feed is lagging (this script's `latest_bar_date`
+    stuck at, say, Sep 21 while Yahoo's own live quotes already reflect Sep
+    22 - see yahoo_historical_lag_2026-09-23.md), the vast majority of the
+    universe never runs through evaluate_ticker() at all on a resumed run,
+    so a per-ticker fallback placed there would only ever reach the handful
+    of tickers that happened to fail/re-fetch that run. Doing it here once,
+    over every row, is what actually fixes "Current Price" for the whole
+    dashboard on a lag day.
+
+    No-ops immediately (zero extra network calls) unless `latest_bar_date`
+    is older than the expected latest US trading day - so this changes
+    nothing on a normal day.
+
+    Updates ONLY 'Current Price' and 'Price Freshness' in place. Leaves
+    'Price Date' and every indicator/derived column (RSI, MACD, EMA, KDJ,
+    52W High Drop %, DCF margin, analyst upside) exactly as computed from
+    the last CONFIRMED close - this is a display-only refresh of the
+    headline price, not a recompute of the technicals for a new day."""
+    expected = expected_latest_us_trading_date()
+    if latest_bar_date >= expected or 'Ticker' not in df.columns:
+        return df
+    print(f"[NOTE] Yahoo's history is still lagging (latest complete bar "
+          f"{latest_bar_date}, expected {expected}) - refreshing 'Current "
+          f"Price' with a live quote for all {len(df)} tickers so the report "
+          f"isn't stuck a day behind. Price Date/indicators stay on "
+          f"{latest_bar_date} until Yahoo's history itself catches up.",
+          flush=True)
+    updated = 0
+    total = len(df)
+    for pos, (idx, row) in enumerate(df.iterrows(), 1):
+        live_price = _try_get_live_price(yf.Ticker(str(row['Ticker'])))
+        if live_price:
+            df.at[idx, 'Current Price'] = round(live_price, 2)
+            df.at[idx, 'Price Freshness'] = "Live quote (history pending)"
+            updated += 1
+        if pos % 50 == 0 or pos == total:
+            print(f"  ...live-quote refresh [{pos}/{total}] ({updated} updated so far)", flush=True)
+        time.sleep(0.3)  # fast_info is lighter than a full history() pull, but still be polite
+        if pos % 50 == 0 and pos != total:
+            time.sleep(5)
+    print(f"[NOTE] Live-quote refresh done: {updated}/{total} tickers updated "
+          f"({total - updated} kept their last confirmed close - live quote "
+          f"unavailable for those, usually illiquid/low-volume names).")
+    return df
+
 def preflight_check():
     """Tests ONE well-known, always-liquid ticker (AAPL) before touching the
     other 633 - if this fails, it's a broken yfinance/environment issue, not
@@ -569,6 +747,11 @@ def preflight_check():
         # shows a live-forming candle with no Close until the session ends).
         # It does NOT mean anything is broken.
         complete_hist = hist.dropna(subset=['Close'])
+        if len(complete_hist) and _session_not_yet_closed(complete_hist.index[-1].date()):
+            print(f"[NOTE] Dropping AAPL's still-open session {complete_hist.index[-1].date()} "
+                  f"from the pre-flight check (Yahoo returned a live Close, but the US market "
+                  f"hasn't closed yet) - same protection as evaluate_ticker().")
+            complete_hist = complete_hist.iloc[:-1]
         if complete_hist.empty:
             print(f"[PRE-FLIGHT FAILED] All {len(hist)} rows for AAPL are missing Close "
                   f"prices, including older/closed trading days. That's NOT just an "
@@ -655,6 +838,7 @@ def main():
     else:
         df_final = pd.DataFrame(all_results).drop_duplicates(subset=['Ticker'], keep='last') \
                                              .sort_values(by="Matrix Score", ascending=False)
+        df_final = refresh_stale_prices_with_live_quotes(df_final, latest_bar_date)
         try:
             df_final.to_excel(OUTPUT_NAME, index=False)
             print(f"\n[SUCCESS] {len(df_final)} total tickers in report. Saved to: {OUTPUT_NAME}")
