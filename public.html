@@ -232,16 +232,19 @@
   .sticky-stat-bar.visible{display:block;}
   .sticky-top-row{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;}
 
+  /* "Back" button lives inside the sticky <header> at the top-left (like the
+     KLSE dashboard), so it stays frozen at the top while scrolling and never
+     covers the cards/charts/tables below. Only shown while a detail is open. */
+  .header-left{display:flex; align-items:center; gap:12px; min-width:0;}
   .back-to-list-btn{
-    display:none; align-items:center; gap:6px; position:fixed; left:50%; bottom:18px;
-    transform:translateX(-50%); z-index:50; background:var(--panel); color:var(--ink);
-    border:1px solid var(--line); border-radius:999px; padding:11px 20px;
+    display:none; align-items:center; gap:6px; flex-shrink:0;
+    background:var(--panel); color:var(--ink);
+    border:1px solid var(--line); border-radius:999px; padding:9px 16px;
     font-family:'IBM Plex Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer;
-    box-shadow:0 8px 24px rgba(0,0,0,0.35);
   }
   .back-to-list-btn.visible{display:flex;}
   .back-to-list-btn:hover{border-color:var(--amber); color:var(--amber);}
-  .back-to-list-btn .arrow{font-size:15px;}
+  .back-to-list-btn .arrow{font-size:15px; line-height:1;}
 
   .search-row{display:flex; gap:8px; margin-bottom:10px;}
   .search-input{
@@ -277,10 +280,6 @@
 </head>
 <body>
 
-<button id="backToListBtn" class="back-to-list-btn" onclick="backToList()" aria-label="Back to all stocks list">
-  <span class="arrow">←</span> Back to list
-</button>
-
 <div id="stickyStatBar" class="sticky-stat-bar">
   <div class="sticky-top-row">
     <span class="ticker" id="stickyTicker">—</span>
@@ -299,9 +298,14 @@
 
 <header>
   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-    <div>
-      <p class="eyebrow">Market Desk · Shared View</p>
-      <h1>Recommendations</h1>
+    <div class="header-left">
+      <button id="backToListBtn" class="back-to-list-btn" onclick="backToList()" aria-label="Back to all stocks list">
+        <span class="arrow">‹</span> Back
+      </button>
+      <div>
+        <p class="eyebrow">Market Desk · Shared View</p>
+        <h1>Recommendations</h1>
+      </div>
     </div>
     <button id="themeToggle" class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">◐</button>
   </div>
@@ -541,10 +545,11 @@ function toggleTickerDetail(i){
   updateBackButton();
 }
 
-// --- Floating "Back to list" button: shows whenever a stock's detail is open ---
+// --- Header "Back" button (top-left, frozen in sticky header): shows whenever a stock's detail is open ---
 function updateBackButton(){
   const anyOpen = !!document.querySelector('.card-detail.open');
   document.getElementById('backToListBtn').classList.toggle('visible', anyOpen);
+  positionStickyStatBar(); // header height can shift when the button appears - keep the stat bar flush under it
 }
 
 function backToList(){
