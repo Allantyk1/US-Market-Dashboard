@@ -109,7 +109,6 @@
   .level-filter-row{display:none; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
   .level-filter-row.visible{display:flex;}
   .level-chip.active[data-level="BELOW"]{background:var(--red-dim); color:var(--red); border-color:currentColor;}
-  .level-chip.active[data-level="ABOVE"]{background:var(--green-dim); color:var(--green); border-color:currentColor;}
   .level-badge{
     display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
     padding:3px 10px; border-radius:999px; margin:0 0 8px;
@@ -373,7 +372,6 @@
   <div class="level-filter-row" id="levelFilterNav">
     <button class="kdj-chip level-chip active" data-level="BOTH">Both <span class="kdj-chip-count" id="countLevelBoth">0</span></button>
     <button class="kdj-chip level-chip" data-level="BELOW">▼ Below Support <span class="kdj-chip-count" id="countLevelBelow">0</span></button>
-    <button class="kdj-chip level-chip" data-level="ABOVE">▲ Above Resistance <span class="kdj-chip-count" id="countLevelAbove">0</span></button>
   </div>
   <div class="kdj-filter-row" id="kdjFilterNav">
     <button class="kdj-chip active" data-kdj="ALL">All KDJ</button>
@@ -1173,7 +1171,6 @@ function updateTabCounts(){
   document.getElementById('countLevels').textContent = below.length + above.length;
   document.getElementById('countLevelBoth').textContent = below.length + above.length;
   document.getElementById('countLevelBelow').textContent = below.length;
-  document.getElementById('countLevelAbove').textContent = above.length;
 }
 
 // KDJ chip counts are scoped to the currently active Signal tab (Buy/Watch/
