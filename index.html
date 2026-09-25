@@ -101,6 +101,22 @@
   .tab-btn[data-tab="ALL"].active .tab-count,
   .tab-btn[data-tab="PORTFOLIO"].active .tab-count{color:var(--amber);}
 
+  .tab-btn[data-tab="LEVELS"].active{border-color:var(--amber); color:var(--amber); background:var(--amber-dim);}
+  .tab-btn[data-tab="LEVELS"].active .tab-count{color:var(--amber);}
+  /* Price-vs-levels tab: sub-filter chips + per-card breach badge.
+     Support = lower Bollinger Band, Resistance = upper Bollinger Band
+     (the same Support / Resistance shown in each card's detail grid). */
+  .level-filter-row{display:none; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
+  .level-filter-row.visible{display:flex;}
+  .level-chip.active[data-level="BELOW"]{background:var(--red-dim); color:var(--red); border-color:currentColor;}
+  .level-chip.active[data-level="ABOVE"]{background:var(--green-dim); color:var(--green); border-color:currentColor;}
+  .level-badge{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
+    padding:3px 10px; border-radius:999px; margin:0 0 8px;
+  }
+  .level-badge.below{background:var(--red-dim); color:var(--red);}
+  .level-badge.above{background:var(--green-dim); color:var(--green);}
+
   .score-badge{
     font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);
   }
@@ -344,6 +360,7 @@
     <button class="tab-btn" data-tab="SELL">Sell <span class="tab-count" id="countSell">0</span></button>
     <button class="tab-btn active" data-tab="ALL">All Stocks <span class="tab-count" id="countAll">0</span></button>
     <button class="tab-btn" data-tab="PORTFOLIO">Portfolio <span class="tab-count" id="countPortfolio">0</span></button>
+    <button class="tab-btn" data-tab="LEVELS">Support / Resistance <span class="tab-count" id="countLevels">0</span></button>
   </div>
   <div class="search-row">
     <input type="text" class="search-input" id="tickerSearch" placeholder="Search by ticker or name…">
@@ -352,6 +369,12 @@
        layered on top of the Buy/Watch/Sell/All tabs above (attractiveness).
        Combines with whichever tab + search are active; purely a client-side
        filter, does not touch Matrix Score/Signal or the tab counts above. -->
+  <!-- Support / Resistance tab sub-filter. Only shown on that tab. -->
+  <div class="level-filter-row" id="levelFilterNav">
+    <button class="kdj-chip level-chip active" data-level="BOTH">Both <span class="kdj-chip-count" id="countLevelBoth">0</span></button>
+    <button class="kdj-chip level-chip" data-level="BELOW">▼ Below Support <span class="kdj-chip-count" id="countLevelBelow">0</span></button>
+    <button class="kdj-chip level-chip" data-level="ABOVE">▲ Above Resistance <span class="kdj-chip-count" id="countLevelAbove">0</span></button>
+  </div>
   <div class="kdj-filter-row" id="kdjFilterNav">
     <button class="kdj-chip active" data-kdj="ALL">All KDJ</button>
     <button class="kdj-chip" data-kdj="Buy Zone">▲ Buy Zone <span class="kdj-chip-count" id="countKdjBuyZone">0</span></button>
@@ -494,6 +517,7 @@ let ALL_TICKERS_MAP = new Map(); // ticker -> full screener record, for merging 
 let TOP20_SET = new Set();
 let HOLDINGS = [];
 let activeTab = 'ALL';
+let activeLevelFilter = 'BOTH'; // Support / Resistance tab sub-filter: BOTH | BELOW | ABOVE
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
 // Portfolio holdings joined with their screener technical record (RSI, trend,
@@ -509,6 +533,39 @@ function mergedHoldings(){
     const t = ALL_TICKERS_MAP.get(h.ticker);
     return t ? { ...t, ...h } : h;
   });
+}
+
+// --- Price vs Support / Resistance ---
+// Support = lower Bollinger Band (support_lower_bb), Resistance = upper
+// Bollinger Band (resistance_upper_bb). NOT the "Entry - Support" box:
+// suggested_entry is capped at price x 0.995, so price can never sit
+// below it and that comparison would always return an empty list.
+// Returns 'BELOW' / 'ABOVE' / null, plus how far past the level (as a fraction).
+function levelBreach(t){
+  const p = t.current_price, s = t.support_lower_bb, r = t.resistance_upper_bb;
+  if (p == null) return null;
+  if (s != null && s > 0 && p < s) return { side:'BELOW', pct:(p - s) / s };
+  if (r != null && r > 0 && p > r) return { side:'ABOVE', pct:(p - r) / r };
+  return null;
+}
+function levelRows(){
+  // Furthest past the level first: deepest below support, then strongest above resistance.
+  const below = [], above = [];
+  ALL_TICKERS.forEach(t => {
+    const b = levelBreach(t);
+    if (b) (b.side === 'BELOW' ? below : above).push({ ...t, _breach:b });
+  });
+  below.sort((a, b) => a._breach.pct - b._breach.pct);
+  above.sort((a, b) => b._breach.pct - a._breach.pct);
+  return { below, above };
+}
+function levelBadge(t){
+  const b = t._breach;
+  if (!b) return '';
+  const pct = (Math.abs(b.pct) * 100).toFixed(1);
+  return b.side === 'BELOW'
+    ? `<div><span class="level-badge below">▼ ${pct}% below support ${fmtMoney(t.support_lower_bb)}</span></div>`
+    : `<div><span class="level-badge above">▲ ${pct}% above resistance ${fmtMoney(t.resistance_upper_bb)}</span></div>`;
 }
 
 // --- Screener-style card: Buy / Watch / Sell / All Stocks / Portfolio tabs ---
@@ -536,6 +593,7 @@ function screenerCard(t, i){
         </div>
       </div>
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
+      ${levelBadge(t)}
       ${holdingLine}
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
@@ -601,6 +659,7 @@ function renderTabContent(){
   document.getElementById('backToListBtn').classList.remove('visible');
   updateKdjChipCounts(); // keep chip counts scoped to whichever Signal tab is now active
 
+  document.getElementById('levelFilterNav').classList.toggle('visible', activeTab === 'LEVELS');
   if (activeTab === 'PORTFOLIO'){
     // Merged with each holding's screener technical record so Portfolio
     // cards get the same RSI/Trend/VWAP/KDJ Action labelling as All Stocks -
@@ -619,12 +678,19 @@ function renderTabContent(){
     return;
   }
 
+  document.getElementById('levelFilterNav').classList.toggle('visible', activeTab === 'LEVELS');
+
   let rows = ALL_TICKERS;
-  if (activeTab !== 'ALL') rows = rows.filter(t => t.signal === activeTab);
+  let baseTotal = ALL_TICKERS.length;
+  if (activeTab === 'LEVELS'){
+    const { below, above } = levelRows();
+    rows = activeLevelFilter === 'BELOW' ? below : activeLevelFilter === 'ABOVE' ? above : below.concat(above);
+    baseTotal = rows.length;
+  } else if (activeTab !== 'ALL') rows = rows.filter(t => t.signal === activeTab);
   if (activeKdjFilter !== 'ALL') rows = rows.filter(t => t.kdj_action === activeKdjFilter);
   if (q) rows = rows.filter(t => (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
 
-  countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : rows.length} tickers`;
+  countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : activeTab === 'LEVELS' ? baseTotal : rows.length} tickers`;
   if (!rows.length){ el.innerHTML = '<div class="empty">No matches.</div>'; return; }
 
   // Cap rendering for very broad queries so an old phone doesn't choke at once
@@ -1103,6 +1169,11 @@ function updateTabCounts(){
   document.getElementById('countSell').textContent = ALL_TICKERS.filter(t => t.signal === 'SELL').length;
   document.getElementById('countAll').textContent = ALL_TICKERS.length;
   document.getElementById('countPortfolio').textContent = HOLDINGS.length;
+  const { below, above } = levelRows();
+  document.getElementById('countLevels').textContent = below.length + above.length;
+  document.getElementById('countLevelBoth').textContent = below.length + above.length;
+  document.getElementById('countLevelBelow').textContent = below.length;
+  document.getElementById('countLevelAbove').textContent = above.length;
 }
 
 // KDJ chip counts are scoped to the currently active Signal tab (Buy/Watch/
@@ -1116,6 +1187,8 @@ function updateKdjChipCounts(){
   const base = (activeTab === 'BUY' || activeTab === 'WATCHLIST' || activeTab === 'SELL')
     ? ALL_TICKERS.filter(t => t.signal === activeTab)
     : activeTab === 'PORTFOLIO' ? mergedHoldings() // scoped to your 15 holdings, not the full universe
+    : activeTab === 'LEVELS' ? (() => { const { below, above } = levelRows();
+        return activeLevelFilter === 'BELOW' ? below : activeLevelFilter === 'ABOVE' ? above : below.concat(above); })()
     : ALL_TICKERS; // ALL tab
   document.getElementById('countKdjBuyZone').textContent = base.filter(t => t.kdj_action === 'Buy Zone').length;
   document.getElementById('countKdjAccum').textContent = base.filter(t => t.kdj_action === 'Accumulate on Dip').length;
@@ -1134,10 +1207,18 @@ document.getElementById('tabNav').addEventListener('click', (e) => {
   renderTabContent();
 });
 document.getElementById('tickerSearch').addEventListener('input', renderTabContent);
+document.getElementById('levelFilterNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.level-chip');
+  if (!btn) return;
+  document.querySelectorAll('.level-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeLevelFilter = btn.dataset.level;
+  renderTabContent();
+});
 document.getElementById('kdjFilterNav').addEventListener('click', (e) => {
   const btn = e.target.closest('.kdj-chip');
   if (!btn) return;
-  document.querySelectorAll('.kdj-chip').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#kdjFilterNav .kdj-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   activeKdjFilter = btn.dataset.kdj;
   renderTabContent();
