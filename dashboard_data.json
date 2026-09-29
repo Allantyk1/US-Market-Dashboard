@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-28T10:58:10",
+  "generated_at": "2026-09-29T11:45:59",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 103507.71,
-    "total_cost": 90012.88,
-    "total_gain": 13494.83,
-    "total_gain_pct": 0.1499,
+    "total_value": 102750.46,
+    "total_cost": 89450.32,
+    "total_gain": 13300.14,
+    "total_gain_pct": 0.1487,
     "holdings": [
       {
         "ticker": "AVGO",
@@ -16,7 +16,7 @@
         "market_value": 1058.43,
         "gain_dollar": 6.73,
         "gain_pct": 0.0064,
-        "weight_pct": 0.0102,
+        "weight_pct": 0.0103,
         "suggested_entry": 343.24,
         "analyst_target": 531.85,
         "macd_trend": "FALLING"
@@ -30,7 +30,7 @@
         "market_value": 1712.23,
         "gain_dollar": 41.55,
         "gain_pct": 0.0249,
-        "weight_pct": 0.0165,
+        "weight_pct": 0.0167,
         "suggested_entry": 127.04,
         "analyst_target": 170.0,
         "macd_trend": "RISING"
@@ -44,7 +44,7 @@
         "market_value": 6810.1,
         "gain_dollar": 791.67,
         "gain_pct": 0.1315,
-        "weight_pct": 0.0658,
+        "weight_pct": 0.0663,
         "suggested_entry": 56.09,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -58,7 +58,7 @@
         "market_value": 36900.0,
         "gain_dollar": 4217.1,
         "gain_pct": 0.129,
-        "weight_pct": 0.3565,
+        "weight_pct": 0.3591,
         "suggested_entry": 94.17,
         "analyst_target": 116.37,
         "macd_trend": "FLAT"
@@ -72,7 +72,7 @@
         "market_value": 909.6,
         "gain_dollar": 53.8,
         "gain_pct": 0.0629,
-        "weight_pct": 0.0088,
+        "weight_pct": 0.0089,
         "suggested_entry": 38.32,
         "analyst_target": 67.14,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 6176.8,
         "gain_dollar": -127.12,
         "gain_pct": -0.0202,
-        "weight_pct": 0.0597,
+        "weight_pct": 0.0601,
         "suggested_entry": 38.78,
         "analyst_target": 77.97,
         "macd_trend": "FALLING"
@@ -100,7 +100,7 @@
         "market_value": 16236.47,
         "gain_dollar": 3982.17,
         "gain_pct": 0.325,
-        "weight_pct": 0.1569,
+        "weight_pct": 0.158,
         "suggested_entry": 950.39,
         "analyst_target": 1515.54,
         "macd_trend": "RISING"
@@ -114,7 +114,7 @@
         "market_value": 7899.96,
         "gain_dollar": 2897.82,
         "gain_pct": 0.5793,
-        "weight_pct": 0.0763,
+        "weight_pct": 0.0769,
         "suggested_entry": 215.61,
         "analyst_target": 327.7,
         "macd_trend": "FALLING"
@@ -128,7 +128,7 @@
         "market_value": 2583.6,
         "gain_dollar": 96.0,
         "gain_pct": 0.0386,
-        "weight_pct": 0.025,
+        "weight_pct": 0.0251,
         "suggested_entry": 84.17,
         "analyst_target": 107.8,
         "macd_trend": "RISING"
@@ -142,7 +142,7 @@
         "market_value": 1554.0,
         "gain_dollar": -206.4,
         "gain_pct": -0.1172,
-        "weight_pct": 0.015,
+        "weight_pct": 0.0151,
         "suggested_entry": 7.24,
         "analyst_target": 14.75,
         "macd_trend": "FALLING"
@@ -156,7 +156,7 @@
         "market_value": 3831.2,
         "gain_dollar": 713.96,
         "gain_pct": 0.229,
-        "weight_pct": 0.037,
+        "weight_pct": 0.0373,
         "suggested_entry": 168.53,
         "analyst_target": 252.21,
         "macd_trend": "FALLING"
@@ -170,7 +170,7 @@
         "market_value": 3316.0,
         "gain_dollar": -1299.8,
         "gain_pct": -0.2816,
-        "weight_pct": 0.032,
+        "weight_pct": 0.0323,
         "suggested_entry": 16.32,
         "analyst_target": 20.35,
         "macd_trend": "FLAT"
@@ -178,13 +178,13 @@
       {
         "ticker": "SOXL",
         "company": "Direxion Daily Semic",
-        "shares": 35.0,
+        "shares": 30.0,
         "avg_cost": 112.512,
         "current_price": 151.45,
-        "market_value": 5300.75,
-        "gain_dollar": 1362.83,
+        "market_value": 4543.5,
+        "gain_dollar": 1168.14,
         "gain_pct": 0.3461,
-        "weight_pct": 0.0512,
+        "weight_pct": 0.0442,
         "suggested_entry": 109.72,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -198,7 +198,7 @@
         "market_value": 7165.97,
         "gain_dollar": 1044.78,
         "gain_pct": 0.1707,
-        "weight_pct": 0.0692,
+        "weight_pct": 0.0697,
         "suggested_entry": 699.19,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -212,7 +212,7 @@
         "market_value": 2052.6,
         "gain_dollar": -80.26,
         "gain_pct": -0.0376,
-        "weight_pct": 0.0198,
+        "weight_pct": 0.02,
         "suggested_entry": 102.12,
         "analyst_target": 153.88,
         "macd_trend": "FALLING"
