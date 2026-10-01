@@ -1,0 +1,4 @@
+# Win-rate model local files (large, PC-only)
+winrate_price_cache.pkl
+winrate_model.pkl
+__pycache__/
