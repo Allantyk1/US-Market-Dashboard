@@ -100,6 +100,13 @@
   .tab-btn[data-tab="WATCHLIST"].active .tab-count,
   .tab-btn[data-tab="ALL"].active .tab-count,
   .tab-btn[data-tab="PORTFOLIO"].active .tab-count{color:var(--amber);}
+  /* LEAP / option position cards (Portfolio tab) - added 2026-10-02 */
+  .group-title{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 2px 8px;}
+  .opt-tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 7px; border-radius:6px; margin-left:6px;
+    background:var(--amber-dim); color:var(--amber); vertical-align:middle;}
+  .dte{font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--panel-2); color:var(--ink-dim);}
+  .dte.soon{background:var(--amber-dim); color:var(--amber);}
+  .dte.urgent{background:var(--red-dim); color:var(--red);}
 
   .score-badge{
     font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);
@@ -384,8 +391,19 @@ const signalTag = (s) => {
   return `<span class="tag ${cls}">${s || '—'}</span>`;
 };
 
-function renderAlerts(holdings, top20){
+function renderAlerts(holdings, top20, options){
   const alerts = [];
+  (options || []).forEach(o => {
+    const label = `${o.underlying} ${o.type} $${o.strike}`;
+    if (o.dte != null && o.dte <= 90){
+      alerts.push({type:'warn', title:`⏳ ${label} expires in ${o.dte} days`,
+        msg:`Time decay speeds up in the last 90 days - decide whether to roll, sell or hold.`});
+    }
+    if (o.gain_pct != null && o.gain_pct <= -0.5){
+      alerts.push({type:'warn', title:`🔻 ${label} down ${fmtPct(o.gain_pct)}`,
+        msg:`Option worth ${fmtMoney(o.option_price)} vs ${fmtMoney(o.premium_paid)} paid.`});
+    }
+  });
   holdings.forEach(h => {
     if (h.macd_trend === 'FALLING'){
       alerts.push({type:'warn', title:`⚠️ ${h.ticker} momentum turning bearish`,
@@ -493,6 +511,7 @@ let ALL_TICKERS = [];
 let ALL_TICKERS_MAP = new Map(); // ticker -> full screener record, for merging technical data onto portfolio holdings
 let TOP20_SET = new Set();
 let HOLDINGS = [];
+let OPTIONS = []; // open option positions (LEAPs) from Portfolio_Tracker.xlsx "My Options" tab
 let activeTab = 'ALL';
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
@@ -509,6 +528,51 @@ function mergedHoldings(){
     const t = ALL_TICKERS_MAP.get(h.ticker);
     return t ? { ...t, ...h } : h;
   });
+}
+
+// --- Option position card (Portfolio tab). Not expandable: tap-through
+// charts belong to the underlying stock, which has its own card. ---
+function fmtExpiry(s){
+  if (!s) return '—';
+  const d = new Date(s + 'T00:00:00');
+  return isNaN(d) ? s : d.toLocaleDateString(undefined, {day:'numeric', month:'short', year:'numeric'});
+}
+function optionCard(o){
+  const u = ALL_TICKERS_MAP.get(o.underlying) || {};
+  const dteCls = o.dte == null ? '' : (o.dte <= 90 ? 'urgent' : (o.dte <= 180 ? 'soon' : ''));
+  const gainColor = (o.gain_dollar ?? 0) >= 0 ? 'var(--green)' : 'var(--red)';
+  const beColor = (o.vs_breakeven_pct ?? 0) >= 0 ? 'var(--green)' : 'var(--red)';
+  return `
+    <div class="card">
+      <div class="card-top">
+        <div class="ticker-block">
+          <span class="ticker">${o.underlying}</span>
+          <span class="opt-tag">${o.type} $${o.strike}</span>
+        </div>
+        <div style="text-align:right;">
+          <div class="price mono">${fmtMoney(o.option_price)}</div>
+          <div class="score-badge">per share · ${o.contracts} contract${o.contracts == 1 ? '' : 's'}</div>
+        </div>
+      </div>
+      <div class="card-mid" style="margin:6px 0 6px;">
+        <span style="color:var(--ink-dim);">Expires ${fmtExpiry(o.expiry)}</span>
+        <span class="dte ${dteCls}">${o.dte ?? '—'} days left</span>
+      </div>
+      <div class="card-mid">
+        <span>Paid ${fmtMoney(o.premium_paid)} · cost ${fmtMoney(o.cost_basis)}</span>
+        <span class="val" style="color:${o.gain_dollar != null ? gainColor : 'var(--ink-faint)'}">${o.gain_dollar != null ? `${fmtMoney(o.gain_dollar)} (${fmtPct(o.gain_pct)})` : 'no quote'}</span>
+      </div>
+      <div class="card-mid">
+        <span>Stock ${fmtMoney(o.stock_price)} · ${u.signal || '—'}</span>
+        ${trendBadge(u.macd_trend, u.ema20, u.ema40)}${kdjActionBadge(u.kdj_action, u.kdj_k, u.kdj_d)}
+      </div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-label">Market Value</div><div class="stat-value">${fmtMoney(o.market_value)}</div></div>
+        <div class="stat-box"><div class="stat-label">Breakeven</div><div class="stat-value">${fmtMoney(o.breakeven)} <span style="color:${beColor}">${o.vs_breakeven_pct != null ? fmtPct(o.vs_breakeven_pct) : ''}</span></div></div>
+        <div class="stat-box"><div class="stat-label">Implied Vol</div><div class="stat-value">${o.iv != null ? (o.iv*100).toFixed(0)+'%' : '—'}</div></div>
+      </div>
+      ${o.price_source && o.option_price == null ? `<div class="caution-note">⚠ ${o.price_source}</div>` : ''}
+    </div>`;
 }
 
 // --- Screener-style card: Buy / Watch / Sell / All Stocks / Portfolio tabs ---
@@ -608,13 +672,23 @@ function renderTabContent(){
     let rows = mergedHoldings();
     if (activeKdjFilter !== 'ALL') rows = rows.filter(h => h.kdj_action === activeKdjFilter);
     if (q) rows = rows.filter(h => (h.ticker || '').toUpperCase().includes(q) || (h.company || '').toUpperCase().includes(q));
-    countEl.textContent = `${rows.length} of ${HOLDINGS.length} holdings`;
-    if (!rows.length){
-      el.innerHTML = HOLDINGS.length ? '<div class="empty">No matches.</div>'
+    // Option positions: same search + KDJ filter, applied to the underlying stock
+    let opts = OPTIONS.filter(o => {
+      const u = ALL_TICKERS_MAP.get(o.underlying) || {};
+      if (activeKdjFilter !== 'ALL' && u.kdj_action !== activeKdjFilter) return false;
+      if (q && !o.underlying.includes(q) && !(u.company || '').toUpperCase().includes(q)) return false;
+      return true;
+    });
+    countEl.textContent = `${rows.length} of ${HOLDINGS.length} holdings` +
+      (OPTIONS.length ? ` · ${opts.length} of ${OPTIONS.length} options` : '');
+    if (!rows.length && !opts.length){
+      el.innerHTML = (HOLDINGS.length || OPTIONS.length) ? '<div class="empty">No matches.</div>'
         : '<div class="empty">No holdings yet — add them in Portfolio_Tracker.xlsx.</div>';
       return;
     }
-    el.innerHTML = rows.map((h, i) => screenerCard(h, i)).join('');
+    const optHtml = opts.length ? `<div class="group-title">Options / LEAPs (${opts.length})</div>` + opts.map(optionCard).join('') : '';
+    const stockHtml = rows.length ? (opts.length ? `<div class="group-title">Stocks (${rows.length})</div>` : '') + rows.map((h, i) => screenerCard(h, i)).join('') : '';
+    el.innerHTML = optHtml + stockHtml;
     updateBackButton();
     return;
   }
@@ -1102,7 +1176,7 @@ function updateTabCounts(){
   document.getElementById('countWatch').textContent = ALL_TICKERS.filter(t => t.signal === 'WATCHLIST').length;
   document.getElementById('countSell').textContent = ALL_TICKERS.filter(t => t.signal === 'SELL').length;
   document.getElementById('countAll').textContent = ALL_TICKERS.length;
-  document.getElementById('countPortfolio').textContent = HOLDINGS.length;
+  document.getElementById('countPortfolio').textContent = HOLDINGS.length + OPTIONS.length;
 }
 
 // KDJ chip counts are scoped to the currently active Signal tab (Buy/Watch/
@@ -1179,7 +1253,9 @@ async function load(){
     updEl.textContent = 'Updated ' + updated.toLocaleString();
     if (ageHours > 30) updEl.classList.add('stale');
 
-    document.getElementById('dataMode').textContent = data.is_real_data ? '' : '· simulated data';
+    document.getElementById('dataMode').textContent =
+      (data.portfolio && data.portfolio.options_value ? `incl. options ${fmtMoney(data.portfolio.options_value)} ` : '') +
+      (data.is_real_data ? '' : '· simulated data');
 
     const p = data.portfolio;
     document.getElementById('totalValue').textContent = fmtMoney(p.total_value);
@@ -1187,9 +1263,10 @@ async function load(){
     gainEl.textContent = `${fmtMoney(p.total_gain)} (${fmtPct(p.total_gain_pct)})`;
     gainEl.className = 'pill ' + (p.total_gain >= 0 ? 'up' : 'down');
 
-    renderAlerts(p.holdings, data.top20);
+    renderAlerts(p.holdings, data.top20, p.options);
 
     HOLDINGS = p.holdings;
+    OPTIONS = p.options || [];
     ALL_TICKERS = data.all_tickers || [];
     ALL_TICKERS_MAP = new Map(ALL_TICKERS.map(t => [t.ticker, t]));
     TOP20_SET = new Set((data.top20 || []).map(r => r.ticker));
