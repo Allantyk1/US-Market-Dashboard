@@ -117,6 +117,29 @@ def load_history(ticker, anchor):
     return series
 
 
+_band_cache = {}
+
+
+def load_bands(ticker, anchor):
+    """Daily middle / upper Bollinger Band from history/<T>.json -> {date: (mid, upper)}."""
+    if ticker in _band_cache:
+        return _band_cache[ticker]
+    out = {}
+    path = os.path.join(HISTORY_DIR, f"{ticker}.json")
+    if os.path.exists(path):
+        try:
+            with open(path) as f:
+                h = json.load(f)
+            dates = labels_to_dates(h.get("labels", []), anchor)
+            for d, m, u in zip(dates, h.get("middle_bb", []), h.get("upper_bb", [])):
+                if isinstance(m, (int, float)) and isinstance(u, (int, float)):
+                    out[d] = (float(m), float(u))
+        except Exception:
+            pass
+    _band_cache[ticker] = out
+    return out
+
+
 def build_calendar(anchor):
     """Union of trading dates found in the history files of a few liquid tickers."""
     cal = set()
@@ -314,6 +337,8 @@ def main():
         tickers[t] = {"co": r.get("company"), "cat": r.get("category"),
                       "sig": SIG_CODE.get(r.get("signal"), ""), "ms": r.get("matrix_score"),
                       "px": r.get("current_price"), "se": r.get("suggested_entry"),
+                      "lb": r.get("support_lower_bb"), "mb": r.get("middle_bb"),
+                      "ub": r.get("resistance_upper_bb"), "tgt": r.get("analyst_target"),
                       "t20": 1 if t in today_top else 0}
 
     # ---- section: entry watch for every ticker (compact arrays) -------------------
@@ -399,6 +424,57 @@ def main():
             if prev is None or (li - prev) > REENTRY_GAP:
                 add_event("buy", t, d, v[0], v[3] if len(v) > 3 else None)
 
+    # ---- buy-trigger rule (on trial: review ~3 months after it went live) ----------
+    # Fires on day i when ALL of these hold:
+    #   1. a green day (close below the 5-session avg Suggested Entry) in the prior 7 sessions
+    #   2. recovery from the price itself: close above the average close of the prior 5 sessions
+    #   3. still cheap: close below the middle Bollinger Band
+    #   4. the screener signal that day is BUY
+    #   5. reward/risk: (upper BB - close) >= 2 x (close - lowest close of the prior 7 sessions)
+    # Only the first firing counts; it can fire again after REENTRY_GAP quiet sessions.
+    first_logged = logged[0] if logged else last_cal
+    cal_win = [d for d in calendar if d >= first_logged]
+    trig_recent = {}
+    for t in tickers:
+        bands = load_bands(t, anchor)
+        if not bands:
+            continue
+        closes = [close_on(t, d) for d in cal_win]
+        ses = [sugg_on(t, d) for d in cal_win]
+        green = []
+        for i, d in enumerate(cal_win):
+            prior = [v for v in ses[max(0, i - 5):i] if v is not None]
+            green.append(bool(prior and closes[i] is not None and sum(prior) / len(prior) > closes[i]))
+        last_fire = None
+        for i in range(5, len(cal_win)):
+            d, c = cal_win[i], closes[i]
+            if c is None or d not in days or d not in bands:
+                continue
+            if not any(green[max(0, i - 7):i]):
+                continue
+            prev5 = [x for x in closes[i - 5:i] if x is not None]
+            if not prev5 or c <= sum(prev5) / len(prev5):
+                continue
+            mid, upper = bands[d]
+            if c >= mid:
+                continue
+            v = days[d]["prices"].get(t)
+            if not v or len(v) < 3 or v[2] != "B":
+                continue
+            low7 = min([x for x in closes[max(0, i - 7):i] if x is not None] or [c])
+            if (upper - c) < 2 * max(c - low7, 0.0001 * c):
+                continue
+            if last_fire is not None and i - last_fire <= REENTRY_GAP:
+                last_fire = i
+                continue
+            last_fire = i
+            add_event("trigger", t, d, c, v[3] if len(v) > 3 else None)
+            trig_recent[t] = d
+    recent_cut = calendar[-SESSIONS_PER_WEEK] if len(calendar) >= SESSIONS_PER_WEEK else calendar[0]
+    for t, d in trig_recent.items():
+        if d >= recent_cut and t in tickers:
+            tickers[t]["trg"] = d
+
     # ---- baseline: every ticker on every logged day ------------------------------
     universe = sorted({t for d in logged[-(WATCH_SESSIONS + 10):] for t in days[d]["prices"]})
     baseline = {}
@@ -439,6 +515,7 @@ def main():
 
     out = {
         "version": 2,
+        "trigger_review": "2027-01-05",
         "generated_at": dash.get("generated_at"),
         "as_of_session": today_session,
         "last_price_date": last_cal,
@@ -467,8 +544,9 @@ def main():
         json.dump(_clean(out), f, separators=(",", ":"))
 
     n_top = sum(e["src"] == "top20" for e in events)
+    n_trg = sum(e["src"] == "trigger" for e in events)
     print(f"[SUCCESS] {OUT_FILE}: session {today_session}, {len(logged)} logged sessions, "
-          f"{n_top} Top-20 picks + {len(events) - n_top} BUY-signal picks, "
+          f"{n_top} Top-20 picks + {len(events) - n_top - n_trg} BUY-signal picks + {n_trg} buy triggers, "
           f"{len(watch)} tickers in entry watch, baseline {out['baseline_note']}")
 
 

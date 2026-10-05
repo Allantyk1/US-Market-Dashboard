@@ -137,6 +137,12 @@
   .sig.B{background:var(--green-soft);color:var(--green)} .sig.W{background:var(--amber-soft);color:var(--amber)} .sig.S{background:var(--red-soft);color:var(--red)}
   .t20tag{font:600 9.5px var(--font-data);color:var(--amber);border:1px solid var(--amber);border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:1px}
   .jumptag{font:600 9.5px var(--font-data);color:var(--red);border:1px solid var(--red);border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+  .addw{font:600 9.5px var(--font-data);color:var(--ink-dim);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:5px;cursor:pointer;vertical-align:1px}
+  .addw:hover{color:var(--amber);border-color:var(--amber)}
+  .addw:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+  .trgtag{font:600 9.5px var(--font-data);color:var(--green);border:1px solid var(--green);border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+  tr.flash td{animation:flash 1.6s ease-out}
+  @keyframes flash{from{background:var(--amber-soft)}to{background:transparent}}
   tr.base td{color:var(--ink-dim);font-style:italic}
 </style>
 
@@ -155,6 +161,7 @@
       <div class="seg" id="src">
         <button type="button" data-v="top20" aria-pressed="true">Top 20</button>
         <button type="button" data-v="buy" aria-pressed="false">All BUY signals</button>
+        <button type="button" data-v="trigger" aria-pressed="false" title="On trial: the buy-trigger rule">Buy triggers</button>
       </div></div>
     <div class="ctl"><span class="lbl">Pick window</span>
       <div class="seg" id="win">
@@ -215,6 +222,7 @@
         <div class="seg" id="watchSet">
           <button type="button" data-v="top20" aria-pressed="true">Today's Top 20</button>
           <button type="button" data-v="buy" aria-pressed="false">Today's BUY signals</button>
+          <button type="button" data-v="trigger" aria-pressed="false">Buy triggers (last 5 days)</button>
         </div></div>
       <div class="ctl"><span class="lbl">Look-back</span>
         <div class="seg" id="lookback">
@@ -298,7 +306,9 @@ function bindSeg(id,key,num,after){
   el.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S[key]=num?+b.dataset.v:b.dataset.v;if(after)after();sync();save();render();});
   sync();
 }
-const srcName=()=>S.src==="top20"?"Top-20 picks":"BUY-signal picks";
+const srcName=()=>({top20:"Top-20 picks",buy:"BUY-signal picks",trigger:"buy-trigger picks"})[S.src]||"picks";
+const srcVerb=()=>({top20:"entered the Top 20",buy:"got a BUY signal",trigger:"fired a buy trigger"})[S.src];
+const srcNew=()=>({top20:"newly enters the daily Top 20",buy:"gets a new BUY signal",trigger:"fires a new buy trigger (see section 2)"})[S.src];
 const winTxt=()=>S.win?`the last ${S.win} month${S.win>1?"s":""}`:"all logged history";
 function cutoff(){if(!S.win)return "0000";const a=new Date(D.as_of_session+"T00:00:00");a.setMonth(a.getMonth()-S.win);return a.toISOString().slice(0,10)}
 const windowEvents=()=>{const c=cutoff();return D.events.filter(e=>e.src===S.src&&e.d>=c)};
@@ -322,13 +332,13 @@ function boardRows(){
 function renderBoard(){
   const rows=boardRows(), k=S.rankBy;
   const unit=k==="pct"?"%":k==="usd"?"$ per share":"$ on $1,000";
-  $("boardLede").innerHTML=`Each stock is measured from <b>day 1</b>, the first day it was recommended (${S.src==="top20"?"entered the Top 20":"got a BUY signal"}) in ${winTxt()}, to the latest close on ${dlong(D.last_price_date)}. The day-1 price is that day's close. <b>$ per share</b> favours high-priced stocks. <b>$ on $1,000</b> shows what a $1,000 position bought on day 1 has made or lost, which ranks the same as %. <b>⚠ jump</b> marks a one-day move of 50% or more, which is often a split or spin-off in the raw prices rather than a real loss.`;
+  $("boardLede").innerHTML=`Each stock is measured from <b>day 1</b>, the first day it was recommended (${srcVerb()}) in ${winTxt()}, to the latest close on ${dlong(D.last_price_date)}. The day-1 price is that day's close. <b>$ per share</b> favours high-priced stocks. <b>$ on $1,000</b> shows what a $1,000 position bought on day 1 has made or lost, which ranks the same as %. <b>⚠ jump</b> marks a one-day move of 50% or more, which is often a split or spin-off in the raw prices rather than a real loss.`;
   const fmt=r=>k==="pct"?fmtS(r.pct):k==="usd"?smoney(r.usd,2):smoney(r.pos,0);
   const sub=r=>k==="pct"?`${smoney(r.usd,2)}/sh · ${smoney(r.pos)} on $1k`:k==="usd"?`${fmtS(r.pct)} · ${money(r.rp,2)} → ${money(r.lc,2)}`:`${fmtS(r.pct)} · ${smoney(r.usd,2)}/sh`;
   const sorted=[...rows].sort((a,b)=>b[k]-a[k]);
   const best=sorted.slice(0,10), worst=sorted.slice(-10).reverse();
   const maxAbs=Math.max(1e-9,...best.concat(worst).map(r=>Math.abs(r[k])));
-  const li=(r,i,col)=>`<li><span class="no">${i+1}</span><span class="who"><span class="tk">${esc(r.t)}</span>${r.t20?'<span class="t20tag">TOP 20</span>':""}${r.jump?`<span class="jumptag" title="One-day move of 50%+ on ${dshort(r.jump)}: check for a split, reverse split or spin-off">⚠ jump ${dshort(r.jump)}</span>`:""}<small>day 1 ${dshort(r.d)} · ${esc(r.co||"")}</small></span><span class="val"><b class="${cls(r[k])}">${fmt(r)}</b><small>${sub(r)}</small></span><span class="barline"><span style="width:${Math.max(2,Math.round(100*Math.abs(r[k])/maxAbs))}%;background:var(${col})"></span></span></li>`;
+  const li=(r,i,col)=>`<li><span class="no">${i+1}</span><span class="who"><span class="tk">${esc(r.t)}</span>${D.watch[r.t]?`<button type="button" class="addw" data-add="${esc(r.t)}" title="Add ${esc(r.t)} to section 2" aria-label="Add ${esc(r.t)} to section 2">＋ boxes</button>`:""}${r.t20?'<span class="t20tag">TOP 20</span>':""}${r.jump?`<span class="jumptag" title="One-day move of 50%+ on ${dshort(r.jump)}: check for a split, reverse split or spin-off">⚠ jump ${dshort(r.jump)}</span>`:""}<small>day 1 ${dshort(r.d)} · ${esc(r.co||"")}</small></span><span class="val"><b class="${cls(r[k])}">${fmt(r)}</b><small>${sub(r)}</small></span><span class="barline"><span style="width:${Math.max(2,Math.round(100*Math.abs(r[k])/maxAbs))}%;background:var(${col})"></span></span></li>`;
   $("best").innerHTML=best.length?best.map((r,i)=>li(r,i,"--green")).join(""):`<li class="muted">No picks in this window yet.</li>`;
   $("worst").innerHTML=worst.length?worst.map((r,i)=>li(r,i,"--red")).join(""):"";
   const up=rows.filter(r=>r.pct>0).length, tot=rows.reduce((a,r)=>a+r.pos,0);
@@ -346,7 +356,7 @@ function renderBoard(){
   const cols=[["t","Stock"],["d","Day 1"],["rp","Day-1 price"],["lc","Now"],["days","Days"],["pct","% to date"],["usd","$ / share"],["pos","$ on $1k"],["hi","Best since"],["lo","Worst since"],["n","Times picked"],["sig","Signal now"]];
   let h=`<thead><tr>${cols.map(([c,l])=>`<th class="sort" data-k="${c}" ${sk===c?`aria-sort="${dir<0?"descending":"ascending"}"`:""} tabindex="0">${l}</th>`).join("")}</tr></thead><tbody>`;
   for(const r of list.slice(0,boardShow)){
-    h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.t20?'<span class="t20tag">TOP 20</span>':""}${r.jump?`<span class="jumptag" title="One-day move of 50%+ on ${dshort(r.jump)}: check for a split, reverse split or spin-off">⚠ jump ${dshort(r.jump)}</span>`:""}<span class="co">${esc(r.co||"")}</span></td><td>${dshort(r.d)}</td><td>${money(r.rp,2)}</td><td>${money(r.lc,2)}</td><td>${r.days}</td><td class="${cls(r.pct)}">${fmtS(r.pct)}</td><td class="${cls(r.usd)}">${smoney(r.usd,2)}</td><td class="${cls(r.pos)}">${smoney(r.pos)}</td><td class="${cls(r.hi)}">${fmtS(r.hi)}</td><td class="${cls(r.lo)}">${fmtS(r.lo)}</td><td>${r.n}</td><td>${r.sig?`<span class="sig ${r.sig}">${SIGN[r.sig]}</span>`:"–"}</td></tr>`;
+    h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.t20?'<span class="t20tag">TOP 20</span>':""}${D.watch[r.t]?`<button type="button" class="addw" data-add="${esc(r.t)}" title="Add ${esc(r.t)} to section 2" aria-label="Add ${esc(r.t)} to section 2">＋ boxes</button>`:""}${r.jump?`<span class="jumptag" title="One-day move of 50%+ on ${dshort(r.jump)}: check for a split, reverse split or spin-off">⚠ jump ${dshort(r.jump)}</span>`:""}<span class="co">${esc(r.co||"")}</span></td><td>${dshort(r.d)}</td><td>${money(r.rp,2)}</td><td>${money(r.lc,2)}</td><td>${r.days}</td><td class="${cls(r.pct)}">${fmtS(r.pct)}</td><td class="${cls(r.usd)}">${smoney(r.usd,2)}</td><td class="${cls(r.pos)}">${smoney(r.pos)}</td><td class="${cls(r.hi)}">${fmtS(r.hi)}</td><td class="${cls(r.lo)}">${fmtS(r.lo)}</td><td>${r.n}</td><td>${r.sig?`<span class="sig ${r.sig}">${SIGN[r.sig]}</span>`:"–"}</td></tr>`;
   }
   $("boardTable").innerHTML=h+"</tbody>";
   const all=boardShow>20;
@@ -358,6 +368,12 @@ function renderBoard(){
 function median(a){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2}
 
 /* ---------- 2. entry watch ---------- */
+function ladder(info,last){
+  const lb=info.lb,mb=info.mb;
+  if(lb==null||mb==null) return `<td class="muted">–</td><td class="muted">–</td><td class="muted">–</td>`;
+  const half=lb+(mb-lb)/2, c=v=>last!=null&&last<=v?"pos":"";
+  return `<td class="${c(mb)}">${money(mb,2)}</td><td class="${c(half)}">${money(half,2)}</td><td class="${c(lb)}">${money(lb,2)}</td>`;
+}
 function weeklyAvg(w,i,mode){
   const lo=Math.max(0,i-5); const vals=[];
   for(let j=lo;j<i;j++){
@@ -367,14 +383,14 @@ function weeklyAvg(w,i,mode){
   return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
 }
 function watchTickers(){
-  const T=D.tickers; let list=Object.keys(D.watch).filter(t=>S.watchSet==="top20"?T[t]?.t20:T[t]?.sig==="B");
+  const T=D.tickers; let list=Object.keys(D.watch).filter(t=>S.watchSet==="top20"?T[t]?.t20:S.watchSet==="trigger"?!!T[t]?.trg:T[t]?.sig==="B");
   for(const t of extra) if(D.watch[t]&&!list.includes(t)) list.unshift(t);
   return list;
 }
 function renderWatch(){
   const dates=D.watch_dates, n=dates.length, start=Math.max(0,n-S.look), L=n-start, rows=[]; let withHits=0,totalHits=0,totalDays=0;
   const refName=S.ref==="se"?"5-session average of the daily Suggested Entry":"average close on the days (within the prior 5 sessions) the stock was in the Top 20";
-  $("watchLede").innerHTML=`A green box means the stock <b>closed below</b> its weekly average price that day. Here the weekly average is the ${refName}, taken over the 5 sessions before each day so it was known in advance. A buy order at that price would have filled on every green day. <b>Bid now</b> is the weekly average to use for the next session.`;
+  $("watchLede").innerHTML=`A green box means the stock <b>closed below</b> its weekly average price that day. Here the weekly average is the ${refName}, taken over the 5 sessions before each day so it was known in advance. A buy order at that price would have filled on every green day. <b>Bid now</b> is the weekly average to use for the next session. Tap a column heading to sort, tap again to reverse. <b>Mid BB / Ladder ½ / Support</b> are your two-entry ladder: Ladder ½ is Support plus half the distance up to the Mid BB, and a level turns green once the close is at or below it. A green <b>TRIGGER</b> tag means the buy-trigger rule fired in the last 5 sessions.`;
   for(const t of watchTickers()){
     const w=D.watch[t], info=D.tickers[t]||{}; const cells=[]; let hits=0,valid=0; const hitDays=[];
     for(let i=start;i<n;i++){
@@ -385,24 +401,33 @@ function renderWatch(){
     }
     const bid=weeklyAvg(w,n,S.ref), last=w.c[n-1], gap=bid!=null&&last?bid/last-1:null;
     if(hits>0)withHits++; totalHits+=hits; totalDays+=valid;
-    rows.push({t,info,cells,hits,valid,hitDays,bid,last,gap,pinned:extra.has(t)});
+    rows.push({t,info,cells,hits,valid,hitDays,bid,last,gap,pinned:extra.has(t),
+      ratio:valid?hits/valid:-1,ms:info.ms??null,mb:info.mb??null,lb:info.lb??null,half:info.lb!=null&&info.mb!=null?info.lb+(info.mb-info.lb)/2:null});
   }
-  rows.sort((a,b)=>(b.pinned-a.pinned)||(b.hits/(b.valid||1))-(a.hits/(a.valid||1))||b.hits-a.hits);
+  const wk=S.wSortKey||"ratio", wd=S.wSortDir||-1;
+  rows.sort((a,b)=>{
+    if(b.pinned!==a.pinned) return b.pinned-a.pinned;
+    if(wk==="t") return wd*a.t.localeCompare(b.t);
+    const x=a[wk],y=b[wk];
+    if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1;   // blanks always last
+    return wd*(x-y)||(b.hits-a.hits);
+  });
   const near=rows.filter(r=>r.gap!=null&&r.gap>-0.02).length;
   $("watchTiles").innerHTML=[
     tile("Stocks with ≥1 green day",`${withHits}<span class="muted" style="font-size:14px"> / ${rows.length}</span>`,`last ${L} sessions`),
     tile("Green days, all stocks",`${totalDays?Math.round(totalHits/totalDays*100):0}%`,`${totalHits} of ${totalDays} stock-days`),
     tile("Bid within 2% of close",`${near}`,`stocks where the weekly avg is close to the last price`),
   ].join("");
-  let h=`<thead><tr><th>Stock</th><th>Green days</th><th style="text-align:left">Last ${L} sessions <span class="muted">(${dshort(dates[start])} → ${dshort(dates[n-1])})</span></th><th>Close</th><th>Bid now</th><th>vs close</th><th>Score</th><th style="text-align:left">Which days</th></tr></thead><tbody>`;
+  const sh=(k,label,extra="")=>`<th class="sort" data-wk="${k}" tabindex="0" ${wk===k?`aria-sort="${wd<0?"descending":"ascending"}"`:""} ${extra}>${label}</th>`;
+  let h=`<thead><tr>${sh("t","Stock")}${sh("ratio","Green days")}<th style="text-align:left">Last ${L} sessions <span class="muted">(${dshort(dates[start])} → ${dshort(dates[n-1])})</span></th>${sh("last","Close")}${sh("bid","Bid now")}${sh("gap","vs close")}${sh("mb","Mid BB",'title="Middle Bollinger Band"')}${sh("half","Ladder ½",'title="Support + (Mid BB - Support) / 2"')}${sh("lb","Support",'title="Support = lower Bollinger Band"')}${sh("ms","Score",'title="Matrix Score"')}<th style="text-align:left">Which days</th></tr></thead><tbody>`;
   for(const r of rows){
     const ratio=r.valid?r.hits/r.valid:0;
     const pill=r.valid===0?`<span class="pill cold">no data</span>`:ratio>=.5?`<span class="pill hot">${r.hits}/${r.valid}</span>`:r.hits>0?`<span class="pill warm">${r.hits}/${r.valid}</span>`:`<span class="pill cold">0/${r.valid}</span>`;
     const strip=r.cells.map(c=>`<i class="${c.st}${c.in20?" in20":""}${c.newWeek?" wk":""}" data-t="${esc(r.t)}" data-d="${c.d}" data-c="${c.c??""}" data-a="${c.avg??""}" data-in="${c.in20?1:0}"></i>`).join("");
     const daysTxt=r.hitDays.length?r.hitDays.map(dlong).join(", "):`<span class="muted">none</span>`;
-    h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.info.t20?'<span class="t20tag">TOP 20</span>':""}${r.pinned?' <button type="button" class="btn" data-unpin="'+esc(r.t)+'" style="padding:0 6px;font-size:11px" aria-label="Remove '+esc(r.t)+'">×</button>':""}<span class="co">${esc(r.info.co||"")}</span></td><td>${pill}</td><td style="text-align:left"><span class="strip${L>20?" dense":""}">${strip}</span></td><td>${r.last!=null?money(r.last,2):"–"}</td><td>${r.bid!=null?money(r.bid,2):"<span class='muted'>–</span>"}</td><td class="${r.gap==null?"muted":r.gap>=0?"pos":"neg"}">${r.gap==null?"–":fmtS(r.gap)}</td><td>${r.info.ms??"–"}</td><td class="days-list">${daysTxt}</td></tr>`;
+    h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.info.t20?'<span class="t20tag">TOP 20</span>':""}${r.pinned?' <button type="button" class="btn" data-unpin="'+esc(r.t)+'" style="padding:0 6px;font-size:11px" aria-label="Remove '+esc(r.t)+'">×</button>':""}${r.info.trg?`<span class="trgtag" title="Buy trigger fired on ${dlong(r.info.trg)}">TRIGGER ${dshort(r.info.trg)}</span>`:""}<span class="co">${esc(r.info.co||"")}</span></td><td>${pill}</td><td style="text-align:left"><span class="strip${L>20?" dense":""}">${strip}</span></td><td>${r.last!=null?money(r.last,2):"–"}</td><td>${r.bid!=null?money(r.bid,2):"<span class='muted'>–</span>"}</td><td class="${r.gap==null?"muted":r.gap>=0?"pos":"neg"}">${r.gap==null?"–":fmtS(r.gap)}</td>${ladder(r.info,r.last)}<td>${r.info.ms??"–"}</td><td class="days-list">${daysTxt}</td></tr>`;
   }
-  $("watchTable").innerHTML=h+(rows.length?"":`<tr><td colspan="8" class="muted">No stocks in this list today.</td></tr>`)+"</tbody>";
+  $("watchTable").innerHTML=h+(rows.length?"":`<tr><td colspan="11" class="muted">No stocks in this list today.</td></tr>`)+"</tbody>";
 }
 
 /* ---------- 3 & 4 stats ---------- */
@@ -422,8 +447,12 @@ function stats(evs){
 const base=()=>D.baseline[S.measure];
 function renderHits(st,evs){
   const mtxt=S.measure==="peak"?"its best close at any point up to the end of that week":"its close at the end of that week (every 5 trading sessions)";
-  $("hitLede").innerHTML=`A <b>pick</b> is each time a stock ${S.src==="top20"?"newly enters the daily Top 20":"gets a new BUY signal"} (a return after ${D.settings.reentry_gap}+ sessions away counts again). The recommendation price is that day's close. A pick is a hit when ${mtxt} is above the recommendation price, or at least 5/10/15/20% above it. Covers <b>${evs.length}</b> ${srcName()} from ${winTxt()}, so the totals are cumulative.`;
+  $("hitLede").innerHTML=`A <b>pick</b> is each time a stock ${srcNew()} (a return after ${D.settings.reentry_gap}+ sessions away counts again). The recommendation price is that day's close. A pick is a hit when ${mtxt} is above the recommendation price, or at least 5/10/15/20% above it. Covers <b>${evs.length}</b> ${srcName()} from ${winTxt()}, so the totals are cumulative.`;
   const s=st[S.week-1], b=base()[S.week-1];
+  if(S.src==="trigger"){
+    const w4=st[3],b4=base()[3],ok=w4.n>=20&&w4.tiers[0].rate>b4.rates[0]&&w4.avg1k>b4.avg1k;
+    $("hitLede").innerHTML+=` <br><b>Buy-trigger rule, on trial until ${dlong(D.trigger_review||"2027-01-05")}.</b> It fires when a stock that had a green day in the last 7 sessions closes above its own 5-day average close, is still below its Mid BB, is on BUY, and has at least 2× more room up to the upper BB than down to its 7-day low. Keep it only if, by the review date, its week-4 hit rate <i>and</i> average $ per pick beat the Market row. Today at week 4: <span class="${w4.n<20?"muted":ok?"pos":"neg"}">${w4.n<20?`too few picks yet (n=${w4.n})`:ok?"ahead of the market":"not ahead of the market"}</span>.`;
+  }
   $("hitTiles").innerHTML=`<div class="tile"><div class="k">Horizon</div><div class="v">Week ${S.week}</div><div class="s">${s.n} picks matured</div></div>`+TIERS.map((t,i)=>{const diff=s.n&&b.n?s.tiers[i].rate-b.rates[i]:null;return tile(t.label,s.n?fmtP(s.tiers[i].rate):"–",s.n?`${s.tiers[i].n} of ${s.n} · market ${fmtP(b.rates[i])} <span class="${cls(diff)}">(${diff==null?"–":(diff>=0?"+":"−")+Math.abs(diff*100).toFixed(1)+" pts"})</span>`:"not enough history yet",t.tok)}).join("");
   $("hitLegend").innerHTML=TIERS.map(t=>`<span><i class="sw" style="background:var(${t.tok})"></i>${t.label}</span>`).join("")+`<span><i class="sw" style="height:2px;background:var(--ink-dim)"></i>Market, above rec price</span>`;
   let h=`<thead><tr><th>Week</th><th>n</th>${TIERS.map(t=>`<th>${t.short}</th>`).join("")}</tr></thead><tbody>`;
@@ -492,7 +521,13 @@ function boot(data){
   $("boardTable").addEventListener("keydown",e=>{const th=e.target.closest("th.sort");if(th&&(e.key==="Enter"||e.key===" ")){e.preventDefault();sortBy(th)}});
   const addTk=()=>{const v=$("watchSearch").value.trim().toUpperCase();if(D.watch[v]){extra.add(v);$("watchSearch").value="";renderWatch()}};
   $("watchSearch").addEventListener("change",addTk); $("watchSearch").addEventListener("keydown",e=>{if(e.key==="Enter")addTk()});
-  $("watchTable").addEventListener("click",e=>{const b=e.target.closest("[data-unpin]");if(b){extra.delete(b.dataset.unpin);renderWatch()}});
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(!b)return;e.stopPropagation();const t=b.dataset.add;extra.add(t);renderWatch();
+    const row=[...$("watchTable").querySelectorAll("tbody tr")].find(tr=>tr.querySelector(".tk")?.textContent===t);
+    $("watch").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+    if(row){row.classList.add("flash");setTimeout(()=>row.classList.remove("flash"),1700)}},true);
+  const wSort=th=>{const k=th.dataset.wk;if((S.wSortKey||"ratio")===k)S.wSortDir=-(S.wSortDir||-1);else{S.wSortKey=k;S.wSortDir=k==="t"?1:-1}save();renderWatch()};
+  $("watchTable").addEventListener("keydown",e=>{const th=e.target.closest("th[data-wk]");if(th&&(e.key==="Enter"||e.key===" ")){e.preventDefault();wSort(th)}});
+  $("watchTable").addEventListener("click",e=>{const th=e.target.closest("th[data-wk]");if(th){wSort(th);return}const b=e.target.closest("[data-unpin]");if(b){extra.delete(b.dataset.unpin);renderWatch()}});
   document.addEventListener("click",e=>{const tr=e.target.closest("tr.clickable");if(tr){S.week=+tr.dataset.w;save();render()}});
   const tip=$("tip");
   const show=e=>{const i=e.target.closest(".strip i");if(!i){tip.hidden=true;return}
