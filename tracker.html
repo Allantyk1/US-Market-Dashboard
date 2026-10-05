@@ -147,6 +147,13 @@
   .tile-btn:hover{border-color:var(--amber)}
   .tile-btn[aria-pressed="true"]{border-color:var(--amber);background:var(--amber-soft)}
   .tile-btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .calc{background:var(--amber);color:var(--bg);border-color:var(--amber);font-weight:600;padding:7px 16px}
+  .calc:hover{filter:brightness(1.08)}
+  input[type=number]{font:500 13px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;min-width:0}
+  input[type=number]:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  #planOut .panel{margin-top:12px}
+  .plan-sum{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;color:var(--ink-dim);margin-top:10px}
+  .plan-sum b{color:var(--ink)}
   tr.base td{color:var(--ink-dim);font-style:italic}
 </style>
 
@@ -184,6 +191,32 @@
         <button type="button" data-v="peak" aria-pressed="false">Best close so far</button>
       </div></div>
   </div>
+
+  <!-- planner -->
+  <section class="desk" id="planner">
+    <div class="desk-head"><span class="idx">★</span><h2>Buy / sell planner</h2></div>
+    <p class="lede">Type a ticker, choose Buy or Sell and how many entries, then tap <b>Calculate</b>. <b>Buy</b> splits the Support-to-Mid-BB range into equal steps (your ladder). <b>Sell</b> splits the Resistance-to-analyst-target range. Levels use the latest close data.</p>
+    <form class="panel" id="planForm" autocomplete="off">
+      <div class="toolbar" style="margin-bottom:0">
+        <div class="ctl"><label class="lbl" for="planTk">Ticker</label>
+          <input type="search" id="planTk" placeholder="e.g. AVGO" list="tickerList" style="width:130px"></div>
+        <div class="ctl"><span class="lbl">Side</span>
+          <div class="seg" id="planSide"><button type="button" data-v="buy" aria-pressed="true">Buy</button><button type="button" data-v="sell" aria-pressed="false">Sell</button></div></div>
+        <div class="ctl"><span class="lbl">Entries</span>
+          <div class="seg" id="planN"><button type="button" data-v="2" aria-pressed="true">2</button><button type="button" data-v="3" aria-pressed="false">3</button></div></div>
+        <div class="ctl" id="planMktWrap"><span class="lbl">Market</span>
+          <div class="seg" id="planMkt"><button type="button" data-v="auto" aria-pressed="true">Auto</button><button type="button" data-v="down" aria-pressed="false">Down</button><button type="button" data-v="up" aria-pressed="false">Up / flat</button></div></div>
+        <div class="ctl"><label class="lbl" for="planBudget">Budget ($)</label>
+          <input type="number" id="planBudget" min="0" step="100" value="3000" style="width:110px"></div>
+        <div class="ctl" id="planStopWrap"><label class="lbl" for="planStop">Stop below Support (%)</label>
+          <input type="number" id="planStop" min="0" max="20" step="0.5" value="3" style="width:90px"></div>
+        <div class="ctl" id="planEntryWrap" hidden><label class="lbl" for="planEntry">My entry price ($)</label>
+          <input type="number" id="planEntry" min="0" step="0.01" placeholder="optional" style="width:120px"></div>
+        <div class="ctl"><span class="lbl">&nbsp;</span><button type="submit" class="btn calc" id="planGo">Calculate</button></div>
+      </div>
+    </form>
+    <div id="planOut"></div>
+  </section>
 
   <!-- 1 leaderboard -->
   <section class="desk" id="board">
@@ -512,6 +545,39 @@ function baseOpts(tickFmt,tipFmt,yr){
 }
 function drawChart(old,id,cfg){if(old)old.destroy();if(!window.Chart)return null;return new Chart($(id),cfg)}
 
+/* ---------- planner ---------- */
+const P={side:"buy",n:2,mkt:"auto"};
+function planSeg(id,key,num){const el=$(id);el.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P[key]=num?+b.dataset.v:b.dataset.v;
+  el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  $("planMktWrap").hidden=$("planStopWrap").hidden=P.side!=="buy";$("planEntryWrap").hidden=P.side!=="sell";
+  if($("planOut").innerHTML)runPlan();});}
+function runPlan(){
+  const t=$("planTk").value.trim().toUpperCase(), out=$("planOut"), info=D.tickers[t];
+  if(!t){out.innerHTML=`<p class="note">Type a ticker first.</p>`;return}
+  if(!info){out.innerHTML=`<p class="note">${esc(t)} isn't in the screener's universe. Check the spelling, or pick one from the list.</p>`;return}
+  const px=info.px,lb=info.lb,mb=info.mb,ub=info.ub,tgt=info.tgt,n=P.n,budget=Math.max(0,+$("planBudget").value||0);
+  if([px,lb,mb,ub].some(v=>v==null)){out.innerHTML=`<p class="note">${esc(t)} has no Bollinger Band data yet, so levels can't be calculated.</p>`;return}
+  const head=`<div class="tiles" style="margin:12px 0 0">${tile(`${esc(t)} close`,money(px,2),`${esc(info.co||"")}${info.sig?` · ${SIGN[info.sig]}`:""}${info.ms!=null?` · score ${info.ms}`:""}`)}${tile("Support (lower BB)",money(lb,2),fmtS(lb/px-1)+" from close")}${tile("Mid BB",money(mb,2),fmtS(mb/px-1)+" from close")}${tile("Resistance (upper BB)",money(ub,2),fmtS(ub/px-1)+" from close")}${tile("Analyst target",tgt?money(tgt,2):"–",tgt?fmtS(tgt/px-1)+" from close":"no analyst target")}</div>`;
+  let levels=[],note="",sum="";
+  if(P.side==="buy"){
+    const r=mb-lb, hasE=info.e20!=null&&info.e40!=null, autoDown=hasE?info.e20<info.e40:px<mb, mkt=P.mkt==="auto"?(autoDown?"down":"up"):P.mkt;
+    for(let i=0;i<n;i++) levels.push(mkt==="down"?lb+r*(n-1-i)/n:mb-r*i/n);
+    const per=budget/n, rows=levels.map((v,i)=>{const sh=per>0?Math.floor(per/v):0;return{i,v,sh,cost:sh*v}});
+    const tsh=rows.reduce((a,x)=>a+x.sh,0),tc=rows.reduce((a,x)=>a+x.cost,0),avg=tsh?tc/tsh:levels.reduce((a,v)=>a+v,0)/n;
+    const stop=lb*(1-(+$("planStop").value||0)/100), rr=(ub-avg)/Math.max(avg-stop,1e-9);
+    note=`Market: <b>${mkt==="down"?"Down":"Up / flat"}</b>${P.mkt==="auto"?(hasE?` (auto: EMA20 ${money(info.e20,2)} is ${autoDown?"below":"above"} EMA40 ${money(info.e40,2)}, the same test as the dashboard's trend badge)`:` (auto: close is ${px<mb?"below":"above"} the Mid BB)`):""}. ${mkt==="down"?`Levels step from the Mid BB down to Support; the first entry is ${n===2?"halfway":"two-thirds of the way"} up from Support.`:"Levels step down from the Mid BB towards Support."}`;
+    out.innerHTML=head+`<div class="panel"><p class="note" style="margin-top:0">${note}</p><div class="scroll"><table><thead><tr><th>Entry</th><th>Buy limit</th><th>vs close</th><th>Shares</th><th>Cost</th><th>Status</th></tr></thead><tbody>${rows.map(x=>`<tr><td>Entry ${x.i+1}</td><td>${money(x.v,2)}</td><td class="${cls(x.v/px-1)}">${fmtS(x.v/px-1)}</td><td>${budget?x.sh:"–"}</td><td>${budget?money(x.cost,0):"–"}</td><td>${px<=x.v?'<span class="pill hot">would fill now</span>':'<span class="pill cold">waiting</span>'}</td></tr>`).join("")}</tbody></table></div>
+      <div class="plan-sum"><span>Average entry if all fill: <b>${money(avg,2)}</b></span>${budget?`<span>Total: <b>${tsh} shares · ${money(tc,0)}</b></span>`:""}<span>Stop: <b>${money(stop,2)}</b> (${fmtS(stop/avg-1)} from average)</span><span>First take-profit (upper BB): <b>${money(ub,2)}</b> (${fmtS(ub/avg-1)})</span><span>Reward / risk: <b class="${rr>=2?"pos":"neg"}">${rr.toFixed(1)}×</b> ${rr>=2?"passes the 2× check":"below 2×, so think twice"}</span></div></div>`;
+  } else {
+    const hi=tgt&&tgt>ub?tgt:ub*1.10, r=hi-ub, entry=+$("planEntry").value||0;
+    for(let i=0;i<n;i++) levels.push(ub+r*i/n);
+    const rows=levels.map((v,i)=>({i,v}));
+    note=`Levels step up from Resistance (upper BB) towards ${tgt&&tgt>ub?"the analyst target":"Resistance + 10% (no analyst target above Resistance)"}. Sell an equal part at each level, then trail a stop under the last high for anything left. Tracker data so far shows gains often fade after +5% to +10%, so consider selling more at Exit 1.`;
+    out.innerHTML=head+`<div class="panel"><p class="note" style="margin-top:0">${note}</p><div class="scroll"><table><thead><tr><th>Exit</th><th>Sell limit</th><th>vs close</th>${entry?"<th>Gain vs your entry</th>":""}<th>Status</th></tr></thead><tbody>${rows.map(x=>`<tr><td>Exit ${x.i+1} (${Math.round(100/n)}%)</td><td>${money(x.v,2)}</td><td class="${cls(x.v/px-1)}">${fmtS(x.v/px-1)}</td>${entry?`<td class="${cls(x.v/entry-1)}">${fmtS(x.v/entry-1)}</td>`:""}<td>${px>=x.v?'<span class="pill hot">would fill now</span>':'<span class="pill cold">waiting</span>'}</td></tr>`).join("")}</tbody></table></div>
+      <div class="plan-sum">${entry?`<span>Your entry: <b>${money(entry,2)}</b> · now <b class="${cls(px/entry-1)}">${fmtS(px/entry-1)}</b></span>`:""}<span>Protective stop: <b>${money(lb*(1-(+$("planStop").value||3)/100),2)}</b> (just under Support)</span>${entry&&px/entry-1>=0.05?`<span class="pos"><b>Already +5% or more: the tracker data favours taking at least part of the profit now.</b></span>`:""}</div></div>`;
+  }
+}
+
 function render(){
   if(!D)return;
   renderBoard(); renderWatch();
@@ -524,6 +590,8 @@ function boot(data){
   const nTop=D.events.filter(e=>e.src==="top20").length;
   $("meta").innerHTML=`<span>Session <b>${dlong(D.as_of_session)}</b> close</span><span>History from <b>${dshort(D.first_logged_session)}</b> · ${D.logged_sessions} sessions</span><span><b>${nTop}</b> Top-20 picks · <b>${D.events.length-nTop}</b> BUY signals · ${Object.keys(D.tickers).length} tickers</span>`;
   $("foot").innerHTML=`Built by generate_pick_tracker.py from top20_daily_log.json and history/*.json. Sessions are dated to the last completed US close. Weeks are 5 trading sessions after the recommendation day; week 13 needs a pick to be about 3 months old. Market comparison: ${esc(D.baseline_note)}. Generated ${esc(D.generated_at)} (Malaysia time). Not investment advice.`;
+  planSeg("planSide","side");planSeg("planN","n",true);planSeg("planMkt","mkt");
+  $("planForm").addEventListener("submit",e=>{e.preventDefault();runPlan()});
   $("tickerList").innerHTML=Object.keys(D.watch).sort().map(t=>`<option value="${esc(t)}">${esc(D.tickers[t]?.co||"")}</option>`).join("");
   bindSeg("src","src",false,()=>{boardShow=20}); bindSeg("win","win",true); bindSeg("refMode","ref"); bindSeg("measure","measure");
   bindSeg("rankBy","rankBy",false,()=>{S.sortKey=S.rankBy;S.sortDir=-1}); bindSeg("lookback","look",true); bindSeg("nearBid","near",true);

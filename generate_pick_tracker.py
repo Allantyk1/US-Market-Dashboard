@@ -339,6 +339,7 @@ def main():
                       "px": r.get("current_price"), "se": r.get("suggested_entry"),
                       "lb": r.get("support_lower_bb"), "mb": r.get("middle_bb"),
                       "ub": r.get("resistance_upper_bb"), "tgt": r.get("analyst_target"),
+                      "e20": r.get("ema20"), "e40": r.get("ema40"),
                       "t20": 1 if t in today_top else 0}
 
     # ---- section: entry watch for every ticker (compact arrays) -------------------
