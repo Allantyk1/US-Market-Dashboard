@@ -10,7 +10,7 @@ What it does every day:
      dashboard_data.json, so you start with ~2 months of daily snapshots.
   2. Builds pick_tracker_data.json, which tracker.html reads:
        - tickers   : name / category / today's signal for every ticker
-       - watch     : last 35 sessions of close + Suggested Entry for every ticker
+       - watch     : last 45 sessions of close + Suggested Entry for every ticker
        - events    : every NEW Top-20 entry and every NEW BUY signal, with the
                      forward close at week 1..13, best close per horizon, and
                      return to date (for the best/worst leaderboard)
@@ -34,7 +34,7 @@ HISTORY_DIR = "history"
 LOG_FILE = "top20_daily_log.json"
 OUT_FILE = "pick_tracker_data.json"
 
-WATCH_SESSIONS = 30        # days of history shown per stock in section 1
+WATCH_SESSIONS = 40        # sessions of history per stock in the below-weekly-average section (8 weeks)
 REENTRY_GAP = 5            # a ticker counts as a NEW pick if absent this many logged sessions
 HORIZON_WEEKS = 13
 SESSIONS_PER_WEEK = 5

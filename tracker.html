@@ -94,6 +94,8 @@
   .strip i.miss{background:transparent}
   .strip i.na{background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 5px)}
   .strip i.wk{margin-left:5px}
+  .strip.dense i{width:9px}
+  .strip.dense i.in20::after{left:2px;right:2px}
   .strip i.in20::after{content:"";position:absolute;left:3px;right:3px;bottom:-5px;height:2px;border-radius:2px;background:var(--amber)}
   .days-list{font:400 11px var(--font-body);color:var(--ink-dim);white-space:normal;text-align:left;min-width:160px;max-width:260px}
   .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:11.5px;color:var(--ink-dim);margin:2px 0 10px}
@@ -193,6 +195,10 @@
       <div class="toolbar">
         <label class="lbl" for="boardSearch" style="font:500 10px var(--font-data);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)">Find a stock</label>
         <input type="search" id="boardSearch" placeholder="Ticker or name" autocomplete="off">
+        <div class="seg" id="boardRows" role="group" aria-label="Rows shown">
+          <button type="button" data-v="20" aria-pressed="true">Top 20 rows</button>
+          <button type="button" data-v="all" aria-pressed="false">All stocks</button>
+        </div>
         <span class="muted" id="boardCount" style="font-size:12px"></span>
       </div>
       <div class="scroll"><table id="boardTable"></table></div>
@@ -215,6 +221,7 @@
           <button type="button" data-v="5" aria-pressed="false">1 wk</button>
           <button type="button" data-v="10" aria-pressed="true">2 wk</button>
           <button type="button" data-v="20" aria-pressed="false">4 wk</button>
+          <button type="button" data-v="40" aria-pressed="false">8 wk</button>
         </div></div>
       <div class="ctl"><label class="lbl" for="watchSearch">Add any ticker</label>
         <input type="search" id="watchSearch" placeholder="e.g. NVDA" autocomplete="off" list="tickerList"></div>
@@ -270,7 +277,7 @@ const TIERS=[{k:0,label:"Above rec price",short:">0%",tok:"--t1"},{k:.05,label:"
 const SIGN={B:"BUY",W:"WATCH",S:"SELL"};
 const S={src:"top20",win:3,ref:"se",measure:"close",week:4,look:10,watchSet:"top20",rankBy:"pct",sortKey:"pct",sortDir:-1};
 try{Object.assign(S,JSON.parse(localStorage.getItem("pickTrackerPrefs2")||"{}"))}catch(e){}
-const extra=new Set(); let boardShow=25;
+const extra=new Set(); let boardShow=20;
 let D=null,hitChart=null,usdChart=null;
 const $=id=>document.getElementById(id);
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -336,15 +343,17 @@ function renderBoard(){
   let list=rows.filter(r=>!q||r.t.toLowerCase().includes(q)||(r.co||"").toLowerCase().includes(q));
   const sk=S.sortKey, dir=S.sortDir;
   list.sort((a,b)=>{const x=a[sk],y=b[sk];if(typeof x==="string")return dir*x.localeCompare(y);return dir*((x??-1e9)-(y??-1e9))});
-  $("boardCount").textContent=`${list.length} stock${list.length===1?"":"s"}`;
   const cols=[["t","Stock"],["d","Day 1"],["rp","Day-1 price"],["lc","Now"],["days","Days"],["pct","% to date"],["usd","$ / share"],["pos","$ on $1k"],["hi","Best since"],["lo","Worst since"],["n","Times picked"],["sig","Signal now"]];
   let h=`<thead><tr>${cols.map(([c,l])=>`<th class="sort" data-k="${c}" ${sk===c?`aria-sort="${dir<0?"descending":"ascending"}"`:""} tabindex="0">${l}</th>`).join("")}</tr></thead><tbody>`;
   for(const r of list.slice(0,boardShow)){
     h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.t20?'<span class="t20tag">TOP 20</span>':""}${r.jump?`<span class="jumptag" title="One-day move of 50%+ on ${dshort(r.jump)}: check for a split, reverse split or spin-off">⚠ jump ${dshort(r.jump)}</span>`:""}<span class="co">${esc(r.co||"")}</span></td><td>${dshort(r.d)}</td><td>${money(r.rp,2)}</td><td>${money(r.lc,2)}</td><td>${r.days}</td><td class="${cls(r.pct)}">${fmtS(r.pct)}</td><td class="${cls(r.usd)}">${smoney(r.usd,2)}</td><td class="${cls(r.pos)}">${smoney(r.pos)}</td><td class="${cls(r.hi)}">${fmtS(r.hi)}</td><td class="${cls(r.lo)}">${fmtS(r.lo)}</td><td>${r.n}</td><td>${r.sig?`<span class="sig ${r.sig}">${SIGN[r.sig]}</span>`:"–"}</td></tr>`;
   }
   $("boardTable").innerHTML=h+"</tbody>";
-  const more=$("boardMore"); more.hidden=list.length<=25;
-  more.textContent=boardShow<list.length?`Show all ${list.length}`:"Show top 25 only";
+  const all=boardShow>20;
+  $("boardRows").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String((b.dataset.v==="all")===all)));
+  $("boardCount").textContent=all||list.length<=20?`${list.length} stock${list.length===1?"":"s"}`:`showing 20 of ${list.length} stocks`;
+  const more=$("boardMore"); more.hidden=list.length<=20;
+  more.textContent=all?"Show top 20 rows only":`Show all ${list.length} stocks`;
 }
 function median(a){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2}
 
@@ -363,7 +372,7 @@ function watchTickers(){
   return list;
 }
 function renderWatch(){
-  const L=S.look, dates=D.watch_dates, n=dates.length, start=n-L, rows=[]; let withHits=0,totalHits=0,totalDays=0;
+  const dates=D.watch_dates, n=dates.length, start=Math.max(0,n-S.look), L=n-start, rows=[]; let withHits=0,totalHits=0,totalDays=0;
   const refName=S.ref==="se"?"5-session average of the daily Suggested Entry":"average close on the days (within the prior 5 sessions) the stock was in the Top 20";
   $("watchLede").innerHTML=`A green box means the stock <b>closed below</b> its weekly average price that day. Here the weekly average is the ${refName}, taken over the 5 sessions before each day so it was known in advance. A buy order at that price would have filled on every green day. <b>Bid now</b> is the weekly average to use for the next session.`;
   for(const t of watchTickers()){
@@ -391,7 +400,7 @@ function renderWatch(){
     const pill=r.valid===0?`<span class="pill cold">no data</span>`:ratio>=.5?`<span class="pill hot">${r.hits}/${r.valid}</span>`:r.hits>0?`<span class="pill warm">${r.hits}/${r.valid}</span>`:`<span class="pill cold">0/${r.valid}</span>`;
     const strip=r.cells.map(c=>`<i class="${c.st}${c.in20?" in20":""}${c.newWeek?" wk":""}" data-t="${esc(r.t)}" data-d="${c.d}" data-c="${c.c??""}" data-a="${c.avg??""}" data-in="${c.in20?1:0}"></i>`).join("");
     const daysTxt=r.hitDays.length?r.hitDays.map(dlong).join(", "):`<span class="muted">none</span>`;
-    h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.info.t20?'<span class="t20tag">TOP 20</span>':""}${r.pinned?' <button type="button" class="btn" data-unpin="'+esc(r.t)+'" style="padding:0 6px;font-size:11px" aria-label="Remove '+esc(r.t)+'">×</button>':""}<span class="co">${esc(r.info.co||"")}</span></td><td>${pill}</td><td style="text-align:left"><span class="strip">${strip}</span></td><td>${r.last!=null?money(r.last,2):"–"}</td><td>${r.bid!=null?money(r.bid,2):"<span class='muted'>–</span>"}</td><td class="${r.gap==null?"muted":r.gap>=0?"pos":"neg"}">${r.gap==null?"–":fmtS(r.gap)}</td><td>${r.info.ms??"–"}</td><td class="days-list">${daysTxt}</td></tr>`;
+    h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.info.t20?'<span class="t20tag">TOP 20</span>':""}${r.pinned?' <button type="button" class="btn" data-unpin="'+esc(r.t)+'" style="padding:0 6px;font-size:11px" aria-label="Remove '+esc(r.t)+'">×</button>':""}<span class="co">${esc(r.info.co||"")}</span></td><td>${pill}</td><td style="text-align:left"><span class="strip${L>20?" dense":""}">${strip}</span></td><td>${r.last!=null?money(r.last,2):"–"}</td><td>${r.bid!=null?money(r.bid,2):"<span class='muted'>–</span>"}</td><td class="${r.gap==null?"muted":r.gap>=0?"pos":"neg"}">${r.gap==null?"–":fmtS(r.gap)}</td><td>${r.info.ms??"–"}</td><td class="days-list">${daysTxt}</td></tr>`;
   }
   $("watchTable").innerHTML=h+(rows.length?"":`<tr><td colspan="8" class="muted">No stocks in this list today.</td></tr>`)+"</tbody>";
 }
@@ -473,10 +482,11 @@ function boot(data){
   $("meta").innerHTML=`<span>Session <b>${dlong(D.as_of_session)}</b> close</span><span>History from <b>${dshort(D.first_logged_session)}</b> · ${D.logged_sessions} sessions</span><span><b>${nTop}</b> Top-20 picks · <b>${D.events.length-nTop}</b> BUY signals · ${Object.keys(D.tickers).length} tickers</span>`;
   $("foot").innerHTML=`Built by generate_pick_tracker.py from top20_daily_log.json and history/*.json. Sessions are dated to the last completed US close. Weeks are 5 trading sessions after the recommendation day; week 13 needs a pick to be about 3 months old. Market comparison: ${esc(D.baseline_note)}. Generated ${esc(D.generated_at)} (Malaysia time). Not investment advice.`;
   $("tickerList").innerHTML=Object.keys(D.watch).sort().map(t=>`<option value="${esc(t)}">${esc(D.tickers[t]?.co||"")}</option>`).join("");
-  bindSeg("src","src",false,()=>{boardShow=25}); bindSeg("win","win",true); bindSeg("refMode","ref"); bindSeg("measure","measure");
+  bindSeg("src","src",false,()=>{boardShow=20}); bindSeg("win","win",true); bindSeg("refMode","ref"); bindSeg("measure","measure");
   bindSeg("rankBy","rankBy",false,()=>{S.sortKey=S.rankBy;S.sortDir=-1}); bindSeg("lookback","look",true); bindSeg("watchSet","watchSet");
   $("boardSearch").addEventListener("input",()=>renderBoard());
-  $("boardMore").addEventListener("click",()=>{boardShow=boardShow>25?25:1e9;renderBoard()});
+  $("boardMore").addEventListener("click",()=>{const wasAll=boardShow>20;boardShow=wasAll?20:1e9;renderBoard();if(wasAll)$("boardTable").scrollIntoView({block:"nearest"})});
+  $("boardRows").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;boardShow=b.dataset.v==="all"?1e9:20;renderBoard()});
   const sortBy=th=>{const k=th.dataset.k;if(S.sortKey===k)S.sortDir*=-1;else{S.sortKey=k;S.sortDir=(k==="t"||k==="d")?1:-1}save();renderBoard()};
   $("boardTable").addEventListener("click",e=>{const th=e.target.closest("th.sort");if(th)sortBy(th)});
   $("boardTable").addEventListener("keydown",e=>{const th=e.target.closest("th.sort");if(th&&(e.key==="Enter"||e.key===" ")){e.preventDefault();sortBy(th)}});
