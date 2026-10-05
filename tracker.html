@@ -143,6 +143,10 @@
   .trgtag{font:600 9.5px var(--font-data);color:var(--green);border:1px solid var(--green);border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:1px;white-space:nowrap}
   tr.flash td{animation:flash 1.6s ease-out}
   @keyframes flash{from{background:var(--amber-soft)}to{background:transparent}}
+  .tile-btn{font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+  .tile-btn:hover{border-color:var(--amber)}
+  .tile-btn[aria-pressed="true"]{border-color:var(--amber);background:var(--amber-soft)}
+  .tile-btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
   tr.base td{color:var(--ink-dim);font-style:italic}
 </style>
 
@@ -233,6 +237,13 @@
         </div></div>
       <div class="ctl"><label class="lbl" for="watchSearch">Add any ticker</label>
         <input type="search" id="watchSearch" placeholder="e.g. NVDA" autocomplete="off" list="tickerList"></div>
+      <div class="ctl"><span class="lbl">Bid near close</span>
+        <div class="seg" id="nearBid" role="group" aria-label="Only show stocks whose Bid now is near the close">
+          <button type="button" data-v="0" aria-pressed="true">All</button>
+          <button type="button" data-v="2" aria-pressed="false">≤ 2%</button>
+          <button type="button" data-v="3" aria-pressed="false">≤ 3%</button>
+          <button type="button" data-v="5" aria-pressed="false">≤ 5%</button>
+        </div></div>
       <datalist id="tickerList"></datalist>
     </div>
     <div class="tiles" id="watchTiles"></div>
@@ -283,7 +294,7 @@
 (function(){
 const TIERS=[{k:0,label:"Above rec price",short:">0%",tok:"--t1"},{k:.05,label:"≥ 5%",short:"≥5%",tok:"--t2"},{k:.10,label:"≥ 10%",short:"≥10%",tok:"--t3"},{k:.15,label:"≥ 15%",short:"≥15%",tok:"--t4"},{k:.20,label:"≥ 20%",short:"≥20%",tok:"--t5"}];
 const SIGN={B:"BUY",W:"WATCH",S:"SELL"};
-const S={src:"top20",win:3,ref:"se",measure:"close",week:4,look:10,watchSet:"top20",rankBy:"pct",sortKey:"pct",sortDir:-1};
+const S={src:"top20",win:3,ref:"se",measure:"close",week:4,look:10,watchSet:"top20",near:0,rankBy:"pct",sortKey:"pct",sortDir:-1};
 try{Object.assign(S,JSON.parse(localStorage.getItem("pickTrackerPrefs2")||"{}"))}catch(e){}
 const extra=new Set(); let boardShow=20;
 let D=null,hitChart=null,usdChart=null;
@@ -388,9 +399,9 @@ function watchTickers(){
   return list;
 }
 function renderWatch(){
-  const dates=D.watch_dates, n=dates.length, start=Math.max(0,n-S.look), L=n-start, rows=[]; let withHits=0,totalHits=0,totalDays=0;
+  const dates=D.watch_dates, n=dates.length, start=Math.max(0,n-S.look), L=n-start; let rows=[]; let withHits=0,totalHits=0,totalDays=0;
   const refName=S.ref==="se"?"5-session average of the daily Suggested Entry":"average close on the days (within the prior 5 sessions) the stock was in the Top 20";
-  $("watchLede").innerHTML=`A green box means the stock <b>closed below</b> its weekly average price that day. Here the weekly average is the ${refName}, taken over the 5 sessions before each day so it was known in advance. A buy order at that price would have filled on every green day. <b>Bid now</b> is the weekly average to use for the next session. Tap a column heading to sort, tap again to reverse. <b>Mid BB / Ladder ½ / Support</b> are your two-entry ladder: Ladder ½ is Support plus half the distance up to the Mid BB, and a level turns green once the close is at or below it. A green <b>TRIGGER</b> tag means the buy-trigger rule fired in the last 5 sessions.`;
+  $("watchLede").innerHTML=`A green box means the stock <b>closed below</b> its weekly average price that day. Here the weekly average is the ${refName}, taken over the 5 sessions before each day so it was known in advance. A buy order at that price would have filled on every green day. <b>Bid now</b> is the weekly average to use for the next session. Tap a column heading to sort, tap again to reverse. <b>Bid near close</b> keeps only stocks whose Bid now is within 2, 3 or 5% of the close (or above it), so the order is likely to fill soon. <b>Mid BB / Ladder ½ / Support</b> are your two-entry ladder: Ladder ½ is Support plus half the distance up to the Mid BB, and a level turns green once the close is at or below it. A green <b>TRIGGER</b> tag means the buy-trigger rule fired in the last 5 sessions.`;
   for(const t of watchTickers()){
     const w=D.watch[t], info=D.tickers[t]||{}; const cells=[]; let hits=0,valid=0; const hitDays=[];
     for(let i=start;i<n;i++){
@@ -412,19 +423,22 @@ function renderWatch(){
     if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1;   // blanks always last
     return wd*(x-y)||(b.hits-a.hits);
   });
-  const near=rows.filter(r=>r.gap!=null&&r.gap>-0.02).length;
+  const near=rows.filter(r=>r.gap!=null&&r.gap>=-0.02).length;
+  const nb=S.near||0, allRows=rows.length;
+  if(nb) rows=rows.filter(r=>r.pinned||(r.gap!=null&&r.gap>=-nb/100));
   $("watchTiles").innerHTML=[
-    tile("Stocks with ≥1 green day",`${withHits}<span class="muted" style="font-size:14px"> / ${rows.length}</span>`,`last ${L} sessions`),
+    tile("Stocks with ≥1 green day",`${withHits}<span class="muted" style="font-size:14px"> / ${allRows}</span>`,`last ${L} sessions`),
     tile("Green days, all stocks",`${totalDays?Math.round(totalHits/totalDays*100):0}%`,`${totalHits} of ${totalDays} stock-days`),
-    tile("Bid within 2% of close",`${near}`,`stocks where the weekly avg is close to the last price`),
+    `<button type="button" class="tile tile-btn" id="nearTile" aria-pressed="${nb===2}" title="Show only these stocks"><div class="k">Bid within 2% of close</div><div class="v">${near}</div><div class="s">${nb===2?"Filter on: tap to show all":"Tap to show only these"}</div></button>`,
   ].join("");
+  if(nb) $("watchTiles").insertAdjacentHTML("beforeend",`<p class="note" style="grid-column:1/-1;margin:0">Showing <b>${rows.length}</b> of ${allRows} stocks whose Bid now is within ${nb}% below the close or above it (already trading under its weekly average).</p>`);
   const sh=(k,label,extra="")=>`<th class="sort" data-wk="${k}" tabindex="0" ${wk===k?`aria-sort="${wd<0?"descending":"ascending"}"`:""} ${extra}>${label}</th>`;
   let h=`<thead><tr>${sh("t","Stock")}${sh("ratio","Green days")}<th style="text-align:left">Last ${L} sessions <span class="muted">(${dshort(dates[start])} → ${dshort(dates[n-1])})</span></th>${sh("last","Close")}${sh("bid","Bid now")}${sh("gap","vs close")}${sh("mb","Mid BB",'title="Middle Bollinger Band"')}${sh("half","Ladder ½",'title="Support + (Mid BB - Support) / 2"')}${sh("lb","Support",'title="Support = lower Bollinger Band"')}${sh("ms","Score",'title="Matrix Score"')}<th style="text-align:left">Which days</th></tr></thead><tbody>`;
   for(const r of rows){
     const ratio=r.valid?r.hits/r.valid:0;
     const pill=r.valid===0?`<span class="pill cold">no data</span>`:ratio>=.5?`<span class="pill hot">${r.hits}/${r.valid}</span>`:r.hits>0?`<span class="pill warm">${r.hits}/${r.valid}</span>`:`<span class="pill cold">0/${r.valid}</span>`;
     const strip=r.cells.map(c=>`<i class="${c.st}${c.in20?" in20":""}${c.newWeek?" wk":""}" data-t="${esc(r.t)}" data-d="${c.d}" data-c="${c.c??""}" data-a="${c.avg??""}" data-in="${c.in20?1:0}"></i>`).join("");
-    const daysTxt=r.hitDays.length?r.hitDays.map(dlong).join(", "):`<span class="muted">none</span>`;
+    const hd=r.hitDays, daysTxt=!hd.length?`<span class="muted">none</span>`:hd.length<=6?hd.map(dlong).join(", "):`<span title="${esc(hd.map(dlong).join(", "))}">${hd.slice(-6).map(dshort).join(", ")} <span class="muted">+${hd.length-6} earlier</span></span>`;
     h+=`<tr><td><span class="tk">${esc(r.t)}</span>${r.info.t20?'<span class="t20tag">TOP 20</span>':""}${r.pinned?' <button type="button" class="btn" data-unpin="'+esc(r.t)+'" style="padding:0 6px;font-size:11px" aria-label="Remove '+esc(r.t)+'">×</button>':""}${r.info.trg?`<span class="trgtag" title="Buy trigger fired on ${dlong(r.info.trg)}">TRIGGER ${dshort(r.info.trg)}</span>`:""}<span class="co">${esc(r.info.co||"")}</span></td><td>${pill}</td><td style="text-align:left"><span class="strip${L>20?" dense":""}">${strip}</span></td><td>${r.last!=null?money(r.last,2):"–"}</td><td>${r.bid!=null?money(r.bid,2):"<span class='muted'>–</span>"}</td><td class="${r.gap==null?"muted":r.gap>=0?"pos":"neg"}">${r.gap==null?"–":fmtS(r.gap)}</td>${ladder(r.info,r.last)}<td>${r.info.ms??"–"}</td><td class="days-list">${daysTxt}</td></tr>`;
   }
   $("watchTable").innerHTML=h+(rows.length?"":`<tr><td colspan="11" class="muted">No stocks in this list today.</td></tr>`)+"</tbody>";
@@ -512,7 +526,9 @@ function boot(data){
   $("foot").innerHTML=`Built by generate_pick_tracker.py from top20_daily_log.json and history/*.json. Sessions are dated to the last completed US close. Weeks are 5 trading sessions after the recommendation day; week 13 needs a pick to be about 3 months old. Market comparison: ${esc(D.baseline_note)}. Generated ${esc(D.generated_at)} (Malaysia time). Not investment advice.`;
   $("tickerList").innerHTML=Object.keys(D.watch).sort().map(t=>`<option value="${esc(t)}">${esc(D.tickers[t]?.co||"")}</option>`).join("");
   bindSeg("src","src",false,()=>{boardShow=20}); bindSeg("win","win",true); bindSeg("refMode","ref"); bindSeg("measure","measure");
-  bindSeg("rankBy","rankBy",false,()=>{S.sortKey=S.rankBy;S.sortDir=-1}); bindSeg("lookback","look",true); bindSeg("watchSet","watchSet");
+  bindSeg("rankBy","rankBy",false,()=>{S.sortKey=S.rankBy;S.sortDir=-1}); bindSeg("lookback","look",true); bindSeg("nearBid","near",true);
+  $("watchTiles").addEventListener("click",e=>{if(!e.target.closest("#nearTile"))return;S.near=S.near===2?0:2;save();
+    $("nearBid").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.v===S.near)));renderWatch()}); bindSeg("watchSet","watchSet");
   $("boardSearch").addEventListener("input",()=>renderBoard());
   $("boardMore").addEventListener("click",()=>{const wasAll=boardShow>20;boardShow=wasAll?20:1e9;renderBoard();if(wasAll)$("boardTable").scrollIntoView({block:"nearest"})});
   $("boardRows").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;boardShow=b.dataset.v==="all"?1e9:20;renderBoard()});
