@@ -94,6 +94,49 @@ def compute_risk_line(entry, atr):
     return round(line, 2), round(pct, 4), round(pct * 1000)
 
 
+PRICE_CACHE_FILE = "winrate_price_cache.pkl"   # built by train_winrate_model.py
+CACHE_MAX_AGE_DAYS = 10                        # ignore cache series older than this
+_price_cache = None
+
+
+def fallback_atr(ticker):
+    """ATR(14) for a ticker whose report row has no 'ATR (14)' value yet
+    (rows written before the screener had ATR, or tickers that resume mode
+    skipped). Uses the same Wilder ATR as stock_screener_us.py /
+    backtest_stop_loss.py, computed from winrate_price_cache.pkl.
+    Returns (atr, atr_pct) or (None, None)."""
+    global _price_cache
+    if _price_cache is None:
+        _price_cache = {}
+        if os.path.exists(PRICE_CACHE_FILE):
+            try:
+                import pickle
+                with open(PRICE_CACHE_FILE, "rb") as f:
+                    _price_cache = pickle.load(f)
+            except Exception as e:
+                print(f"[WARN] could not read {PRICE_CACHE_FILE}: {e}")
+    df = _price_cache.get(ticker) if ticker else None
+    if df is None or len(df) < 20:
+        return None, None
+    try:
+        import pandas as pd
+        df = df.dropna(subset=["High", "Low", "Close"])
+        last = pd.Timestamp(df.index[-1]).tz_localize(None) if getattr(df.index[-1], "tzinfo", None) else pd.Timestamp(df.index[-1])
+        if (pd.Timestamp.now() - last).days > CACHE_MAX_AGE_DAYS:
+            return None, None
+        c, h, l = df["Close"], df["High"], df["Low"]
+        prev = c.shift(1)
+        tr = pd.concat([h - l, (h - prev).abs(), (l - prev).abs()], axis=1).max(axis=1)
+        atr = _safe_float(tr.ewm(alpha=1 / 14, adjust=False, min_periods=14).mean().iloc[-1])
+        close = _safe_float(c.iloc[-1])
+        if atr is None or not close:
+            return None, None
+        return round(atr, 4), round(atr / close * 100, 2)
+    except Exception as e:
+        print(f"[WARN] fallback ATR failed for {ticker}: {e}")
+        return None, None
+
+
 def load_all_tickers():
     """Full ticker universe with ALL the calculator's fields - not trimmed.
     The dashboard shows a compact summary by default and lets you tap a
@@ -104,9 +147,15 @@ def load_all_tickers():
     import pandas as pd
     df = pd.read_excel(REAL_DATA_FILE)
     tickers = []
+    n_fallback = 0
     for _, r in df.iterrows():
         entry = compute_suggested_entry(r.get("Current Price"), r.get("Support (Lower BB)"))
-        risk_line, risk_pct, risk_per_1000 = compute_risk_line(entry, r.get("ATR (14)"))
+        atr14, atr_pct = _safe_float(r.get("ATR (14)")), _safe_float(r.get("ATR %"))
+        if atr14 is None:
+            atr14, atr_pct = fallback_atr(r.get("Ticker"))
+            if atr14 is not None:
+                n_fallback += 1
+        risk_line, risk_pct, risk_per_1000 = compute_risk_line(entry, atr14)
         tickers.append({
             "ticker": r.get("Ticker"),
             "company": r.get("Name", r.get("Ticker")),
@@ -118,8 +167,8 @@ def load_all_tickers():
             # 3 x ATR risk line below the suggested entry (risk guide, not a
             # sell signal) - see compute_risk_line(). None for rows from
             # before ATR was added until the screener re-processes them.
-            "atr14": _safe_float(r.get("ATR (14)")),
-            "atr_pct": _safe_float(r.get("ATR %")),
+            "atr14": atr14,
+            "atr_pct": atr_pct,
             "risk_line": risk_line,
             "risk_pct": risk_pct,
             "risk_per_1000": risk_per_1000,
@@ -163,6 +212,9 @@ def load_all_tickers():
             "call_wall_oi": r.get("Call Wall Open Interest Volume"),
             "walls_crossed": bool(r.get("Walls Crossed (Low Confidence)")),
         })
+    with_risk = sum(1 for t in tickers if t["risk_line"] is not None)
+    print(f"[INFO] Risk line: {with_risk}/{len(tickers)} tickers "
+          f"({n_fallback} ATR values filled from {PRICE_CACHE_FILE})")
     return tickers
 
 
