@@ -138,6 +138,15 @@
     font-family:'IBM Plex Mono',monospace; margin-bottom:3px;
   }
   .stat-box .stat-value{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;}
+  /* 3 x ATR risk line - risk guide for sizing, not a sell signal */
+  .risk-line{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-top:8px;
+    padding:6px 10px; border-radius:8px; border-left:3px solid var(--ink-faint);
+    background:var(--panel-2); font-size:11.5px; color:var(--ink-dim);
+  }
+  .risk-line .rl-label{font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.04em;
+    text-transform:uppercase; color:var(--ink-faint);}
+  .risk-line .rl-val{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--ink);}
   .stat-box .stat-value .up{color:var(--green);}
 
   .hero{padding:20px; display:flex; flex-direction:column; gap:4px;}
@@ -441,6 +450,29 @@ let TOP20_SET = new Set();
 let activeTab = 'ALL';
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
+// --- 3 x ATR risk line (see compute_risk_line() in generate_dashboard_data.py
+// and backtest_stop_loss.py). A RISK GUIDE for position sizing, not a sell
+// signal: a 3 x ATR stop cut 15%+ losses roughly in half in the backtest but
+// slightly lowers the average return, and can't protect against overnight
+// gaps such as earnings. Public page: always measured from suggested entry.
+function riskInfo(t){
+  if (t.risk_line != null && t.risk_pct != null)
+    return {line: t.risk_line, pct: t.risk_pct, from: 'entry'};
+  return null;
+}
+function riskLineRow(t){
+  const r = riskInfo(t);
+  if (!r) return '';
+  const per1k = Math.round(r.pct * 1000);
+  return `
+      <div class="risk-line" title="3 x ATR below ${r.from}. Risk guide for position sizing - not a sell signal. Does not protect against overnight gaps (earnings).">
+        <span class="rl-label">Risk line</span>
+        <span class="rl-val">${fmtMoney(r.line)}</span>
+        <span>−${(r.pct * 100).toFixed(1)}% from ${r.from}</span>
+        <span>risk $${per1k} per $1,000</span>
+      </div>`;
+}
+
 // --- Screener-style card: Buy / Watch / Sell / All Stocks tabs ---
 function screenerCard(t, i){
   const upside = (t.analyst_target && t.current_price) ? (t.analyst_target - t.current_price) / t.current_price : null;
@@ -473,6 +505,7 @@ function screenerCard(t, i){
         <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value">${fmtMoney(t.suggested_entry)}</div></div>
         <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value">${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class="up">${fmtPct(upside)}</span>` : ''}</div></div>
       </div>
+      ${riskLineRow(t)}
       <div class="card-detail" id="detail-${i}" data-ticker="${t.ticker}" data-loaded="0" onclick="event.stopPropagation()">
         <div class="chart-panels" id="charts-${i}">
           <div class="chart-box"><canvas id="chart-macd-${i}" height="140"></canvas></div>
@@ -495,6 +528,8 @@ function screenerCard(t, i){
           <span class="dlabel">Volume (today / 200SMA)</span><span class="dval">${fmtCompact(t.current_vol)} / ${fmtCompact(t.vol_200sma)}</span>
           <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
           <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
+          <span class="dlabel">ATR (14-day)</span><span class="dval">${fmtMoney(t.atr14)}${t.atr_pct != null ? ` (${t.atr_pct.toFixed(1)}%)` : ''}</span>
+          <span class="dlabel">Risk Line (3 × ATR)</span><span class="dval">${(() => { const r = riskInfo(t); return r ? `${fmtMoney(r.line)} (−${(r.pct*100).toFixed(1)}% from ${r.from})` : '—'; })()}</span>
           <span class="dlabel">Intrinsic Value</span><span class="dval">${fmtMoney(t.intrinsic_value)}</span>
           <span class="dlabel">Margin of Safety</span><span class="dval">${t.margin_of_safety || '—'}</span>
           <span class="dlabel">Analyst Upside</span><span class="dval">${t.analyst_upside_pct || '—'}</span>
