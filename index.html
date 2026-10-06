@@ -150,6 +150,17 @@
   }
   .stat-box .stat-value{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;}
   .stat-box .stat-value .up{color:var(--green);}
+  /* 3 x ATR risk line - risk guide for sizing, not a sell signal */
+  .risk-line{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-top:8px;
+    padding:6px 10px; border-radius:8px; border-left:3px solid var(--ink-faint);
+    background:var(--panel-2); font-size:11.5px; color:var(--ink-dim);
+  }
+  .risk-line .rl-label{font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.04em;
+    text-transform:uppercase; color:var(--ink-faint);}
+  .risk-line .rl-val{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--ink);}
+  .risk-line.breached{border-left-color:var(--red); background:var(--red-dim); color:var(--red);}
+  .risk-line.breached .rl-val, .risk-line.breached .rl-label{color:var(--red);}
 
   .hero{padding:20px; display:flex; flex-direction:column; gap:4px;}
   .hero-value{font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:600; letter-spacing:-0.02em;}
@@ -578,6 +589,38 @@ function optionCard(o){
     </div>`;
 }
 
+// --- 3 x ATR risk line (see compute_risk_line() in generate_dashboard_data.py
+// and backtest_stop_loss.py). A RISK GUIDE for position sizing, not a sell
+// signal: the 5-year backtest showed a 3 x ATR stop cuts 15%+ losses roughly
+// in half but slightly lowers the average return, and can't protect against
+// overnight gaps such as earnings. For holdings the line is measured from
+// YOUR average cost; for everything else from the suggested entry.
+const RISK_ATR_MULT = 3;
+function riskInfo(t, isHolding){
+  if (isHolding && t.avg_cost && t.atr14){
+    const line = t.avg_cost - RISK_ATR_MULT * t.atr14;
+    if (line <= 0) return null;
+    return {line, pct: (t.avg_cost - line) / t.avg_cost, from: 'avg cost',
+            breached: t.current_price != null && t.current_price < line};
+  }
+  if (t.risk_line != null && t.risk_pct != null)
+    return {line: t.risk_line, pct: t.risk_pct, from: 'entry', breached: false};
+  return null;
+}
+function riskLineRow(t, isHolding){
+  const r = riskInfo(t, isHolding);
+  if (!r) return '';
+  const per1k = Math.round(r.pct * 1000);
+  return `
+      <div class="risk-line${r.breached ? ' breached' : ''}" title="3 x ATR below ${r.from}. Risk guide for position sizing - not a sell signal. Does not protect against overnight gaps (earnings).">
+        <span class="rl-label">Risk line</span>
+        <span class="rl-val">${fmtMoney(r.line)}</span>
+        <span>−${(r.pct * 100).toFixed(1)}% from ${r.from}</span>
+        <span>risk $${per1k} per $1,000</span>
+        ${r.breached ? '<span class="rl-val">· price is below risk line</span>' : ''}
+      </div>`;
+}
+
 // --- Screener-style card: Buy / Watch / Sell / All Stocks / Portfolio tabs ---
 function screenerCard(t, i){
   const upside = (t.analyst_target && t.current_price) ? (t.analyst_target - t.current_price) / t.current_price : null;
@@ -619,6 +662,7 @@ function screenerCard(t, i){
         <div class="stat-box"><div class="stat-label">Entry - Support</div><div class="stat-value">${fmtMoney(t.suggested_entry)}</div></div>
         <div class="stat-box"><div class="stat-label">Target Price</div><div class="stat-value">${fmtMoney(t.analyst_target)}${upside !== null ? ` <span class="up">${fmtPct(upside)}</span>` : ''}</div></div>
       </div>
+      ${riskLineRow(t, isHolding)}
       <div class="card-detail" id="detail-${i}" data-ticker="${t.ticker}" data-loaded="0" onclick="event.stopPropagation()">
         <div class="chart-panels" id="charts-${i}">
           <div class="chart-box"><canvas id="chart-macd-${i}" height="140"></canvas></div>
@@ -645,6 +689,8 @@ function screenerCard(t, i){
           <span class="dlabel">Volume Strength</span><span class="dval">${t.volume_strength || '—'}</span>
           <span class="dlabel">R/R Ratio</span><span class="dval">${t.rr_ratio ?? '—'}</span>
           ${t.rr_note ? `<div class="caution-note">⚠ ${t.rr_note}</div>` : ''}
+          <span class="dlabel">ATR (14-day)</span><span class="dval">${fmtMoney(t.atr14)}${t.atr_pct != null ? ` (${t.atr_pct.toFixed(1)}%)` : ''}</span>
+          <span class="dlabel">Risk Line (3 × ATR)</span><span class="dval">${(() => { const r = riskInfo(t, isHolding); return r ? `${fmtMoney(r.line)} (−${(r.pct*100).toFixed(1)}% from ${r.from})` : '—'; })()}</span>
           <span class="dlabel">Intrinsic Value</span><span class="dval">${fmtMoney(t.intrinsic_value)}</span>
           <span class="dlabel">Margin of Safety</span><span class="dval">${t.margin_of_safety || '—'}</span>
           <span class="dlabel">Analyst Upside</span><span class="dval">${t.analyst_upside_pct || '—'}</span>

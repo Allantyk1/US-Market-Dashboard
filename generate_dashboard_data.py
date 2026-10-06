@@ -74,6 +74,26 @@ def compute_suggested_entry(current_price, lower_bb):
     return round(min(cp * 0.995, lb + dist * 0.35), 2)
 
 
+RISK_ATR_MULT = 3.0   # chosen by backtest_stop_loss.py (2026-10-06): loosest
+                      # ATR stop that still roughly halves 15%+ losses while
+                      # rarely selling a stock that later recovers.
+
+
+def compute_risk_line(entry, atr):
+    """3 x ATR 'risk line' below the suggested entry. A risk guide for
+    position sizing, NOT a sell signal: the backtest showed stops cut big
+    losses but slightly lower the average return, and cannot protect
+    against overnight gaps (e.g. earnings). Returns (line, pct, per_1000)."""
+    e, a = _safe_float(entry), _safe_float(atr)
+    if e is None or a is None or e <= 0 or a <= 0:
+        return None, None, None
+    line = e - RISK_ATR_MULT * a
+    if line <= 0:
+        return None, None, None
+    pct = (e - line) / e
+    return round(line, 2), round(pct, 4), round(pct * 1000)
+
+
 def load_all_tickers():
     """Full ticker universe with ALL the calculator's fields - not trimmed.
     The dashboard shows a compact summary by default and lets you tap a
@@ -85,6 +105,8 @@ def load_all_tickers():
     df = pd.read_excel(REAL_DATA_FILE)
     tickers = []
     for _, r in df.iterrows():
+        entry = compute_suggested_entry(r.get("Current Price"), r.get("Support (Lower BB)"))
+        risk_line, risk_pct, risk_per_1000 = compute_risk_line(entry, r.get("ATR (14)"))
         tickers.append({
             "ticker": r.get("Ticker"),
             "company": r.get("Name", r.get("Ticker")),
@@ -92,7 +114,15 @@ def load_all_tickers():
             "signal": r.get("Signal"),
             "matrix_score": r.get("Matrix Score"),
             "current_price": _safe_float(r.get("Current Price")),
-            "suggested_entry": compute_suggested_entry(r.get("Current Price"), r.get("Support (Lower BB)")),
+            "suggested_entry": entry,
+            # 3 x ATR risk line below the suggested entry (risk guide, not a
+            # sell signal) - see compute_risk_line(). None for rows from
+            # before ATR was added until the screener re-processes them.
+            "atr14": _safe_float(r.get("ATR (14)")),
+            "atr_pct": _safe_float(r.get("ATR %")),
+            "risk_line": risk_line,
+            "risk_pct": risk_pct,
+            "risk_per_1000": risk_per_1000,
             "high_52w_price": _safe_float(r.get("52W High Price")),
             "high_52w_drop_pct": r.get("52W High Drop %"),
             "ema20": _safe_float(r.get("EMA20")),
@@ -176,9 +206,67 @@ def load_portfolio():
     return holdings
 
 
+def load_options():
+    """Open option positions (LEAPs etc.) from the 'My Options' tab that
+    generate_portfolio_tracker.py maintains. Private dashboard only - never
+    copied into public_data.json. Added 2026-10-02."""
+    if not os.path.exists(PORTFOLIO_FILE):
+        return []
+    import openpyxl
+    wb = openpyxl.load_workbook(PORTFOLIO_FILE, data_only=True)
+    if "My Options" not in wb.sheetnames:
+        return []
+    ws = wb["My Options"]
+    h = {ws.cell(row=1, column=c).value: c for c in range(1, ws.max_column + 1)}
+    get = lambda r, name: ws.cell(row=r, column=h[name]).value if name in h else None
+    out = []
+    for r in range(2, ws.max_row + 1):
+        und = get(r, "Underlying")
+        if not (und and isinstance(und, str) and len(und.strip()) <= 10 and " " not in und.strip()):
+            continue
+        contracts = _safe_float(get(r, "Contracts")) or 0
+        strike = _safe_float(get(r, "Strike"))
+        if contracts <= 0 or strike is None:
+            continue  # closed, or not filled in properly yet
+        exp = get(r, "Expiry")
+        if not isinstance(exp, (datetime.date, datetime.datetime)) and exp:
+            for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%d-%b-%Y", "%d %b %Y", "%b %d %Y", "%b %d, %Y", "%d-%m-%Y", "%Y/%m/%d"):
+                try:
+                    exp = datetime.datetime.strptime(str(exp).strip(), fmt)
+                    break
+                except ValueError:
+                    pass
+        exp_str = exp.strftime("%Y-%m-%d") if isinstance(exp, (datetime.date, datetime.datetime)) else (str(exp) if exp else None)
+        cp = str(get(r, "Call/Put") or "").strip().upper()[:1]
+        if cp not in ("C", "P") or not exp:
+            continue  # row has an input problem - the Price Source column in Excel says what
+        out.append({
+            "underlying": und.strip().upper(),
+            "type": "CALL" if cp == "C" else ("PUT" if cp == "P" else "?"),
+            "strike": strike,
+            "expiry": exp_str,
+            "contracts": contracts,
+            "premium_paid": _safe_float(get(r, "Premium Paid (per share)")),
+            "option_price": _safe_float(get(r, "Option Price (now)")),
+            "price_source": get(r, "Price Source"),
+            "cost_basis": _safe_float(get(r, "Cost Basis")),
+            "market_value": _safe_float(get(r, "Market Value")),
+            "gain_dollar": _safe_float(get(r, "Unrealized P/L ($)")),
+            "gain_pct": _safe_float(get(r, "Unrealized P/L (%)")),
+            "dte": _safe_float(get(r, "Days to Expiry")),
+            "breakeven": _safe_float(get(r, "Breakeven Price")),
+            "vs_breakeven_pct": _safe_float(get(r, "Stock vs Breakeven (%)")),
+            "stock_price": _safe_float(get(r, "Stock Price")),
+            "iv": _safe_float(get(r, "Implied Volatility")),
+            "notes": get(r, "Notes"),
+        })
+    return out
+
+
 def main():
     top20_rows, is_real = load_top20()
     holdings = load_portfolio()
+    options = load_options()
     all_tickers = load_all_tickers()
     held_tickers = {h["ticker"] for h in holdings}
 
@@ -198,8 +286,15 @@ def main():
             "already_held": r["Ticker"] in held_tickers,
         })
 
-    total_value = sum(h["market_value"] for h in holdings if h["market_value"])
-    total_cost = sum((h["avg_cost"] or 0) * h["shares"] for h in holdings)
+    stock_value = sum(h["market_value"] for h in holdings if h["market_value"])
+    stock_cost = sum((h["avg_cost"] or 0) * h["shares"] for h in holdings)
+    # Options: if a contract had no quote this run, count it at cost rather
+    # than as $0 so the headline total doesn't fake a 100% loss.
+    options_cost = sum(o["cost_basis"] or 0 for o in options)
+    options_value = sum(o["market_value"] if o["market_value"] is not None else (o["cost_basis"] or 0)
+                        for o in options)
+    total_value = stock_value + options_value
+    total_cost = stock_cost + options_cost
     total_gain = total_value - total_cost if total_value else 0
 
     payload = {
@@ -211,6 +306,10 @@ def main():
             "total_gain": round(total_gain, 2),
             "total_gain_pct": round(total_gain / total_cost, 4) if total_cost else None,
             "holdings": holdings,
+            "stock_value": round(stock_value, 2),
+            "options_value": round(options_value, 2),
+            "options_cost": round(options_cost, 2),
+            "options": options,
         },
         "top20": top20,
         "all_tickers": all_tickers,
@@ -235,7 +334,7 @@ def main():
     with open(OUTPUT_FILE, "w") as f:
         json.dump(payload, f, indent=2)
 
-    print(f"[SUCCESS] Wrote {OUTPUT_FILE} - {len(holdings)} holdings, {len(top20)} recommended picks, "
+    print(f"[SUCCESS] Wrote {OUTPUT_FILE} - {len(holdings)} holdings, {len(options)} option positions, {len(top20)} recommended picks, "
           f"{len(all_tickers)} total tickers")
 
     # --- Public version: genuinely no portfolio data, not just hidden in
