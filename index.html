@@ -124,6 +124,12 @@
      system, with a thin outline to mark it as a distinct layer: trend-badge
      = trend HEALTH, kdj-action = entry/exit TIMING. Informational only -
      does not affect Matrix Score/Signal or the Buy/Watch/Sell tab counts. */
+  /* Earnings date badge - stocks often gap after a report, so the next date
+     is shown on every card. Colour by proximity; see earningsBadge(). */
+  .trend-badge.earn{background:var(--panel-2); color:var(--ink-dim);}
+  .trend-badge.earn.soon{background:var(--amber-dim); color:var(--amber);}
+  .trend-badge.earn.urgent{background:var(--red-dim); color:var(--red);}
+  .trend-badge.earn.reported{background:transparent; color:var(--amber); border:1px dashed currentColor;}
   .trend-badge.kdj-action{border:1px solid currentColor; background:transparent;}
   .kdj-filter-row{display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
   .kdj-chip{
@@ -405,8 +411,16 @@ const signalTag = (s) => {
   return `<span class="tag ${cls}">${s || '—'}</span>`;
 };
 
-function renderAlerts(holdings, top20, options){
+function renderAlerts(holdings, top20, options, allTickers){
   const alerts = [];
+  const tmap = new Map((allTickers || []).map(t => [t.ticker, t]));
+  holdings.forEach(h => {
+    const t = tmap.get(h.ticker);
+    if (t && t.earnings_days != null && t.earnings_days <= 7){
+      alerts.push({type:'warn', title:`📅 ${h.ticker} reports earnings ${t.earnings_days === 0 ? 'today' : `in ${t.earnings_days} day${t.earnings_days === 1 ? '' : 's'}`}`,
+        msg:`${t.earnings_date}${t.earnings_estimate ? ' (estimated)' : ''} - you hold this. Expect a possible gap; decide whether to hold through the report.`});
+    }
+  });
   (options || []).forEach(o => {
     const label = `${o.underlying} ${o.type} $${o.strike}`;
     if (o.dte != null && o.dte <= 90){
@@ -510,6 +524,30 @@ function kdjActionBadge(action, k, d){
   const kd = (k !== null && k !== undefined && d !== null && d !== undefined)
     ? ` <span class="mono" style="opacity:0.7;">K${k.toFixed ? k.toFixed(0) : k} D${d.toFixed ? d.toFixed(0) : d}</span>` : '';
   return `<span class="trend-badge kdj-action ${style.cls}" title="KDJ entry/exit timing signal - separate from Matrix Score">${style.icon} ${action}${kd}</span>`;
+}
+
+// Earnings badge - next report date on every card, because stocks often
+// gap down right after earnings. Data comes from earnings_calendar.py via
+// generate_dashboard_data.py (earnings_date / earnings_days /
+// earnings_estimate / days_since_earnings). Red = within 7 days, amber =
+// within 14, grey = later. For a few days after a report it switches to
+// "Reported Xd ago" so a fresh post-earnings move is easy to spot.
+function fmtEarnDate(iso){
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+function earningsBadge(t){
+  if (t.days_since_earnings != null){
+    const ago = t.days_since_earnings === 0 ? 'today' : `${t.days_since_earnings}d ago`;
+    return `<span class="trend-badge earn reported" title="Last earnings ${t.last_earnings_date} - watch for a post-earnings move">📅 Reported ${ago}</span>`;
+  }
+  if (!t.earnings_date || t.earnings_days == null) return '';
+  const n = t.earnings_days;
+  const cls = n <= 7 ? 'urgent' : (n <= 14 ? 'soon' : '');
+  const when = n === 0 ? 'today' : (n === 1 ? 'tmrw' : `${n}d`);
+  const est = t.earnings_estimate ? ' (est.)' : '';
+  return `<span class="trend-badge earn ${cls}" title="Next earnings ${t.earnings_date}${t.earnings_estimate ? ' - estimated, not yet confirmed by the company' : ''}. Stocks can gap sharply after a report.">📅 Earnings ${fmtEarnDate(t.earnings_date)}${est} · ${when}</span>`;
 }
 
 function fmtCompact(v){
@@ -649,7 +687,7 @@ function screenerCard(t, i){
       ${holdingLine}
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
-        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}
+        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}${earningsBadge(t)}
       </div>
       <div class="stat-grid" id="stat-grid-${i}"
            data-ticker="${t.ticker}"
@@ -698,6 +736,8 @@ function screenerCard(t, i){
           <span class="dlabel">Put Wall (Floor)</span><span class="dval">${fmtMoney(t.put_wall_price)} · ${fmtCompact(t.put_wall_oi)} OI</span>
           <span class="dlabel">Call Wall (Ceiling)</span><span class="dval">${fmtMoney(t.call_wall_price)} · ${fmtCompact(t.call_wall_oi)} OI</span>
           ${t.walls_crossed ? `<div class="caution-note">⚠ Put wall is priced above the call wall - unusual, low-confidence options data (common for thinly-traded names). Floor/Ceiling labels may not hold here.</div>` : ''}
+          <span class="dlabel">Next Earnings</span><span class="dval">${t.earnings_date ? `${t.earnings_date}${t.earnings_estimate ? ' (est.)' : ''} · in ${t.earnings_days}d` : '—'}</span>
+          <span class="dlabel">Last Earnings</span><span class="dval">${t.last_earnings_date || '—'}</span>
           <span class="dlabel">Category</span><span class="dval">${t.category || '—'}</span>
         </div>
       </div>
@@ -1312,7 +1352,7 @@ async function load(){
     gainEl.textContent = `${fmtMoney(p.total_gain)} (${fmtPct(p.total_gain_pct)})`;
     gainEl.className = 'pill ' + (p.total_gain >= 0 ? 'up' : 'down');
 
-    renderAlerts(p.holdings, data.top20, p.options);
+    renderAlerts(p.holdings, data.top20, p.options, data.all_tickers);
 
     HOLDINGS = p.holdings;
     OPTIONS = p.options || [];
