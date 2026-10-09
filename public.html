@@ -113,6 +113,12 @@
   /* KDJ Action badge - entry/exit TIMING layer, informational only, separate
      from trend-badge (trend HEALTH) and Matrix Score/Signal. Reuses the same
      colors, with a thin outline to mark it as a distinct layer. */
+  /* Earnings date badge - stocks often gap after a report, so the next date
+     is shown on every card. Colour by proximity; see earningsBadge(). */
+  .trend-badge.earn{background:var(--panel-2); color:var(--ink-dim);}
+  .trend-badge.earn.soon{background:var(--amber-dim); color:var(--amber);}
+  .trend-badge.earn.urgent{background:var(--red-dim); color:var(--red);}
+  .trend-badge.earn.reported{background:transparent; color:var(--amber); border:1px dashed currentColor;}
   .trend-badge.kdj-action{border:1px solid currentColor; background:transparent;}
   .kdj-filter-row{display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
   .kdj-chip{
@@ -436,6 +442,28 @@ function kdjActionBadge(action, k, d){
   return `<span class="trend-badge kdj-action ${style.cls}" title="KDJ entry/exit timing signal - separate from Matrix Score">${style.icon} ${action}${kd}</span>`;
 }
 
+// Earnings badge - next report date on every card, because stocks often
+// gap down right after earnings. Mirrored from index.html; data comes from
+// earnings_calendar.py via generate_dashboard_data.py. Red = within 7 days,
+// amber = within 14, grey = later; "Reported Xd ago" for 5 days after.
+function fmtEarnDate(iso){
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+function earningsBadge(t){
+  if (t.days_since_earnings != null){
+    const ago = t.days_since_earnings === 0 ? 'today' : `${t.days_since_earnings}d ago`;
+    return `<span class="trend-badge earn reported" title="Last earnings ${t.last_earnings_date} - watch for a post-earnings move">📅 Reported ${ago}</span>`;
+  }
+  if (!t.earnings_date || t.earnings_days == null) return '';
+  const n = t.earnings_days;
+  const cls = n <= 7 ? 'urgent' : (n <= 14 ? 'soon' : '');
+  const when = n === 0 ? 'today' : (n === 1 ? 'tmrw' : `${n}d`);
+  const est = t.earnings_estimate ? ' (est.)' : '';
+  return `<span class="trend-badge earn ${cls}" title="Next earnings ${t.earnings_date}${t.earnings_estimate ? ' - estimated, not yet confirmed by the company' : ''}. Stocks can gap sharply after a report.">📅 Earnings ${fmtEarnDate(t.earnings_date)}${est} · ${when}</span>`;
+}
+
 function fmtCompact(v){
   if (v === null || v === undefined || v === '') return '—';
   const n = Number(v);
@@ -492,7 +520,7 @@ function screenerCard(t, i){
       <div class="company" style="margin:-4px 0 8px;">${t.company || ''}</div>
       <div class="card-mid">
         <span>RSI ${t.rsi ?? '—'} · Trend ${t.macd_trend || 'N/A'}</span>
-        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}
+        ${trendBadge(t.macd_trend, t.ema20, t.ema40)}${vwapBadge(t.vwap_sd_distance)}${kdjActionBadge(t.kdj_action, t.kdj_k, t.kdj_d)}${earningsBadge(t)}
       </div>
       <div class="stat-grid" id="stat-grid-${i}"
            data-ticker="${t.ticker}"
@@ -536,6 +564,8 @@ function screenerCard(t, i){
           <span class="dlabel">Put/Call OI Ratio</span><span class="dval">${t.put_call_ratio ?? '—'}</span>
           <span class="dlabel">Put Wall (Floor)</span><span class="dval">${fmtMoney(t.put_wall_price)} · ${fmtCompact(t.put_wall_oi)} OI</span>
           <span class="dlabel">Call Wall (Ceiling)</span><span class="dval">${fmtMoney(t.call_wall_price)} · ${fmtCompact(t.call_wall_oi)} OI</span>
+          <span class="dlabel">Next Earnings</span><span class="dval">${t.earnings_date ? `${t.earnings_date}${t.earnings_estimate ? ' (est.)' : ''} · in ${t.earnings_days}d` : '—'}</span>
+          <span class="dlabel">Last Earnings</span><span class="dval">${t.last_earnings_date || '—'}</span>
           <span class="dlabel">Category</span><span class="dval">${t.category || '—'}</span>
         </div>
       </div>

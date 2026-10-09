@@ -107,6 +107,14 @@
   .dte{font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--panel-2); color:var(--ink-dim);}
   .dte.soon{background:var(--amber-dim); color:var(--amber);}
   .dte.urgent{background:var(--red-dim); color:var(--red);}
+  /* Sold positions (Portfolio tab) - from Trade_Tracker.xlsx My Trades, added 2026-10-09 */
+  .sold-tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 7px; border-radius:6px; margin-left:6px;
+    background:var(--panel-2); color:var(--ink-dim); vertical-align:middle;}
+  .card.sold .opt-tag, .sold-tag{white-space:nowrap;}
+  .sold-tag.closed{background:var(--panel-2); color:var(--ink);}
+  .card.sold{opacity:.92;}
+  .realized-sum{display:flex; gap:8px; flex-wrap:wrap; margin:0 2px 8px; font-size:12px; color:var(--ink-dim);}
+  .realized-sum b{font-family:'IBM Plex Mono',monospace; font-weight:600;}
 
   .score-badge{
     font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);
@@ -170,7 +178,7 @@
 
   .hero{padding:20px; display:flex; flex-direction:column; gap:4px;}
   .hero-value{font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:600; letter-spacing:-0.02em;}
-  .hero-sub{display:flex; gap:14px; font-size:14px; color:var(--ink-dim);}
+  .hero-sub{display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; font-size:14px; color:var(--ink-dim);}
   .pill{
     display:inline-flex; align-items:center; gap:5px; padding:3px 9px;
     border-radius:999px; font-size:13px; font-family:'IBM Plex Mono',monospace; font-weight:500;
@@ -355,6 +363,7 @@
   <div class="hero-value mono" id="totalValue">—</div>
   <div class="hero-sub">
     <span id="totalGain" class="pill">—</span>
+    <span id="realizedPill" class="pill" style="display:none;" title="Realized P/L from SELL rows in Trade_Tracker.xlsx > My Trades"></span>
     <span id="dataMode" style="color:var(--ink-faint);"></span>
   </div>
 </div>
@@ -564,6 +573,7 @@ let ALL_TICKERS_MAP = new Map(); // ticker -> full screener record, for merging 
 let TOP20_SET = new Set();
 let HOLDINGS = [];
 let OPTIONS = []; // open option positions (LEAPs) from Portfolio_Tracker.xlsx "My Options" tab
+let REALIZED = null; // realized P/L + sell history from Trade_Tracker.xlsx "My Trades" (2026-10-09)
 let activeTab = 'ALL';
 let activeKdjFilter = 'ALL'; // second, independent filter dimension - KDJ Action (timing), separate from the Signal tabs above (attractiveness)
 
@@ -625,6 +635,50 @@ function optionCard(o){
       </div>
       ${o.price_source && o.option_price == null ? `<div class="caution-note">⚠ ${o.price_source}</div>` : ''}
     </div>`;
+}
+
+// --- Sold card (Portfolio tab): one per SELL row in My Trades. ---
+function soldCard(x){
+  const c = (x.realized ?? 0) >= 0 ? 'var(--green)' : 'var(--red)';
+  const isOpt = x.kind === 'OPTION';
+  const n = Number(x.shares).toLocaleString('en-US', {maximumFractionDigits:4});
+  const sh = isOpt ? `${n} contract${x.shares == 1 ? '' : 's'}` : n;
+  // "IREN C25 17-Mar-2028" -> "C25 Mar '28" so it fits on a phone
+  const optLabel = isOpt ? (x.label || '').replace(x.ticker + ' ', '')
+      .replace(/\b\d{1,2}-([A-Za-z]{3})-\d{2}(\d{2})\b/, "$1 '$2") : '';
+  return `
+    <div class="card sold">
+      <div class="card-top">
+        <div class="ticker-block">
+          <span class="ticker">${x.ticker}</span>
+          ${isOpt ? `<span class="opt-tag">${optLabel}</span>` : ''}
+          <span class="sold-tag ${x.closed_position ? 'closed' : ''}">${x.closed_position ? 'SOLD ALL' : 'TRIMMED'}</span>
+        </div>
+        <div style="text-align:right;">
+          <div class="price mono" style="color:${c}">${fmtMoney(x.realized)}</div>
+          <div class="score-badge">${fmtPct(x.realized_pct)} realized</div>
+        </div>
+      </div>
+      <div class="card-mid">
+        <span style="color:var(--ink-dim);">${fmtExpiry(x.date)} · sold ${sh} @ ${fmtMoney(x.price)}</span>
+        <span class="val" style="color:var(--ink-dim);">avg cost ${fmtMoney(x.avg_cost)}</span>
+      </div>
+      ${x.notes ? `<div class="card-mid"><span style="color:var(--ink-faint);">${String(x.notes).replace(/[<>&]/g, '')}</span></div>` : ''}
+    </div>`;
+}
+function soldSection(q){
+  if (!REALIZED || !(REALIZED.sells || []).length) return '';
+  let sells = REALIZED.sells;
+  if (activeKdjFilter !== 'ALL') return ''; // KDJ timing applies to stocks you hold, not past sales
+  if (q) sells = sells.filter(x => (x.ticker || '').includes(q));
+  if (!sells.length) return '';
+  const tone = (v) => `style="color:${(v ?? 0) >= 0 ? 'var(--green)' : 'var(--red)'}"`;
+  return `<div class="group-title">Sold (${sells.length})</div>
+    <div class="realized-sum">
+      <span>This month <b ${tone(REALIZED.this_month)}>${fmtMoney(REALIZED.this_month)}</b></span>
+      <span>· This year <b ${tone(REALIZED.this_year)}>${fmtMoney(REALIZED.this_year)}</b></span>
+      <span>· ${REALIZED.n_wins}/${REALIZED.n_sells} sells at a profit</span>
+    </div>` + sells.map(soldCard).join('');
 }
 
 // --- 3 x ATR risk line (see compute_risk_line() in generate_dashboard_data.py
@@ -770,14 +824,15 @@ function renderTabContent(){
     });
     countEl.textContent = `${rows.length} of ${HOLDINGS.length} holdings` +
       (OPTIONS.length ? ` · ${opts.length} of ${OPTIONS.length} options` : '');
-    if (!rows.length && !opts.length){
+    const soldHtml = soldSection(q);
+    if (!rows.length && !opts.length && !soldHtml){
       el.innerHTML = (HOLDINGS.length || OPTIONS.length) ? '<div class="empty">No matches.</div>'
-        : '<div class="empty">No holdings yet — add them in Portfolio_Tracker.xlsx.</div>';
+        : '<div class="empty">No holdings yet — record your buys in Trade_Tracker.xlsx › My Trades.</div>';
       return;
     }
     const optHtml = opts.length ? `<div class="group-title">Options / LEAPs (${opts.length})</div>` + opts.map(optionCard).join('') : '';
-    const stockHtml = rows.length ? (opts.length ? `<div class="group-title">Stocks (${rows.length})</div>` : '') + rows.map((h, i) => screenerCard(h, i)).join('') : '';
-    el.innerHTML = optHtml + stockHtml;
+    const stockHtml = rows.length ? ((opts.length || soldHtml) ? `<div class="group-title">Stocks (${rows.length})</div>` : '') + rows.map((h, i) => screenerCard(h, i)).join('') : '';
+    el.innerHTML = optHtml + stockHtml + soldHtml;
     updateBackButton();
     return;
   }
@@ -1353,6 +1408,16 @@ async function load(){
     gainEl.className = 'pill ' + (p.total_gain >= 0 ? 'up' : 'down');
 
     renderAlerts(p.holdings, data.top20, p.options, data.all_tickers);
+
+    REALIZED = p.realized || null;
+    const rp = document.getElementById('realizedPill');
+    if (REALIZED && REALIZED.n_sells){
+      rp.textContent = `Realized ${fmtMoney(REALIZED.this_year)} this year`;
+      rp.className = 'pill ' + (REALIZED.this_year >= 0 ? 'up' : 'down');
+      rp.style.display = '';
+    } else {
+      rp.style.display = 'none';
+    }
 
     HOLDINGS = p.holdings;
     OPTIONS = p.options || [];
