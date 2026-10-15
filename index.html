@@ -845,11 +845,13 @@ function renderTabContent(){
   if (q) rows = rows.filter(t => (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
 
   countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : rows.length} tickers`;
-  if (!rows.length){ el.innerHTML = '<div class="empty">No matches.</div>'; return; }
+  // Tickers with a valuation but no card (valuation_extra.txt, 2026-10-15)
+  const valHint = (q && window.Valuation) ? Valuation.searchHint(q, ALL_TICKERS.map(t => t.ticker)) : '';
+  if (!rows.length){ el.innerHTML = valHint + '<div class="empty">No matches.</div>'; return; }
 
   // Cap rendering for very broad queries so an old phone doesn't choke at once
   const capped = rows.slice(0, 150);
-  el.innerHTML = capped.map((t, i) => screenerCard(t, i)).join('');
+  el.innerHTML = valHint + capped.map((t, i) => screenerCard(t, i)).join('');
   if (rows.length > 150){
     el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
   }

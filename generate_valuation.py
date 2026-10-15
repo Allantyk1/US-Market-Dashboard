@@ -12,6 +12,9 @@ WHICH STOCKS (about 50, not the whole 680 universe, to keep Yahoo calls low):
   3. Top 20 best performers, past 3 months (pick_tracker_data.json) - the same
      ranking as tracker.html section 1 with its defaults: Top-20 picks,
      3-month window, ranked by % gain from day 1 to the latest close.
+  4. Your own extra tickers, one per line in valuation_extra.txt (added
+     2026-10-15). They can be outside the 680-stock screener: those have no
+     card, so open them by typing the ticker in the dashboard search box.
   ETFs are listed but not valued (no earnings / cash flow to discount).
 
 REFRESH: fundamentals (statements, estimates, 5y monthly prices) are cached
@@ -44,6 +47,12 @@ DASHBOARD_FILE = "dashboard_data.json"
 PICK_FILE = "pick_tracker_data.json"
 CACHE_FILE = "valuation_cache.json"
 OUTPUT_FILE = "valuation_data.json"
+EXTRA_FILE = "valuation_extra.txt"
+EXTRA_TEMPLATE = """# Extra tickers for the Valuation dialog - one per line, e.g. NVDA
+# Lines starting with # are ignored. Tickers outside the screener have no
+# card: type the ticker in the dashboard search box to open its valuation.
+# New tickers are fetched on the next run of generate_valuation.py.
+"""
 
 REFRESH_DAYS = 7          # fundamentals re-fetched weekly
 BEST_N = 20               # top N best performers from the tracker
@@ -150,6 +159,34 @@ def best_performers(pick, n=BEST_N, months=BEST_MONTHS):
     for i, r in enumerate(rows[:n]):
         r["rank"] = i + 1
     return rows[:n], cut
+
+
+def read_extra():
+    """valuation_extra.txt -> list of tickers. Creates a template on first run."""
+    if not os.path.exists(EXTRA_FILE):
+        with open(EXTRA_FILE, "w", encoding="utf-8") as fh:
+            fh.write(EXTRA_TEMPLATE)
+        return []
+    out = []
+    with open(EXTRA_FILE, "r", encoding="utf-8-sig") as fh:
+        for line in fh:
+            t = line.split("#", 1)[0].strip().upper().replace(".", "-")  # BRK.B -> BRK-B (Yahoo)
+            if t and t not in out:
+                out.append(t)
+    return out
+
+
+def fresh_price(symbol):
+    """Latest close for a ticker the screener doesn't cover (so it isn't in
+    dashboard_data.json). One cheap call per run, only for those tickers."""
+    try:
+        h = yf.Ticker(symbol).history(period="5d", interval="1d")
+        time.sleep(CALL_DELAY)
+        closes = [num(c) for c in h["Close"]]
+        closes = [c for c in closes if c]
+        return closes[-1] if closes else None
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------- fetch
@@ -472,9 +509,11 @@ def main():
     else:
         print(f"[WARN] {PICK_FILE} not found - the 3-month best list is skipped this run.")
 
-    universe = list(dict.fromkeys(top20 + watch + [b["t"] for b in best]))
+    extra = read_extra()
+    universe = list(dict.fromkeys(top20 + watch + [b["t"] for b in best] + extra))
     print(f"Valuation list: {len(universe)} stocks "
-          f"(Top 20: {len(top20)}, watchlist: {len(watch)}, 3M best: {len(best)})")
+          f"(Top 20: {len(top20)}, watchlist: {len(watch)}, 3M best: {len(best)}, "
+          f"your extras: {len(extra)} from {EXTRA_FILE})")
 
     cache = load_json(CACHE_FILE) if os.path.exists(CACHE_FILE) else {}
     today = datetime.date.today()
@@ -507,14 +546,20 @@ def main():
         rec = all_t.get(sym, {})
         c = cache.get(sym)
         lists = [k for k, ok in (("top20", sym in top20), ("watchlist", sym in watch),
-                                 ("best3m", sym in best_map)) if ok]
+                                 ("best3m", sym in best_map), ("extra", sym in extra)) if ok]
         base = {"co": rec.get("company"), "lists": lists,
                 "best3m": best_map.get(sym)}
         if not c:
             out[sym] = {**base, "error": "Yahoo data not available yet"}
             continue
         f = c["fund"]
-        price = num(rec.get("current_price")) or num((f.get("info") or {}).get("currentPrice"))
+        price = num(rec.get("current_price"))
+        if price is None and not f.get("etf"):
+            price = fresh_price(sym)  # not in the screener: get today's close
+        if price is None:
+            price = num((f.get("info") or {}).get("currentPrice"))
+        price = r2(price)
+        base["in_screener"] = sym in all_t
         base["co"] = base["co"] or f.get("co")
         base.update({"price": price, "fetched": c["fetched"]})
         if f.get("etf"):
@@ -528,7 +573,7 @@ def main():
     data = {
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
         "price_date": dash.get("generated_at"),
-        "lists": {"top20": top20, "watchlist": watch, "best3m": best,
+        "lists": {"top20": top20, "watchlist": watch, "best3m": best, "extra": extra,
                   "best3m_from": cut, "best3m_months": BEST_MONTHS},
         "assumptions": {
             "growth_cap": GROWTH_CAP, "long_term_growth": LONG_TERM_GROWTH,

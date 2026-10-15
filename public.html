@@ -195,7 +195,8 @@
     padding:14px 16px; margin-bottom:9px;
   }
   .card-top{display:flex; justify-content:space-between; align-items:baseline;}
-  .ticker-block{display:flex; align-items:baseline; gap:8px;}
+  .ticker-block{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; row-gap:4px; margin-bottom:3px;}
+  .ticker-block .recommended-tag, .ticker-block .best3m-tag, .ticker-block .val-btn{white-space:nowrap; margin-left:0;}
   .ticker{font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:16px;}
   .company{font-size:12px; color:var(--ink-faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
   .price{font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:600;}
@@ -360,6 +361,7 @@
   <div id="tabContent"><div class="empty">No data loaded yet.</div></div>
 </section>
 
+<script src="valuation.js"></script>
 <footer>
   Shared view · $1K/month planning tool, not financial advice · Not personalized to you<br>
   Figures reflect the last time the data was published, not live market ticks
@@ -510,7 +512,7 @@ function screenerCard(t, i){
       <div class="card-top">
         <div class="ticker-block">
           <span class="ticker">${t.ticker}</span>
-          ${isRecommended ? '<span class="recommended-tag">TOP 20</span>' : ''}
+          ${isRecommended ? '<span class="recommended-tag">TOP 20</span>' : ''}${window.Valuation ? Valuation.bestTag(t.ticker) + Valuation.button(t.ticker) : ''}
         </div>
         <div style="text-align:right;">
           <div class="price mono">${fmtMoney(t.current_price)}</div>
@@ -589,11 +591,13 @@ function renderTabContent(){
   if (q) rows = rows.filter(t => (t.ticker || '').toUpperCase().includes(q) || (t.company || '').toUpperCase().includes(q));
 
   countEl.textContent = `${rows.length} of ${activeTab === 'ALL' ? ALL_TICKERS.length : rows.length} tickers`;
-  if (!rows.length){ el.innerHTML = '<div class="empty">No matches.</div>'; return; }
+  // Tickers with a valuation but no card (valuation_extra.txt, 2026-10-15)
+  const valHint = (q && window.Valuation) ? Valuation.searchHint(q, ALL_TICKERS.map(t => t.ticker)) : '';
+  if (!rows.length){ el.innerHTML = valHint + '<div class="empty">No matches.</div>'; return; }
 
   // Cap rendering for very broad queries so an old phone doesn't choke at once
   const capped = rows.slice(0, 150);
-  el.innerHTML = capped.map((t, i) => screenerCard(t, i)).join('');
+  el.innerHTML = valHint + capped.map((t, i) => screenerCard(t, i)).join('');
   if (rows.length > 150){
     el.innerHTML += `<div class="empty">Showing first 150 - narrow your search to see more.</div>`;
   }
@@ -1125,6 +1129,10 @@ async function load(){
     // no effect on GitHub's own CDN layer, which can otherwise keep serving
     // a stale (or even a stale 404) response for a while after the file
     // actually changes.
+    // Valuation dialog data (valuation.js / generate_valuation.py, 2026-10-15).
+    // Loaded in parallel and never throws - if the file is missing the cards
+    // simply render without the Valuation button. Holds no portfolio data.
+    const valuationReady = window.Valuation ? Valuation.load() : Promise.resolve(false);
     const res = await fetch('public_data.json?v=' + Date.now(), {cache:'no-store'});
     if (!res.ok){
       throw new Error(`HTTP ${res.status} ${res.statusText} - the file may not have deployed yet, try again in a minute`);
@@ -1140,6 +1148,7 @@ async function load(){
     ALL_TICKERS = data.all_tickers || [];
     TOP20_SET = new Set((data.top20 || []).map(r => r.ticker));
     updateTabCounts();
+    await valuationReady;
     renderTabContent();
     renderTickerTape((data.top20 || []).length ? data.top20 : ALL_TICKERS.slice(0, 20));
   } catch(e){

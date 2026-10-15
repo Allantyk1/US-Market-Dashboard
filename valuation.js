@@ -70,6 +70,7 @@
   .val-foot{font-size:11px;color:var(--ink-faint);line-height:1.6;margin-top:16px}
   .val-foot b{color:var(--ink-dim);font-weight:600}
   .val-empty{padding:18px 0;color:var(--ink-dim);font-size:13px}
+  .val-hint{font-size:12px;color:var(--ink-dim);background:var(--panel-2);border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:0 0 10px;line-height:2}
   @media (max-width:560px){
     .val-in{padding:14px 12px}
     .val-strip{grid-template-columns:1fr 1fr}
@@ -109,6 +110,17 @@
     return b ? `<span class="best3m-tag" title="Top ${DATA.lists.best3m.length} best performer over the past ${DATA.lists.best3m_months} months in the Pick Tracker: ${spct(b.pct)} since first Top-20 pick on ${esc(b.d)}">3M BEST #${b.rank}</span>` : '';
   }
 
+  // Search-box shortcut for tickers that have a valuation but no card on the
+  // page (e.g. extras from valuation_extra.txt outside the screener).
+  function searchHint(q, shownTickers) {
+    q = String(q || '').trim().toUpperCase();
+    if (!q || !DATA || !DATA.tickers) return '';
+    const shown = new Set(shownTickers || []);
+    const hits = Object.keys(DATA.tickers).filter(t => !shown.has(t) && (t === q || (q.length >= 2 && t.startsWith(q)))).slice(0, 6);
+    if (!hits.length) return '';
+    return `<div class="val-hint">Not in the screener list · valuation available: ${hits.map(t => `<button type="button" class="val-btn" data-val="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+  }
+
   function ensureDialog() {
     if (dlg) return dlg;
     injectCss();
@@ -125,6 +137,7 @@
     const out = [];
     if (v.lists.includes('top20')) out.push('<span class="val-chip amber">TOP 20 today</span>');
     if (v.lists.includes('watchlist')) out.push('<span class="val-chip">Watchlist</span>');
+    if (v.lists.includes('extra')) out.push('<span class="val-chip">Added by you</span>');
     if (v.best3m) out.push(`<span class="val-chip green">3M best #${v.best3m.rank} · ${spct(v.best3m.pct)} since ${esc(v.best3m.d)}</span>`);
     return out.join('');
   }
@@ -169,7 +182,7 @@
   }
 
   function body(t, v) {
-    if (!v) return `<div class="val-empty">No valuation for ${esc(t)} yet. Only today's Top 20, your watchlist and the 3-month best performers are valued.</div>`;
+    if (!v) return `<div class="val-empty">No valuation for ${esc(t)} yet. Add it to valuation_extra.txt and it appears after the next run of generate_valuation.py.</div>`;
     const head = `<div class="val-hd"><div><div class="val-tk">${esc(t)}</div><div class="val-co">${esc(v.co || '')}</div></div>
       <button type="button" class="val-x" aria-label="Close" onclick="this.closest('dialog').close()">×</button></div>
       <div class="val-chips">${chips(v)}</div>`;
@@ -233,5 +246,5 @@
   addEventListener('resize', () => { if (dlg && dlg.open) placeLines(); });
 
   injectCss();
-  window.Valuation = {load, has, get, button, bestTag, open};
+  window.Valuation = {load, has, get, button, bestTag, open, searchHint};
 })();
