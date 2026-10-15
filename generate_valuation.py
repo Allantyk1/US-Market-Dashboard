@@ -246,6 +246,8 @@ def fetch_fundamentals(symbol):
     return {
         "etf": False,
         "co": info.get("shortName") or info.get("longName"),
+        # e.g. SK Hynix ADR: statements in KRW, price in USD -> not comparable
+        "cur": info.get("currency"), "fin_cur": info.get("financialCurrency"),
         "info": {k: num(info.get(k)) for k in (
             "currentPrice", "trailingEps", "forwardEps", "bookValue", "sharesOutstanding",
             "totalRevenue", "netIncomeToCommon", "operatingCashflow", "freeCashflow",
@@ -265,7 +267,7 @@ def fetch_fundamentals(symbol):
             "invested_capital": _row(bs, "Invested Capital"),
         },
         "est": {
-            "eps_5y": _est(ge, "+5y", "stockTrend"),
+            "eps_5y": _est(ge, "+5y", "stockTrend") if _est(ge, "+5y", "stockTrend") is not None else _est(ge, "LTG", "stockTrend"),
             "eps_1y": _est(ge, "+1y", "stockTrend"),
             "eps_0y": _est(ge, "0y", "stockTrend"),
             "rev_1y": _est(re_, "+1y", "growth"),
@@ -525,7 +527,9 @@ def main():
         if is_etf and not c:
             cache[sym] = {"fetched": today.isoformat(), "fund": {"etf": True}}
             continue
-        if not force and c and age is not None and age < REFRESH_DAYS:
+        # cache entries from before the currency check (2026-10-15) are refetched once
+        old_format = c and not c["fund"].get("etf") and "cur" not in c["fund"]
+        if not force and c and age is not None and age < REFRESH_DAYS and not old_format:
             continue
         try:
             print(f"  fetching {sym} ({n + 1}/{len(universe)})")
@@ -565,8 +569,16 @@ def main():
         if f.get("etf"):
             out[sym] = {**base, "etf": True}
             continue
+        if f.get("fin_cur") and f.get("cur") and f["fin_cur"] != f["cur"]:
+            out[sym] = {**base, "error": f"Its accounts are reported in {f['fin_cur']} while the price is in {f['cur']}, "
+                                         f"so the methods can't be compared with the price. Skipped"}
+            continue
         try:
             out[sym] = {**base, **value_stock(f, price)}
+            fv = out[sym].get("fair")
+            if fv and price and (fv / price > 10 or fv / price < 0.1):
+                out[sym]["warn"] = ("Fair value is more than 10x away from the price. That usually means a reverse "
+                                    "split, a currency or share-count mismatch, or a penny stock. Check before relying on it.")
         except Exception as e:
             out[sym] = {**base, "error": f"could not value: {e}"}
 

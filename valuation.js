@@ -70,6 +70,7 @@
   .val-foot{font-size:11px;color:var(--ink-faint);line-height:1.6;margin-top:16px}
   .val-foot b{color:var(--ink-dim);font-weight:600}
   .val-empty{padding:18px 0;color:var(--ink-dim);font-size:13px}
+  .val-warn{font-size:12px;color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent);border-radius:10px;padding:8px 10px;margin:0 0 10px;line-height:1.5}
   .val-hint{font-size:12px;color:var(--ink-dim);background:var(--panel-2);border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:0 0 10px;line-height:2}
   @media (max-width:560px){
     .val-in{padding:14px 12px}
@@ -222,7 +223,8 @@
       Fundamentals fetched ${esc(v.fetched)} (refreshed every ${A.refresh_days} days) · price from the ${esc((DATA.price_date || '').slice(0, 10))} close.
       These are estimates from Yahoo data, not StockOracle's figures, and not financial advice.</div>`;
 
-    return head + strip + `<div class="val-h">Valuation by method</div>` + bars(v) +
+    const warn = v.warn ? `<div class="val-warn">⚠ ${esc(v.warn)}</div>` : '';
+    return head + warn + strip + `<div class="val-h">Valuation by method</div>` + bars(v) +
       `<div class="val-h">Key metrics</div>` + grid + foot;
   }
 
