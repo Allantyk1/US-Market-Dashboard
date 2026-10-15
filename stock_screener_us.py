@@ -324,6 +324,53 @@ def calculate_dcf(ticker_obj, info, current_price):
         return round(intrinsic_per_share, 2), f"{round(margin_of_safety, 1)}%"
     except Exception: return "N/A", "Error"
 
+def _fill_trailing_nan_closes(ticker_obj, hist):
+    """Recover a completed bar that Yahoo's default (auto_adjust=True) pull
+    returns with a NaN Close.
+
+    Found 2026-10-15: at 9:14am MYT (5h after the Oct 14 US close) every
+    ticker's .history(period="2y") had an Oct 14 row with NaN Close, so the
+    screener fell back to Oct 13 - yet yf.download("NVDA", period="5d",
+    auto_adjust=False) returned the full Oct 14 bar (Close 221.30, Vol 117M)
+    at the same moment. Yahoo's adjusted-close series lags its raw OHLC for
+    the newest bar, and auto_adjust turns a missing adjclose into NaN Close.
+
+    Fix: only when the trailing row(s) have NaN Close, re-pull a short 5d
+    window UNADJUSTED and copy the raw OHLCV into those rows. Safe to mix:
+    the adjustment factor for the newest bar is always 1 (no later
+    dividends/splits to adjust for), so raw == adjusted for it. Rows that are
+    NaN in both pulls stay NaN and get dropped downstream as before, and
+    _session_not_yet_closed() still guards against a live intraday Close.
+    No extra network call on a normal day (trailing Close not NaN)."""
+    try:
+        if hist.empty or not pd.isna(hist['Close'].iloc[-1]):
+            return hist
+        raw = ticker_obj.history(period="5d", auto_adjust=False, timeout=10)
+        if raw.empty:
+            return hist
+        raw = raw.dropna(subset=['Close'])
+        raw_by_date = {idx.date(): row for idx, row in raw.iterrows()}
+        hist = hist.copy()
+        filled = []
+        # Walk back from the end over the trailing NaN-Close block only.
+        for idx in reversed(hist.index):
+            if not pd.isna(hist.at[idx, 'Close']):
+                break
+            row = raw_by_date.get(idx.date())
+            if row is None:
+                continue
+            for col in ("Open", "High", "Low", "Close", "Volume"):
+                if col in hist.columns and col in row.index and not pd.isna(row[col]):
+                    hist.at[idx, col] = row[col]
+            filled.append(idx.date())
+        if filled:
+            print(f"[DIAG] {getattr(ticker_obj, 'ticker', '?')}: recovered "
+                  f"{', '.join(str(d) for d in sorted(filled))} from unadjusted feed "
+                  f"(adjusted feed had NaN Close).")
+        return hist
+    except Exception:
+        return hist
+
 def fetch_history_with_retry(ticker_obj, retries=3, base_delay=2.0):
     """Yahoo Finance rate-limits/blocks aggressively past a few hundred rapid
     requests. Retry with backoff instead of giving up on the first failure."""
@@ -332,7 +379,7 @@ def fetch_history_with_retry(ticker_obj, retries=3, base_delay=2.0):
         try:
             hist = ticker_obj.history(period="2y", timeout=10)
             if not hist.empty:
-                return hist, None
+                return _fill_trailing_nan_closes(ticker_obj, hist), None
             last_err = "empty history returned"
         except Exception as e:
             last_err = str(e)
@@ -488,7 +535,7 @@ def evaluate_ticker(symbol, category_map=None):
     if len(hist) < _rows_before_dropna:
         _last_complete_date = hist.index[-1].date() if len(hist) else "N/A"
         print(f"[DIAG] {symbol}: dropped {_rows_before_dropna - len(hist)} trailing row(s) "
-              f"(NaN Close and/or still-open session). "
+              f"(NaN Close in both adjusted and unadjusted feeds, and/or still-open session). "
               f"Most recent raw date from Yahoo was {_last_raw_date}, "
               f"most recent COMPLETE (usable) date is {_last_complete_date}.")
     if hist.empty or len(hist) < 45:
@@ -849,9 +896,11 @@ PREFLIGHT_TICKERS = ["AAPL", "SPY", "QQQ", "MSFT"]
 def _latest_complete_bar(symbol):
     """(latest complete bar date, its close, rows dropped) for a short pull,
     with the same NaN-Close + still-open-session protection as evaluate_ticker()."""
-    hist = yf.Ticker(symbol).history(period="5d", timeout=10)
+    _t = yf.Ticker(symbol)
+    hist = _t.history(period="5d", timeout=10)
     if hist.empty:
         return None, None, 0
+    hist = _fill_trailing_nan_closes(_t, hist)
     complete = hist.dropna(subset=['Close'])
     if len(complete) and _session_not_yet_closed(complete.index[-1].date()):
         complete = complete.iloc[:-1]
