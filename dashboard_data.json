@@ -1,26 +1,12 @@
 {
-  "generated_at": "2026-10-14T12:59:21",
+  "generated_at": "2026-10-15T09:06:54",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 98857.37,
-    "total_cost": 97901.81,
-    "total_gain": 955.56,
-    "total_gain_pct": 0.0098,
+    "total_value": 98182.51,
+    "total_cost": 97643.04,
+    "total_gain": 539.47,
+    "total_gain_pct": 0.0055,
     "holdings": [
-      {
-        "ticker": "AMZU",
-        "company": "Direxion Daily AMZN ",
-        "shares": 40.0,
-        "avg_cost": 35.2676,
-        "current_price": 36.37,
-        "market_value": 1454.8,
-        "gain_dollar": 44.1,
-        "gain_pct": 0.0313,
-        "weight_pct": 0.0161,
-        "suggested_entry": 33.8,
-        "analyst_target": null,
-        "macd_trend": "RISING"
-      },
       {
         "ticker": "AVGO",
         "company": "Broadcom Inc.",
@@ -30,7 +16,7 @@
         "market_value": 2143.86,
         "gain_dollar": 36.16,
         "gain_pct": 0.0172,
-        "weight_pct": 0.0237,
+        "weight_pct": 0.0232,
         "suggested_entry": 344.67,
         "analyst_target": 531.31,
         "macd_trend": "FALLING"
@@ -44,7 +30,7 @@
         "market_value": 1522.5,
         "gain_dollar": -191.38,
         "gain_pct": -0.1117,
-        "weight_pct": 0.0168,
+        "weight_pct": 0.0165,
         "suggested_entry": 9.88,
         "analyst_target": 23.89,
         "macd_trend": "FALLING"
@@ -58,10 +44,24 @@
         "market_value": 6340.8,
         "gain_dollar": -204.4,
         "gain_pct": -0.0312,
-        "weight_pct": 0.07,
+        "weight_pct": 0.0685,
         "suggested_entry": 52.58,
         "analyst_target": null,
         "macd_trend": "FALLING"
+      },
+      {
+        "ticker": "GGLL",
+        "company": "Direxion Daily GOOGL",
+        "shares": 8.0,
+        "avg_cost": 106.0799,
+        "current_price": 104.85,
+        "market_value": 838.8,
+        "gain_dollar": -9.84,
+        "gain_pct": -0.0116,
+        "weight_pct": 0.0091,
+        "suggested_entry": 98.61,
+        "analyst_target": null,
+        "macd_trend": "RISING"
       },
       {
         "ticker": "HOOD",
@@ -72,7 +72,7 @@
         "market_value": 1326.24,
         "gain_dollar": 26.99,
         "gain_pct": 0.0208,
-        "weight_pct": 0.0146,
+        "weight_pct": 0.0143,
         "suggested_entry": 105.4,
         "analyst_target": 134.56,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 850.3,
         "gain_dollar": -15.3,
         "gain_pct": -0.0177,
-        "weight_pct": 0.0094,
+        "weight_pct": 0.0092,
         "suggested_entry": 83.82,
         "analyst_target": 97.27,
         "macd_trend": "RISING"
@@ -100,7 +100,7 @@
         "market_value": 882.0,
         "gain_dollar": 41.0,
         "gain_pct": 0.0488,
-        "weight_pct": 0.0097,
+        "weight_pct": 0.0095,
         "suggested_entry": 84.09,
         "analyst_target": 96.24,
         "macd_trend": "RISING"
@@ -108,13 +108,13 @@
       {
         "ticker": "INTC",
         "company": "Intel Corporation",
-        "shares": 200.0,
-        "avg_cost": 108.943,
+        "shares": 210.0,
+        "avg_cost": 108.409,
         "current_price": 102.81,
-        "market_value": 20562.0,
-        "gain_dollar": -1226.6,
-        "gain_pct": -0.0563,
-        "weight_pct": 0.2271,
+        "market_value": 21590.1,
+        "gain_dollar": -1175.79,
+        "gain_pct": -0.0516,
+        "weight_pct": 0.2333,
         "suggested_entry": 99.74,
         "analyst_target": 118.05,
         "macd_trend": "FALLING"
@@ -128,7 +128,7 @@
         "market_value": 6960.0,
         "gain_dollar": -1558.06,
         "gain_pct": -0.1829,
-        "weight_pct": 0.0769,
+        "weight_pct": 0.0752,
         "suggested_entry": 33.71,
         "analyst_target": 78.14,
         "macd_trend": "FALLING"
@@ -142,7 +142,7 @@
         "market_value": 587.0,
         "gain_dollar": 7.65,
         "gain_pct": 0.0132,
-        "weight_pct": 0.0065,
+        "weight_pct": 0.0063,
         "suggested_entry": 23.23,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -156,7 +156,7 @@
         "market_value": 1065.26,
         "gain_dollar": -0.35,
         "gain_pct": -0.0003,
-        "weight_pct": 0.0118,
+        "weight_pct": 0.0115,
         "suggested_entry": 140.77,
         "analyst_target": 237.8,
         "macd_trend": "FALLING"
@@ -164,13 +164,13 @@
       {
         "ticker": "MU",
         "company": "Micron Technology, I",
-        "shares": 14.0021,
-        "avg_cost": 816.839,
+        "shares": 15.0021,
+        "avg_cost": 825.6732,
         "current_price": 953.19,
-        "market_value": 13346.66,
-        "gain_dollar": 1909.2,
-        "gain_pct": 0.1669,
-        "weight_pct": 0.1474,
+        "market_value": 14299.85,
+        "gain_dollar": 1913.02,
+        "gain_pct": 0.1544,
+        "weight_pct": 0.1545,
         "suggested_entry": 948.42,
         "analyst_target": 1560.57,
         "macd_trend": "FALLING"
@@ -184,7 +184,7 @@
         "market_value": 8027.13,
         "gain_dollar": 2721.19,
         "gain_pct": 0.5129,
-        "weight_pct": 0.0887,
+        "weight_pct": 0.0867,
         "suggested_entry": 220.37,
         "analyst_target": 328.72,
         "macd_trend": "FALLING"
@@ -198,7 +198,7 @@
         "market_value": 2580.9,
         "gain_dollar": 4.32,
         "gain_pct": 0.0017,
-        "weight_pct": 0.0285,
+        "weight_pct": 0.0279,
         "suggested_entry": 84.25,
         "analyst_target": 107.35,
         "macd_trend": "RISING"
@@ -212,7 +212,7 @@
         "market_value": 1264.0,
         "gain_dollar": -496.4,
         "gain_pct": -0.282,
-        "weight_pct": 0.014,
+        "weight_pct": 0.0137,
         "suggested_entry": 6.29,
         "analyst_target": 14.75,
         "macd_trend": "FALLING"
@@ -226,7 +226,7 @@
         "market_value": 3141.2,
         "gain_dollar": 23.96,
         "gain_pct": 0.0077,
-        "weight_pct": 0.0347,
+        "weight_pct": 0.0339,
         "suggested_entry": 156.27,
         "analyst_target": 252.21,
         "macd_trend": "FALLING"
@@ -240,7 +240,7 @@
         "market_value": 3810.0,
         "gain_dollar": -1545.75,
         "gain_pct": -0.2886,
-        "weight_pct": 0.0421,
+        "weight_pct": 0.0412,
         "suggested_entry": 15.04,
         "analyst_target": 20.36,
         "macd_trend": "RISING"
@@ -248,13 +248,13 @@
       {
         "ticker": "SOXL",
         "company": "Direxion Daily Semic",
-        "shares": 30.0,
-        "avg_cost": 113.7407,
+        "shares": 35.0,
+        "avg_cost": 113.3959,
         "current_price": 127.57,
-        "market_value": 3827.1,
-        "gain_dollar": 414.88,
-        "gain_pct": 0.1216,
-        "weight_pct": 0.0423,
+        "market_value": 4464.95,
+        "gain_dollar": 496.09,
+        "gain_pct": 0.125,
+        "weight_pct": 0.0482,
         "suggested_entry": 116.35,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -268,7 +268,7 @@
         "market_value": 7223.52,
         "gain_dollar": 1089.5,
         "gain_pct": 0.1776,
-        "weight_pct": 0.0798,
+        "weight_pct": 0.078,
         "suggested_entry": 701.37,
         "analyst_target": null,
         "macd_trend": "FLAT"
@@ -282,7 +282,7 @@
         "market_value": 1581.3,
         "gain_dollar": -43.08,
         "gain_pct": -0.0265,
-        "weight_pct": 0.0175,
+        "weight_pct": 0.0171,
         "suggested_entry": 137.54,
         "analyst_target": 210.25,
         "macd_trend": "FALLING"
@@ -296,36 +296,16 @@
         "market_value": 2050.8,
         "gain_dollar": -82.06,
         "gain_pct": -0.0385,
-        "weight_pct": 0.0226,
+        "weight_pct": 0.0222,
         "suggested_entry": 99.77,
         "analyst_target": 148.56,
         "macd_trend": "RISING"
       }
     ],
-    "stock_value": 90547.37,
-    "options_value": 8310.0,
-    "options_cost": 8310.0,
+    "stock_value": 92550.51,
+    "options_value": 5632.0,
+    "options_cost": 6130.0,
     "options": [
-      {
-        "underlying": "IREN",
-        "type": "CALL",
-        "strike": 25.0,
-        "expiry": "2028-01-21",
-        "contracts": 1.0,
-        "premium_paid": 21.8,
-        "option_price": null,
-        "price_source": "lookup failed: Too Many Requests. Rate limited. Try after a while.",
-        "cost_basis": 2180.0,
-        "market_value": null,
-        "gain_dollar": null,
-        "gain_pct": null,
-        "dte": 464.0,
-        "breakeven": 46.8,
-        "vs_breakeven_pct": -0.2564,
-        "stock_price": 34.8,
-        "iv": null,
-        "notes": "Bought on 1 Oct 2026 when IREN mother share was at $39.5 with a Delta of 0.85"
-      },
       {
         "underlying": "IREN",
         "type": "CALL",
@@ -333,17 +313,17 @@
         "expiry": "2028-03-17",
         "contracts": 1.0,
         "premium_paid": 18.8,
-        "option_price": null,
-        "price_source": "lookup failed: Too Many Requests. Rate limited. Try after a while.",
+        "option_price": 14.9,
+        "price_source": "Yahoo mid (bid/ask)",
         "cost_basis": 1880.0,
-        "market_value": null,
-        "gain_dollar": null,
-        "gain_pct": null,
-        "dte": 520.0,
+        "market_value": 1490.0,
+        "gain_dollar": -390.0,
+        "gain_pct": -0.2074,
+        "dte": 519.0,
         "breakeven": 43.8,
         "vs_breakeven_pct": -0.2055,
         "stock_price": 34.8,
-        "iv": null,
+        "iv": 0.9523930541992187,
         "notes": "Bought on 8 Oct 2026 when mother share was around $35.20 with Delta of 0.82"
       },
       {
@@ -353,27 +333,56 @@
         "expiry": "2028-01-21",
         "contracts": 1.0,
         "premium_paid": 42.5,
-        "option_price": null,
-        "price_source": "lookup failed: Too Many Requests. Rate limited. Try after a while.",
+        "option_price": 41.42,
+        "price_source": "Yahoo mid (bid/ask)",
         "cost_basis": 4250.0,
-        "market_value": null,
-        "gain_dollar": null,
-        "gain_pct": null,
-        "dte": 464.0,
+        "market_value": 4142.0,
+        "gain_dollar": -108.0,
+        "gain_pct": -0.0254,
+        "dte": 463.0,
         "breakeven": 177.5,
         "vs_breakeven_pct": -0.0497,
         "stock_price": 168.67,
-        "iv": null,
+        "iv": 0.355200539855957,
         "notes": "Bought on 1 Oct 2026 when mother share was at $167.5 with a Delta of 0.85"
       }
     ],
     "realized": {
-      "total": 0,
-      "this_month": 0,
-      "this_year": 0,
-      "n_sells": 0,
-      "n_wins": 0,
-      "sells": []
+      "total": 940.65,
+      "this_month": 940.65,
+      "this_year": 940.65,
+      "n_sells": 2,
+      "n_wins": 2,
+      "sells": [
+        {
+          "date": "2026-10-14",
+          "ticker": "IREN",
+          "kind": "OPTION",
+          "label": "IREN C25 21-Jan-2028",
+          "shares": 1.0,
+          "price": 31.0,
+          "avg_cost": 21.8,
+          "fees": 1.21,
+          "realized": 918.79,
+          "realized_pct": 0.4215,
+          "closed_position": true,
+          "notes": null
+        },
+        {
+          "date": "2026-10-14",
+          "ticker": "AMZU",
+          "kind": "STOCK",
+          "label": "AMZU",
+          "shares": 40.0,
+          "price": 35.89,
+          "avg_cost": 35.2676,
+          "fees": 3.04,
+          "realized": 21.86,
+          "realized_pct": 0.0155,
+          "closed_position": true,
+          "notes": null
+        }
+      ]
     }
   },
   "top20": [
@@ -689,7 +698,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -744,7 +753,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -799,7 +808,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -853,8 +862,8 @@
       "call_wall_price": 50.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_date": "2026-10-27",
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -967,7 +976,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "LII",
@@ -1019,7 +1028,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -1074,7 +1083,7 @@
       "call_wall_oi": 59,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-24",
       "days_since_earnings": null
@@ -1129,7 +1138,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-02",
-      "earnings_days": 49,
+      "earnings_days": 48,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-01",
       "days_since_earnings": null
@@ -1238,11 +1247,11 @@
       "call_wall_price": 25.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-14",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "WY",
@@ -1294,7 +1303,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -1348,11 +1357,11 @@
       "call_wall_price": 310.0,
       "call_wall_oi": 88,
       "walls_crossed": false,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-15",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "LHX",
@@ -1404,7 +1413,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -1459,7 +1468,7 @@
       "call_wall_oi": 28,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -1569,7 +1578,7 @@
       "call_wall_oi": 52,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-11",
       "days_since_earnings": null
@@ -1624,7 +1633,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -1679,7 +1688,7 @@
       "call_wall_oi": 12,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -1734,7 +1743,7 @@
       "call_wall_oi": 65,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -1789,7 +1798,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-09",
-      "earnings_days": 56,
+      "earnings_days": 55,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -1844,7 +1853,7 @@
       "call_wall_oi": 6026,
       "walls_crossed": false,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -1899,7 +1908,7 @@
       "call_wall_oi": 227,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -1954,7 +1963,7 @@
       "call_wall_oi": 17,
       "walls_crossed": false,
       "earnings_date": "2026-11-13",
-      "earnings_days": 30,
+      "earnings_days": 29,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-13",
       "days_since_earnings": null
@@ -2009,7 +2018,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -2064,7 +2073,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-15",
-      "earnings_days": 1,
+      "earnings_days": 0,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-15",
       "days_since_earnings": null
@@ -2118,7 +2127,7 @@
       "call_wall_price": 50.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-29",
+      "earnings_date": "2026-10-30",
       "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
@@ -2173,7 +2182,7 @@
       "call_wall_price": 155.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-09",
+      "earnings_date": "2026-11-10",
       "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-07",
@@ -2229,7 +2238,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-01",
-      "earnings_days": 48,
+      "earnings_days": 47,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-01",
       "days_since_earnings": null
@@ -2284,7 +2293,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -2342,7 +2351,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "SITM",
@@ -2394,7 +2403,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -2452,7 +2461,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "NBIS",
@@ -2504,7 +2513,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -2558,8 +2567,8 @@
       "call_wall_price": 120.0,
       "call_wall_oi": 0,
       "walls_crossed": true,
-      "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_date": "2026-11-03",
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -2614,7 +2623,7 @@
       "call_wall_oi": 34,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -2669,7 +2678,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -2723,8 +2732,8 @@
       "call_wall_price": 40.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_date": "2026-10-29",
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -2779,7 +2788,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -2834,7 +2843,7 @@
       "call_wall_oi": 19,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -2889,7 +2898,7 @@
       "call_wall_oi": 39,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -2999,7 +3008,7 @@
       "call_wall_oi": 25,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -3054,7 +3063,7 @@
       "call_wall_oi": 11,
       "walls_crossed": false,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -3109,7 +3118,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -3164,7 +3173,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -3274,7 +3283,7 @@
       "call_wall_oi": 100,
       "walls_crossed": true,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -3384,7 +3393,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -3439,7 +3448,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-18",
-      "earnings_days": 65,
+      "earnings_days": 64,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-01",
       "days_since_earnings": null
@@ -3494,7 +3503,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -3549,7 +3558,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-02",
       "days_since_earnings": null
@@ -3604,7 +3613,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2027-01-21",
-      "earnings_days": 99,
+      "earnings_days": 98,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-01",
       "days_since_earnings": null
@@ -3659,7 +3668,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -3714,7 +3723,7 @@
       "call_wall_oi": 6,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -3769,7 +3778,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-09",
-      "earnings_days": 26,
+      "earnings_days": 25,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -3824,7 +3833,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -3934,7 +3943,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -3989,7 +3998,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -4044,7 +4053,7 @@
       "call_wall_oi": 116,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -4099,7 +4108,7 @@
       "call_wall_oi": 19,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -4154,7 +4163,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -4209,7 +4218,7 @@
       "call_wall_oi": 15,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -4264,7 +4273,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -4319,7 +4328,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -4374,7 +4383,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -4429,7 +4438,7 @@
       "call_wall_oi": 331,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -4539,7 +4548,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-18",
       "days_since_earnings": null
@@ -4594,7 +4603,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -4649,7 +4658,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -4704,7 +4713,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -4759,7 +4768,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-10",
       "days_since_earnings": null
@@ -4814,7 +4823,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-26",
-      "earnings_days": 12,
+      "earnings_days": 11,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-24",
       "days_since_earnings": null
@@ -4869,7 +4878,7 @@
       "call_wall_oi": 23,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -4978,7 +4987,7 @@
       "call_wall_price": 95.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-04",
+      "earnings_date": "2026-11-05",
       "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
@@ -5034,7 +5043,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -5089,7 +5098,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -5144,7 +5153,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -5199,7 +5208,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -5254,7 +5263,7 @@
       "call_wall_oi": 80,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -5309,7 +5318,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-12-23",
-      "earnings_days": 70,
+      "earnings_days": 69,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-23",
       "days_since_earnings": null
@@ -5364,7 +5373,7 @@
       "call_wall_oi": 18,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -5419,7 +5428,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-24",
-      "earnings_days": 71,
+      "earnings_days": 70,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-30",
       "days_since_earnings": null
@@ -5473,7 +5482,7 @@
       "call_wall_price": 25.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-05",
+      "earnings_date": "2026-11-06",
       "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
@@ -5532,7 +5541,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "RIOT",
@@ -5584,7 +5593,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-10",
       "days_since_earnings": null
@@ -5639,7 +5648,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -5694,7 +5703,7 @@
       "call_wall_oi": 54,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -5752,7 +5761,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "PCAR",
@@ -5804,7 +5813,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -5859,7 +5868,7 @@
       "call_wall_oi": 72,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -5913,8 +5922,8 @@
       "call_wall_price": 180.0,
       "call_wall_oi": 16,
       "walls_crossed": true,
-      "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_date": "2026-10-23",
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -5969,7 +5978,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -6024,7 +6033,7 @@
       "call_wall_oi": 179,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -6189,7 +6198,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-10",
       "days_since_earnings": null
@@ -6244,7 +6253,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-17",
-      "earnings_days": 34,
+      "earnings_days": 33,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-01",
       "days_since_earnings": null
@@ -6299,7 +6308,7 @@
       "call_wall_oi": 102,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -6354,7 +6363,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-10",
-      "earnings_days": 57,
+      "earnings_days": 56,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -6409,7 +6418,7 @@
       "call_wall_oi": 8,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -6464,7 +6473,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -6574,7 +6583,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -6629,7 +6638,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -6684,7 +6693,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -6739,7 +6748,7 @@
       "call_wall_oi": 80,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -6794,7 +6803,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -6849,7 +6858,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-20",
       "days_since_earnings": null
@@ -6904,7 +6913,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-16",
-      "earnings_days": 63,
+      "earnings_days": 62,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-16",
       "days_since_earnings": null
@@ -7014,7 +7023,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -7069,7 +7078,7 @@
       "call_wall_oi": 2,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -7124,7 +7133,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-18",
-      "earnings_days": 65,
+      "earnings_days": 64,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-30",
       "days_since_earnings": null
@@ -7179,7 +7188,7 @@
       "call_wall_oi": 37,
       "walls_crossed": false,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-24",
       "days_since_earnings": null
@@ -7234,7 +7243,7 @@
       "call_wall_oi": 223,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -7289,7 +7298,7 @@
       "call_wall_oi": 7,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -7344,7 +7353,7 @@
       "call_wall_oi": 185,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -7399,7 +7408,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -7454,7 +7463,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -7509,7 +7518,7 @@
       "call_wall_oi": 5,
       "walls_crossed": false,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -7563,11 +7572,11 @@
       "call_wall_price": 165.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-15",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "KLAC",
@@ -7619,7 +7628,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -7674,10 +7683,10 @@
       "call_wall_oi": 303,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-06-23",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-12",
+      "days_since_earnings": 3
     },
     {
       "ticker": "CMI",
@@ -7729,7 +7738,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -7784,7 +7793,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -7894,7 +7903,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -8004,7 +8013,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -8059,7 +8068,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -8114,7 +8123,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -8169,7 +8178,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -8224,7 +8233,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -8279,7 +8288,7 @@
       "call_wall_oi": 2,
       "walls_crossed": true,
       "earnings_date": "2026-12-10",
-      "earnings_days": 57,
+      "earnings_days": 56,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -8334,7 +8343,7 @@
       "call_wall_oi": 7,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -8388,8 +8397,8 @@
       "call_wall_price": 29.0,
       "call_wall_oi": 0,
       "walls_crossed": true,
-      "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_date": "2026-11-03",
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -8444,7 +8453,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-17",
       "days_since_earnings": null
@@ -8499,7 +8508,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -8553,8 +8562,8 @@
       "call_wall_price": 470.0,
       "call_wall_oi": 6,
       "walls_crossed": false,
-      "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_date": "2026-10-28",
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -8609,7 +8618,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -8884,7 +8893,7 @@
       "call_wall_oi": 17,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -8939,7 +8948,7 @@
       "call_wall_oi": 41,
       "walls_crossed": false,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -8994,7 +9003,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -9049,7 +9058,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-15",
       "days_since_earnings": null
@@ -9159,7 +9168,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -9214,7 +9223,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -9269,7 +9278,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-10",
-      "earnings_days": 57,
+      "earnings_days": 56,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-09",
       "days_since_earnings": null
@@ -9324,7 +9333,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -9379,7 +9388,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -9489,7 +9498,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -9544,7 +9553,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -9599,7 +9608,7 @@
       "call_wall_oi": 19,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -9654,7 +9663,7 @@
       "call_wall_oi": 115,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -9709,7 +9718,7 @@
       "call_wall_oi": 7,
       "walls_crossed": false,
       "earnings_date": "2026-11-02",
-      "earnings_days": 19,
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -9764,7 +9773,7 @@
       "call_wall_oi": 21,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -9819,7 +9828,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-16",
-      "earnings_days": 63,
+      "earnings_days": 62,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-30",
       "days_since_earnings": null
@@ -9873,8 +9882,8 @@
       "call_wall_price": 140.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_date": "2026-10-29",
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -9929,7 +9938,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -9984,7 +9993,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -10039,7 +10048,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -10094,7 +10103,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -10149,7 +10158,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -10204,7 +10213,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-17",
       "days_since_earnings": null
@@ -10258,11 +10267,11 @@
       "call_wall_price": 140.0,
       "call_wall_oi": 0,
       "walls_crossed": true,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-16",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "HUM",
@@ -10314,7 +10323,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -10369,7 +10378,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -10423,11 +10432,11 @@
       "call_wall_price": 42.5,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-14",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "UNH",
@@ -10482,7 +10491,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "HD",
@@ -10534,7 +10543,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-17",
-      "earnings_days": 34,
+      "earnings_days": 33,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-18",
       "days_since_earnings": null
@@ -10589,7 +10598,7 @@
       "call_wall_oi": 2,
       "walls_crossed": true,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -10644,7 +10653,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-20",
       "days_since_earnings": null
@@ -10699,7 +10708,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -10754,7 +10763,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -10864,7 +10873,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -10919,7 +10928,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -10973,8 +10982,8 @@
       "call_wall_price": 15.0,
       "call_wall_oi": 2,
       "walls_crossed": false,
-      "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_date": "2026-10-29",
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -11029,7 +11038,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -11084,7 +11093,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -11139,7 +11148,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-14",
       "days_since_earnings": null
@@ -11249,7 +11258,7 @@
       "call_wall_oi": 55,
       "walls_crossed": true,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -11304,7 +11313,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-08",
-      "earnings_days": 25,
+      "earnings_days": 24,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-08",
       "days_since_earnings": null
@@ -11414,7 +11423,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -11469,7 +11478,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -11524,7 +11533,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -11582,7 +11591,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-13",
-      "days_since_earnings": 1
+      "days_since_earnings": 2
     },
     {
       "ticker": "CAT",
@@ -11634,7 +11643,7 @@
       "call_wall_oi": 174,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -11689,7 +11698,7 @@
       "call_wall_oi": 17,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -11744,7 +11753,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-10",
-      "earnings_days": 57,
+      "earnings_days": 56,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-10",
       "days_since_earnings": null
@@ -11799,7 +11808,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -11854,7 +11863,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -11909,7 +11918,7 @@
       "call_wall_oi": 52,
       "walls_crossed": true,
       "earnings_date": "2026-12-09",
-      "earnings_days": 56,
+      "earnings_days": 55,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -11964,7 +11973,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -12019,7 +12028,7 @@
       "call_wall_oi": 30,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -12074,7 +12083,7 @@
       "call_wall_oi": 4,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-26",
       "days_since_earnings": null
@@ -12129,7 +12138,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -12184,7 +12193,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-11",
       "days_since_earnings": null
@@ -12239,7 +12248,7 @@
       "call_wall_oi": 1032,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -12294,7 +12303,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -12349,7 +12358,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -12404,7 +12413,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-01",
-      "earnings_days": 48,
+      "earnings_days": 47,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -12459,7 +12468,7 @@
       "call_wall_oi": 4,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -12514,7 +12523,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -12569,7 +12578,7 @@
       "call_wall_oi": 3,
       "walls_crossed": true,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -12624,7 +12633,7 @@
       "call_wall_oi": 12,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -12679,7 +12688,7 @@
       "call_wall_oi": 63,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -12734,7 +12743,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -12789,7 +12798,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-11",
       "days_since_earnings": null
@@ -12844,7 +12853,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -12899,7 +12908,7 @@
       "call_wall_oi": 5,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -12954,7 +12963,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -13009,7 +13018,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -13064,7 +13073,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -13118,7 +13127,7 @@
       "call_wall_price": 9.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-04",
+      "earnings_date": "2026-11-05",
       "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-10",
@@ -13174,7 +13183,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -13229,7 +13238,7 @@
       "call_wall_oi": 7079,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -13284,7 +13293,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-16",
-      "earnings_days": 33,
+      "earnings_days": 32,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-15",
       "days_since_earnings": null
@@ -13339,7 +13348,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -13394,7 +13403,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -13449,7 +13458,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -13503,8 +13512,8 @@
       "call_wall_price": 35.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_date": "2026-11-03",
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -13559,7 +13568,7 @@
       "call_wall_oi": 181,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -13614,7 +13623,7 @@
       "call_wall_oi": 316,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -13669,7 +13678,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-04",
-      "earnings_days": 51,
+      "earnings_days": 50,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -13724,7 +13733,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -13779,7 +13788,7 @@
       "call_wall_oi": 80,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -13833,8 +13842,8 @@
       "call_wall_price": 260.0,
       "call_wall_oi": 7,
       "walls_crossed": true,
-      "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_date": "2026-10-28",
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -13889,7 +13898,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-10",
       "days_since_earnings": null
@@ -13943,8 +13952,8 @@
       "call_wall_price": 155.0,
       "call_wall_oi": 101,
       "walls_crossed": false,
-      "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_date": "2026-10-29",
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -13999,7 +14008,7 @@
       "call_wall_oi": 23,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -14054,7 +14063,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -14109,7 +14118,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -14164,7 +14173,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -14219,7 +14228,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -14274,7 +14283,7 @@
       "call_wall_oi": 8,
       "walls_crossed": false,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-15",
       "days_since_earnings": null
@@ -14329,7 +14338,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -14384,7 +14393,7 @@
       "call_wall_oi": 22,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-15",
       "days_since_earnings": null
@@ -14439,7 +14448,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -14494,7 +14503,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-20",
-      "earnings_days": 37,
+      "earnings_days": 36,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -14548,8 +14557,8 @@
       "call_wall_price": 180.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_date": "2026-11-06",
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -14604,7 +14613,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-04",
-      "earnings_days": 51,
+      "earnings_days": 50,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -14659,7 +14668,7 @@
       "call_wall_oi": 35,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -14714,7 +14723,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -14769,7 +14778,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-10",
       "days_since_earnings": null
@@ -14824,7 +14833,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -14879,7 +14888,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -14934,7 +14943,7 @@
       "call_wall_oi": 14,
       "walls_crossed": true,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -14989,7 +14998,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -15044,7 +15053,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -15099,7 +15108,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -15154,7 +15163,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-18",
-      "earnings_days": 65,
+      "earnings_days": 64,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-29",
       "days_since_earnings": null
@@ -15209,7 +15218,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -15264,7 +15273,7 @@
       "call_wall_oi": 22,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -15319,7 +15328,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -15429,7 +15438,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -15484,7 +15493,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -15539,7 +15548,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -15594,7 +15603,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -15649,7 +15658,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -15704,7 +15713,7 @@
       "call_wall_oi": 5,
       "walls_crossed": true,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -15814,7 +15823,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -15869,7 +15878,7 @@
       "call_wall_oi": 13,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -15924,7 +15933,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -15979,7 +15988,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-02",
-      "earnings_days": 19,
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -16034,7 +16043,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -16089,7 +16098,7 @@
       "call_wall_oi": 23,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -16254,7 +16263,7 @@
       "call_wall_oi": 23,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -16309,7 +16318,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -16364,7 +16373,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -16419,7 +16428,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -16474,7 +16483,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -16529,7 +16538,7 @@
       "call_wall_oi": 119,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-02",
       "days_since_earnings": null
@@ -16584,7 +16593,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -16639,7 +16648,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -16694,7 +16703,7 @@
       "call_wall_oi": 346,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -16748,7 +16757,7 @@
       "call_wall_price": 25.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-04",
+      "earnings_date": "2026-11-05",
       "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
@@ -17024,7 +17033,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -17079,7 +17088,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-24",
-      "earnings_days": 41,
+      "earnings_days": 40,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -17134,7 +17143,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -17189,7 +17198,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-19",
-      "earnings_days": 5,
+      "earnings_days": 4,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-17",
       "days_since_earnings": null
@@ -17244,7 +17253,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -17299,7 +17308,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -17354,7 +17363,7 @@
       "call_wall_oi": 4,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -17409,7 +17418,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -17464,7 +17473,7 @@
       "call_wall_oi": 6,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -17519,7 +17528,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-13",
-      "earnings_days": 30,
+      "earnings_days": 29,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -17574,7 +17583,7 @@
       "call_wall_oi": 1017,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -17629,7 +17638,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -17739,7 +17748,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-13",
-      "earnings_days": 30,
+      "earnings_days": 29,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-13",
       "days_since_earnings": null
@@ -17794,7 +17803,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-20",
-      "earnings_days": 37,
+      "earnings_days": 36,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-10",
       "days_since_earnings": null
@@ -17849,7 +17858,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -17904,7 +17913,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -17959,7 +17968,7 @@
       "call_wall_oi": 258,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -18014,7 +18023,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": null,
       "days_since_earnings": null
@@ -18069,7 +18078,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-09",
-      "earnings_days": 26,
+      "earnings_days": 25,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -18124,7 +18133,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -18179,7 +18188,7 @@
       "call_wall_oi": 35,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -18234,7 +18243,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-13",
       "days_since_earnings": null
@@ -18289,7 +18298,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-11",
       "days_since_earnings": null
@@ -18344,7 +18353,7 @@
       "call_wall_oi": 14,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -18399,7 +18408,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -18454,7 +18463,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -18509,7 +18518,7 @@
       "call_wall_oi": 622,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -18564,7 +18573,7 @@
       "call_wall_oi": 23,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -18619,7 +18628,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -18674,7 +18683,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -18784,7 +18793,7 @@
       "call_wall_oi": 50,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -18839,7 +18848,7 @@
       "call_wall_oi": 1000,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -18894,7 +18903,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -18949,7 +18958,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -19004,7 +19013,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -19059,7 +19068,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -19114,7 +19123,7 @@
       "call_wall_oi": 2779,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -19169,7 +19178,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -19224,7 +19233,7 @@
       "call_wall_oi": 20,
       "walls_crossed": false,
       "earnings_date": "2026-10-15",
-      "earnings_days": 1,
+      "earnings_days": 0,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -19279,7 +19288,7 @@
       "call_wall_oi": 62,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -19334,7 +19343,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -19389,7 +19398,7 @@
       "call_wall_oi": 5,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -19444,7 +19453,7 @@
       "call_wall_oi": 35,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -19499,7 +19508,7 @@
       "call_wall_oi": 13,
       "walls_crossed": true,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-11",
       "days_since_earnings": null
@@ -19554,7 +19563,7 @@
       "call_wall_oi": 14,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -19609,7 +19618,7 @@
       "call_wall_oi": 534,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -19664,7 +19673,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -19719,7 +19728,7 @@
       "call_wall_oi": 100,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -19774,7 +19783,7 @@
       "call_wall_oi": 25,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -19829,7 +19838,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -19884,7 +19893,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -19939,7 +19948,7 @@
       "call_wall_oi": 12,
       "walls_crossed": true,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -19994,7 +20003,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-15",
       "days_since_earnings": null
@@ -20049,7 +20058,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-24",
       "days_since_earnings": null
@@ -20104,7 +20113,7 @@
       "call_wall_oi": 8,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -20159,7 +20168,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-15",
-      "earnings_days": 1,
+      "earnings_days": 0,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -20214,7 +20223,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -20489,7 +20498,7 @@
       "call_wall_oi": 3,
       "walls_crossed": true,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -20544,7 +20553,7 @@
       "call_wall_oi": 27,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -20599,7 +20608,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-17",
-      "earnings_days": 64,
+      "earnings_days": 63,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-01",
       "days_since_earnings": null
@@ -20654,7 +20663,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -20709,7 +20718,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -20764,7 +20773,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -20818,11 +20827,11 @@
       "call_wall_price": 1330.0,
       "call_wall_oi": 5,
       "walls_crossed": true,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-13",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "IBB",
@@ -20929,7 +20938,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -20984,7 +20993,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -21039,7 +21048,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -21094,7 +21103,7 @@
       "call_wall_oi": 38,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-24",
       "days_since_earnings": null
@@ -21149,7 +21158,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -21204,7 +21213,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -21314,7 +21323,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -21369,7 +21378,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -21424,7 +21433,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-17",
-      "earnings_days": 64,
+      "earnings_days": 63,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-30",
       "days_since_earnings": null
@@ -21479,7 +21488,7 @@
       "call_wall_oi": 534,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -21534,7 +21543,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -21589,7 +21598,7 @@
       "call_wall_oi": 5,
       "walls_crossed": true,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -21644,7 +21653,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -21699,7 +21708,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -21754,7 +21763,7 @@
       "call_wall_oi": 44,
       "walls_crossed": false,
       "earnings_date": "2026-11-11",
-      "earnings_days": 28,
+      "earnings_days": 27,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -21809,7 +21818,7 @@
       "call_wall_oi": 1098,
       "walls_crossed": false,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-13",
       "days_since_earnings": null
@@ -21864,7 +21873,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -21919,7 +21928,7 @@
       "call_wall_oi": 607,
       "walls_crossed": true,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -21974,7 +21983,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -22029,7 +22038,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -22084,7 +22093,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-15",
-      "earnings_days": 1,
+      "earnings_days": 0,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -22139,7 +22148,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -22194,7 +22203,7 @@
       "call_wall_oi": 75,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -22249,7 +22258,7 @@
       "call_wall_oi": 89,
       "walls_crossed": false,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -22304,7 +22313,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -22359,7 +22368,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -22414,7 +22423,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -22469,7 +22478,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -22524,7 +22533,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -22579,7 +22588,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -22633,8 +22642,8 @@
       "call_wall_price": 180.0,
       "call_wall_oi": 103,
       "walls_crossed": false,
-      "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_date": "2026-11-03",
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -22689,7 +22698,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -22799,7 +22808,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-24",
-      "earnings_days": 41,
+      "earnings_days": 40,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-20",
       "days_since_earnings": null
@@ -22908,8 +22917,8 @@
       "call_wall_price": 125.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_date": "2026-10-28",
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -22964,7 +22973,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -23019,7 +23028,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -23074,7 +23083,7 @@
       "call_wall_oi": 12,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -23129,7 +23138,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -23184,7 +23193,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -23294,7 +23303,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -23349,7 +23358,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -23404,7 +23413,7 @@
       "call_wall_oi": 13,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -23514,7 +23523,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -23569,7 +23578,7 @@
       "call_wall_oi": 5,
       "walls_crossed": true,
       "earnings_date": "2026-12-11",
-      "earnings_days": 58,
+      "earnings_days": 57,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-24",
       "days_since_earnings": null
@@ -23624,7 +23633,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-13",
-      "earnings_days": 30,
+      "earnings_days": 29,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -23679,7 +23688,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-19",
-      "earnings_days": 36,
+      "earnings_days": 35,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-20",
       "days_since_earnings": null
@@ -23733,8 +23742,8 @@
       "call_wall_price": 575.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_date": "2026-10-22",
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -23789,7 +23798,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -23844,7 +23853,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -23899,7 +23908,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -23954,7 +23963,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -24064,7 +24073,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-10",
-      "earnings_days": 57,
+      "earnings_days": 56,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-02",
       "days_since_earnings": null
@@ -24119,7 +24128,7 @@
       "call_wall_oi": 43,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -24174,7 +24183,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -24228,8 +24237,8 @@
       "call_wall_price": 20.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_date": "2026-10-22",
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -24284,7 +24293,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -24339,7 +24348,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-24",
-      "earnings_days": 41,
+      "earnings_days": 40,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -24393,8 +24402,8 @@
       "call_wall_price": 55.0,
       "call_wall_oi": 0,
       "walls_crossed": true,
-      "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_date": "2026-11-04",
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -24449,7 +24458,7 @@
       "call_wall_oi": 69,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -24504,7 +24513,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -24559,7 +24568,7 @@
       "call_wall_oi": 211,
       "walls_crossed": false,
       "earnings_date": "2026-11-20",
-      "earnings_days": 37,
+      "earnings_days": 36,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-25",
       "days_since_earnings": null
@@ -24614,7 +24623,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -24669,7 +24678,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -24724,7 +24733,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -24779,7 +24788,7 @@
       "call_wall_oi": 10,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -24834,7 +24843,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -24889,7 +24898,7 @@
       "call_wall_oi": 14,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -24944,7 +24953,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -24999,7 +25008,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -25054,7 +25063,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -25109,7 +25118,7 @@
       "call_wall_oi": 16,
       "walls_crossed": true,
       "earnings_date": "2026-10-16",
-      "earnings_days": 2,
+      "earnings_days": 1,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-17",
       "days_since_earnings": null
@@ -25164,7 +25173,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -25219,7 +25228,7 @@
       "call_wall_oi": 1529,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -25274,7 +25283,7 @@
       "call_wall_oi": 245,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -25329,7 +25338,7 @@
       "call_wall_oi": 60,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -25384,7 +25393,7 @@
       "call_wall_oi": 9,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -25439,7 +25448,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -25494,7 +25503,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-17",
-      "earnings_days": 64,
+      "earnings_days": 63,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-23",
       "days_since_earnings": null
@@ -25549,7 +25558,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -25604,7 +25613,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -25659,7 +25668,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-20",
-      "earnings_days": 37,
+      "earnings_days": 36,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-20",
       "days_since_earnings": null
@@ -25714,7 +25723,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -25769,7 +25778,7 @@
       "call_wall_oi": 35,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -25823,8 +25832,8 @@
       "call_wall_price": 115.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_date": "2026-10-28",
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -25879,7 +25888,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -25934,7 +25943,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-16",
       "days_since_earnings": null
@@ -25989,7 +25998,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -26044,7 +26053,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -26099,7 +26108,7 @@
       "call_wall_oi": 22,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -26153,8 +26162,8 @@
       "call_wall_price": 75.0,
       "call_wall_oi": 1,
       "walls_crossed": false,
-      "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_date": "2026-11-02",
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -26209,7 +26218,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -26264,7 +26273,7 @@
       "call_wall_oi": 4,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -26319,7 +26328,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-08",
-      "earnings_days": 55,
+      "earnings_days": 54,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-22",
       "days_since_earnings": null
@@ -26374,7 +26383,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -26429,7 +26438,7 @@
       "call_wall_oi": 79,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -26484,7 +26493,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -26538,8 +26547,8 @@
       "call_wall_price": 430.0,
       "call_wall_oi": 72,
       "walls_crossed": false,
-      "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_date": "2026-11-02",
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -26594,7 +26603,7 @@
       "call_wall_oi": 48,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -26649,7 +26658,7 @@
       "call_wall_oi": 142,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -26704,7 +26713,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -26759,7 +26768,7 @@
       "call_wall_oi": 15,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -26814,7 +26823,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -26869,7 +26878,7 @@
       "call_wall_oi": 55,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -26924,7 +26933,7 @@
       "call_wall_oi": 7,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -26979,7 +26988,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -27034,7 +27043,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-11-17",
-      "earnings_days": 34,
+      "earnings_days": 33,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-20",
       "days_since_earnings": null
@@ -27088,8 +27097,8 @@
       "call_wall_price": 60.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-12-11",
-      "earnings_days": 58,
+      "earnings_date": "2026-12-15",
+      "earnings_days": 61,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-10",
       "days_since_earnings": null
@@ -27144,7 +27153,7 @@
       "call_wall_oi": 16,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -27199,7 +27208,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -27254,7 +27263,7 @@
       "call_wall_oi": 10,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -27309,7 +27318,7 @@
       "call_wall_oi": 101,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -27364,7 +27373,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-18",
-      "earnings_days": 65,
+      "earnings_days": 64,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-23",
       "days_since_earnings": null
@@ -27419,7 +27428,7 @@
       "call_wall_oi": 157,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -27474,7 +27483,7 @@
       "call_wall_oi": 32,
       "walls_crossed": false,
       "earnings_date": "2026-11-02",
-      "earnings_days": 19,
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -27529,7 +27538,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-11-28",
-      "earnings_days": 45,
+      "earnings_days": 44,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -27584,7 +27593,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -27639,7 +27648,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -27749,7 +27758,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -27804,7 +27813,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-13",
       "days_since_earnings": null
@@ -28079,7 +28088,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-11-26",
-      "earnings_days": 43,
+      "earnings_days": 42,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -28134,7 +28143,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-18",
       "days_since_earnings": null
@@ -28189,7 +28198,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -28244,7 +28253,7 @@
       "call_wall_oi": 15,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -28299,7 +28308,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -28354,7 +28363,7 @@
       "call_wall_oi": 83,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-11",
       "days_since_earnings": null
@@ -28409,7 +28418,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -28464,7 +28473,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-02",
-      "earnings_days": 49,
+      "earnings_days": 48,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -28519,7 +28528,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -28574,7 +28583,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-03",
       "days_since_earnings": null
@@ -28629,7 +28638,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-02",
-      "earnings_days": 49,
+      "earnings_days": 48,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-27",
       "days_since_earnings": null
@@ -28684,7 +28693,7 @@
       "call_wall_oi": 17,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -28739,7 +28748,7 @@
       "call_wall_oi": 191,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-20",
       "days_since_earnings": null
@@ -28794,7 +28803,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -28848,8 +28857,8 @@
       "call_wall_price": 45.0,
       "call_wall_oi": 24,
       "walls_crossed": false,
-      "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_date": "2026-11-02",
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -28904,7 +28913,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -28959,7 +28968,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -29014,7 +29023,7 @@
       "call_wall_oi": 43,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -29069,7 +29078,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-20",
       "days_since_earnings": null
@@ -29124,7 +29133,7 @@
       "call_wall_oi": 62,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -29179,7 +29188,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -29234,7 +29243,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -29289,7 +29298,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -29344,7 +29353,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_days": 28,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-13",
       "days_since_earnings": null
@@ -29399,7 +29408,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-02",
-      "earnings_days": 49,
+      "earnings_days": 48,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -29454,7 +29463,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -29509,7 +29518,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -29564,7 +29573,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -29619,7 +29628,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -29674,7 +29683,7 @@
       "call_wall_oi": 10,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -29729,7 +29738,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-11",
       "days_since_earnings": null
@@ -29787,7 +29796,7 @@
       "earnings_days": null,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-09",
-      "days_since_earnings": 5
+      "days_since_earnings": null
     },
     {
       "ticker": "SCHW",
@@ -29839,7 +29848,7 @@
       "call_wall_oi": 92,
       "walls_crossed": false,
       "earnings_date": "2026-10-15",
-      "earnings_days": 1,
+      "earnings_days": 0,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -29894,7 +29903,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-24",
       "days_since_earnings": null
@@ -29948,8 +29957,8 @@
       "call_wall_price": 55.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-12",
-      "earnings_days": 29,
+      "earnings_date": "2026-11-17",
+      "earnings_days": 33,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -30004,7 +30013,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -30059,7 +30068,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -30114,7 +30123,7 @@
       "call_wall_oi": 14,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -30169,7 +30178,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -30224,7 +30233,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-09",
-      "earnings_days": 56,
+      "earnings_days": 55,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-08",
       "days_since_earnings": null
@@ -30279,7 +30288,7 @@
       "call_wall_oi": 175,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -30334,7 +30343,7 @@
       "call_wall_oi": 16,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -30389,7 +30398,7 @@
       "call_wall_oi": 157,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -30444,7 +30453,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -30499,7 +30508,7 @@
       "call_wall_oi": 27,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -30554,7 +30563,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -30609,7 +30618,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -30664,7 +30673,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -30719,7 +30728,7 @@
       "call_wall_oi": 6,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -30774,7 +30783,7 @@
       "call_wall_oi": 6,
       "walls_crossed": false,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-18",
       "days_since_earnings": null
@@ -30829,7 +30838,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -30884,7 +30893,7 @@
       "call_wall_oi": 49,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -30939,7 +30948,7 @@
       "call_wall_oi": 6,
       "walls_crossed": true,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -30994,7 +31003,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -31049,7 +31058,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -31104,7 +31113,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -31159,7 +31168,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-02",
-      "earnings_days": 19,
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -31214,7 +31223,7 @@
       "call_wall_oi": 2,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -31269,7 +31278,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -31324,7 +31333,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -31379,7 +31388,7 @@
       "call_wall_oi": 2,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -31434,7 +31443,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -31489,7 +31498,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -31544,7 +31553,7 @@
       "call_wall_oi": 23,
       "walls_crossed": false,
       "earnings_date": "2027-01-07",
-      "earnings_days": 85,
+      "earnings_days": 84,
       "earnings_estimate": false,
       "last_earnings_date": "2026-10-06",
       "days_since_earnings": null
@@ -31599,7 +31608,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -31654,7 +31663,7 @@
       "call_wall_oi": 13,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -31709,7 +31718,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -31764,7 +31773,7 @@
       "call_wall_oi": 25,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -31819,7 +31828,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -31874,7 +31883,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -31929,7 +31938,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -31984,7 +31993,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -32039,7 +32048,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -32093,8 +32102,8 @@
       "call_wall_price": 165.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-12-24",
-      "earnings_days": 71,
+      "earnings_date": "2026-12-18",
+      "earnings_days": 64,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-24",
       "days_since_earnings": null
@@ -32149,7 +32158,7 @@
       "call_wall_oi": 52,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -32204,7 +32213,7 @@
       "call_wall_oi": 22,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -32259,7 +32268,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -32314,7 +32323,7 @@
       "call_wall_oi": 37,
       "walls_crossed": false,
       "earnings_date": "2026-11-16",
-      "earnings_days": 33,
+      "earnings_days": 32,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -32368,8 +32377,8 @@
       "call_wall_price": 135.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_date": "2026-11-04",
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -32424,7 +32433,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -32479,7 +32488,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -32534,7 +32543,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -32589,7 +32598,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -32644,7 +32653,7 @@
       "call_wall_oi": 18,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -32699,7 +32708,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -32754,7 +32763,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -32809,7 +32818,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-19",
-      "earnings_days": 36,
+      "earnings_days": 35,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-20",
       "days_since_earnings": null
@@ -32864,7 +32873,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -32919,7 +32928,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-12-02",
-      "earnings_days": 49,
+      "earnings_days": 48,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-02",
       "days_since_earnings": null
@@ -32974,7 +32983,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-21",
-      "earnings_days": 7,
+      "earnings_days": 6,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -33029,7 +33038,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -33084,7 +33093,7 @@
       "call_wall_oi": 32,
       "walls_crossed": false,
       "earnings_date": "2026-10-23",
-      "earnings_days": 9,
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-24",
       "days_since_earnings": null
@@ -33139,7 +33148,7 @@
       "call_wall_oi": 85,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -33194,7 +33203,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -33249,7 +33258,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -33304,7 +33313,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -33359,7 +33368,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -33414,7 +33423,7 @@
       "call_wall_oi": 50,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -33469,7 +33478,7 @@
       "call_wall_oi": 12,
       "walls_crossed": false,
       "earnings_date": "2026-11-28",
-      "earnings_days": 45,
+      "earnings_days": 44,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-01",
       "days_since_earnings": null
@@ -33524,7 +33533,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -33579,7 +33588,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -33634,7 +33643,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -33689,7 +33698,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -33744,7 +33753,7 @@
       "call_wall_oi": 22,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -33799,7 +33808,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -33854,7 +33863,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -33909,7 +33918,7 @@
       "call_wall_oi": 962,
       "walls_crossed": false,
       "earnings_date": "2026-12-02",
-      "earnings_days": 49,
+      "earnings_days": 48,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -33964,7 +33973,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -34019,7 +34028,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -34074,7 +34083,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -34128,8 +34137,8 @@
       "call_wall_price": 55.0,
       "call_wall_oi": 0,
       "walls_crossed": false,
-      "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_date": "2026-10-28",
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -34184,7 +34193,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -34239,7 +34248,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-11-10",
-      "earnings_days": 27,
+      "earnings_days": 26,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -34293,8 +34302,8 @@
       "call_wall_price": 35.0,
       "call_wall_oi": 62,
       "walls_crossed": false,
-      "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_date": "2026-10-23",
+      "earnings_days": 8,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -34349,7 +34358,7 @@
       "call_wall_oi": 1,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -34403,8 +34412,8 @@
       "call_wall_price": 110.0,
       "call_wall_oi": 0,
       "walls_crossed": true,
-      "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_date": "2026-11-06",
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -34459,7 +34468,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-19",
-      "earnings_days": 36,
+      "earnings_days": 35,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-25",
       "days_since_earnings": null
@@ -34514,7 +34523,7 @@
       "call_wall_oi": 98,
       "walls_crossed": false,
       "earnings_date": "2026-11-19",
-      "earnings_days": 36,
+      "earnings_days": 35,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-18",
       "days_since_earnings": null
@@ -34624,7 +34633,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-18",
-      "earnings_days": 35,
+      "earnings_days": 34,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -34734,7 +34743,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -34789,7 +34798,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -34844,7 +34853,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-03",
-      "earnings_days": 50,
+      "earnings_days": 49,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-02",
       "days_since_earnings": null
@@ -34899,7 +34908,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -34953,11 +34962,11 @@
       "call_wall_price": 940.0,
       "call_wall_oi": 11,
       "walls_crossed": false,
-      "earnings_date": "2026-10-14",
-      "earnings_days": 0,
+      "earnings_date": null,
+      "earnings_days": null,
       "earnings_estimate": false,
-      "last_earnings_date": "2026-07-15",
-      "days_since_earnings": null
+      "last_earnings_date": "2026-10-14",
+      "days_since_earnings": 1
     },
     {
       "ticker": "SJM",
@@ -35009,7 +35018,7 @@
       "call_wall_oi": 3,
       "walls_crossed": false,
       "earnings_date": "2026-11-24",
-      "earnings_days": 41,
+      "earnings_days": 40,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -35064,7 +35073,7 @@
       "call_wall_oi": 8,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-27",
       "days_since_earnings": null
@@ -35229,7 +35238,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-22",
       "days_since_earnings": null
@@ -35284,7 +35293,7 @@
       "call_wall_oi": 18,
       "walls_crossed": true,
       "earnings_date": "2026-11-20",
-      "earnings_days": 37,
+      "earnings_days": 36,
       "earnings_estimate": false,
       "last_earnings_date": "2026-09-01",
       "days_since_earnings": null
@@ -35339,7 +35348,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -35394,7 +35403,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -35449,7 +35458,7 @@
       "call_wall_oi": 17,
       "walls_crossed": false,
       "earnings_date": "2026-11-20",
-      "earnings_days": 37,
+      "earnings_days": 36,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -35504,7 +35513,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-29",
       "days_since_earnings": null
@@ -35834,7 +35843,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -35889,7 +35898,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-20",
-      "earnings_days": 6,
+      "earnings_days": 5,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-21",
       "days_since_earnings": null
@@ -36054,7 +36063,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -36109,7 +36118,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-26",
-      "earnings_days": 43,
+      "earnings_days": 42,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-26",
       "days_since_earnings": null
@@ -36164,7 +36173,7 @@
       "call_wall_oi": 81,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -36219,7 +36228,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -36274,7 +36283,7 @@
       "call_wall_oi": 54,
       "walls_crossed": false,
       "earnings_date": "2026-11-09",
-      "earnings_days": 26,
+      "earnings_days": 25,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-12",
       "days_since_earnings": null
@@ -36329,7 +36338,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -36384,7 +36393,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-27",
-      "earnings_days": 13,
+      "earnings_days": 12,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-28",
       "days_since_earnings": null
@@ -36439,7 +36448,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -36494,7 +36503,7 @@
       "call_wall_oi": 5,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -36549,7 +36558,7 @@
       "call_wall_oi": 141,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -36604,7 +36613,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -36659,7 +36668,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-02",
-      "earnings_days": 19,
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2020-02-10",
       "days_since_earnings": null
@@ -36714,7 +36723,7 @@
       "call_wall_oi": 18,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -36769,7 +36778,7 @@
       "call_wall_oi": 15,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -36824,7 +36833,7 @@
       "call_wall_oi": 365,
       "walls_crossed": false,
       "earnings_date": "2026-11-04",
-      "earnings_days": 21,
+      "earnings_days": 20,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-07",
       "days_since_earnings": null
@@ -36879,7 +36888,7 @@
       "call_wall_oi": 15,
       "walls_crossed": true,
       "earnings_date": "2026-11-02",
-      "earnings_days": 19,
+      "earnings_days": 18,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-03",
       "days_since_earnings": null
@@ -36934,7 +36943,7 @@
       "call_wall_oi": 20,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -36989,7 +36998,7 @@
       "call_wall_oi": 84,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -37044,7 +37053,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -37099,7 +37108,7 @@
       "call_wall_oi": 1,
       "walls_crossed": false,
       "earnings_date": "2026-10-30",
-      "earnings_days": 16,
+      "earnings_days": 15,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -37154,7 +37163,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-25",
-      "earnings_days": 42,
+      "earnings_days": 41,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-25",
       "days_since_earnings": null
@@ -37264,7 +37273,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -37319,7 +37328,7 @@
       "call_wall_oi": 16,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-31",
       "days_since_earnings": null
@@ -37374,7 +37383,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -37429,7 +37438,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -37484,7 +37493,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-10-28",
-      "earnings_days": 14,
+      "earnings_days": 13,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
@@ -37539,7 +37548,7 @@
       "call_wall_oi": 1306,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -37594,7 +37603,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-06",
-      "earnings_days": 23,
+      "earnings_days": 22,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-05",
       "days_since_earnings": null
@@ -37649,7 +37658,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2027-02-19",
-      "earnings_days": 128,
+      "earnings_days": 127,
       "earnings_estimate": false,
       "last_earnings_date": "2020-08-06",
       "days_since_earnings": null
@@ -37704,7 +37713,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-12-09",
-      "earnings_days": 56,
+      "earnings_days": 55,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-19",
       "days_since_earnings": null
@@ -37759,7 +37768,7 @@
       "call_wall_oi": 38,
       "walls_crossed": false,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -37869,7 +37878,7 @@
       "call_wall_oi": 0,
       "walls_crossed": true,
       "earnings_date": "2026-10-22",
-      "earnings_days": 8,
+      "earnings_days": 7,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-23",
       "days_since_earnings": null
@@ -37924,7 +37933,7 @@
       "call_wall_oi": 53,
       "walls_crossed": false,
       "earnings_date": "2026-11-05",
-      "earnings_days": 22,
+      "earnings_days": 21,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-06",
       "days_since_earnings": null
@@ -37979,7 +37988,7 @@
       "call_wall_oi": 0,
       "walls_crossed": false,
       "earnings_date": "2026-11-03",
-      "earnings_days": 20,
+      "earnings_days": 19,
       "earnings_estimate": false,
       "last_earnings_date": "2026-08-04",
       "days_since_earnings": null
@@ -38034,7 +38043,7 @@
       "call_wall_oi": 12,
       "walls_crossed": false,
       "earnings_date": "2026-10-29",
-      "earnings_days": 15,
+      "earnings_days": 14,
       "earnings_estimate": false,
       "last_earnings_date": "2026-07-30",
       "days_since_earnings": null
