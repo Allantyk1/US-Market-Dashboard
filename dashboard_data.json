@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-16T07:40:37",
+  "generated_at": "2026-10-16T10:24:02",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 96052.69,
+    "total_value": 96397.69,
     "total_cost": 99995.37,
-    "total_gain": -3942.68,
-    "total_gain_pct": -0.0394,
+    "total_gain": -3597.68,
+    "total_gain_pct": -0.036,
     "holdings": [
       {
         "ticker": "AVGO",
@@ -303,7 +303,7 @@
       }
     ],
     "stock_value": 90267.69,
-    "options_value": 5785.0,
+    "options_value": 6130.0,
     "options_cost": 6130.0,
     "options": [
       {
@@ -313,17 +313,17 @@
         "expiry": "2028-03-17",
         "contracts": 1.0,
         "premium_paid": 18.8,
-        "option_price": 15.85,
-        "price_source": "Yahoo mid (bid/ask)",
+        "option_price": null,
+        "price_source": "lookup failed: Failed to perform, curl: (6) Could not resolve host: query2.",
         "cost_basis": 1880.0,
-        "market_value": 1585.0,
-        "gain_dollar": -295.0,
-        "gain_pct": -0.1569,
+        "market_value": null,
+        "gain_dollar": null,
+        "gain_pct": null,
         "dte": 518.0,
         "breakeven": 43.8,
         "vs_breakeven_pct": -0.3023,
         "stock_price": 30.56,
-        "iv": 1.052250832519531,
+        "iv": null,
         "notes": "Bought on 8 Oct 2026 when mother share was around $35.20 with Delta of 0.82"
       },
       {
@@ -333,17 +333,17 @@
         "expiry": "2028-01-21",
         "contracts": 1.0,
         "premium_paid": 42.5,
-        "option_price": 42.0,
-        "price_source": "Yahoo mid (bid/ask)",
+        "option_price": null,
+        "price_source": "lookup failed: Failed to perform, curl: (6) Could not resolve host: query2.",
         "cost_basis": 4250.0,
-        "market_value": 4200.0,
-        "gain_dollar": -50.0,
-        "gain_pct": -0.0118,
+        "market_value": null,
+        "gain_dollar": null,
+        "gain_pct": null,
         "dte": 462.0,
         "breakeven": 177.5,
         "vs_breakeven_pct": -0.0589,
         "stock_price": 167.04,
-        "iv": 0.3655458953857422,
+        "iv": null,
         "notes": "Bought on 1 Oct 2026 when mother share was at $167.5 with a Delta of 0.85"
       }
     ],
