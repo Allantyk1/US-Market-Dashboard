@@ -394,7 +394,8 @@ const SETUPS={SR:"Strong rebound",D:"Discount",ND:"No dip – don't chase","-":"
    NO DIP         = newest box is white and there was no real dip before it (fewer than 2 green days in a row).
    Forward test counts from RULES_LIVE_FROM; earlier sessions are shown separately as history. */
 const SR_TOP=30, SR_MONTHS=3, SR_MIN_WHITE=2, SR_MAX_WHITE=6, SR_MIN_GREEN=2, ND_MAX_GREEN=1, RULE_HORIZON=10, RULES_LIVE_FROM="2026-10-12";
-function cutoffFor(dateStr,months){const a=new Date(dateStr+"T00:00:00");a.setMonth(a.getMonth()-months);return a.toISOString().slice(0,10)}
+function cutoffFor(dateStr,months){const a=new Date(dateStr+"T00:00:00");a.setMonth(a.getMonth()-months);return isoLocal(a)}
+function isoLocal(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}  /* local date, not UTC: toISOString shifted dates by a day in Malaysia (UTC+8) */
 /* top N rows of section 1 as they stood on session index i (Top 20 picks, 3-month window, % to date) */
 function topRowsAt(i,n=SR_TOP){
   const d=D.watch_dates[i], cut=cutoffFor(d,SR_MONTHS), first={};
@@ -466,7 +467,7 @@ const srcName=()=>({top20:"Top-20 picks",buy:"BUY-signal picks",trigger:"buy-tri
 const srcVerb=()=>({top20:"entered the Top 20",buy:"got a BUY signal",trigger:"fired a buy trigger"})[S.src];
 const srcNew=()=>({top20:"newly enters the daily Top 20",buy:"gets a new BUY signal",trigger:"fires a new buy trigger (see section 2)"})[S.src];
 const winTxt=()=>S.win?`the last ${S.win} month${S.win>1?"s":""}`:"all logged history";
-function cutoff(){if(!S.win)return "0000";const a=new Date(D.as_of_session+"T00:00:00");a.setMonth(a.getMonth()-S.win);return a.toISOString().slice(0,10)}
+function cutoff(){if(!S.win)return "0000";const a=new Date(D.as_of_session+"T00:00:00");a.setMonth(a.getMonth()-S.win);return isoLocal(a)}
 const windowEvents=()=>{const c=cutoff();return D.events.filter(e=>e.src===S.src&&e.d>=c)};
 
 /* ---------- 1. leaderboard ---------- */

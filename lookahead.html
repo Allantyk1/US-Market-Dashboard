@@ -100,6 +100,16 @@
   .note{font-size:11.5px;color:var(--ink-faint);line-height:1.6;margin-top:10px}
   footer{margin-top:34px;font-size:11px;color:var(--ink-faint);line-height:1.6}
   @media (max-width:600px){h1{font-size:25px}.co{max-width:110px}}
+  /* Frozen headings (2026-10-17): the settings bar sticks to the top, each section's
+     title sticks under it, and long tables scroll inside their own box so their
+     column headings and Stock column stay visible. --ctl-h / --dh are set by JS. */
+  .controls{position:sticky;top:0;z-index:6;background:var(--bg)}
+  .desk-head{position:sticky;top:var(--ctl-h,0px);z-index:5;background:var(--bg);padding-block:8px;margin-bottom:0}
+  .scroll.freeze{overflow:auto;max-height:max(320px,calc(100vh - var(--ctl-h,0px) - var(--dh,44px) - 40px))}
+  .scroll.freeze thead th{position:sticky;top:0;z-index:2;background:var(--panel);box-shadow:inset 0 -1px 0 var(--line);border-bottom:0}
+  .scroll.freeze th:first-child,.scroll.freeze td:first-child{position:sticky;left:0;z-index:1;background:var(--panel);box-shadow:inset -1px 0 0 var(--line)}
+  .scroll.freeze thead th:first-child{z-index:3}
+  @media (max-width:600px){.controls{position:static}.desk-head{top:0}.scroll.freeze{max-height:75vh}}
 </style>
 </head>
 <body>
@@ -126,7 +136,7 @@
     <div class="desk-head"><span class="idx">1</span><h2>Which rule is working: the scoreboard</h2></div>
     <p class="lede">Every past session in the tracker log is replayed. For each rule, take the stocks it would have picked that day and compare their move <b>2 and 4 weeks later</b> with the average of every tracked stock (the "market"). The page then <b>recommends the rule that is leading</b>: if the Top 30 leads, the plan is a plain rotation into the Top 30; if another rule leads, the plan switches to it; if nothing beats the market, it says so. This re-runs every day as the log grows.</p>
     <div id="verdict"></div>
-    <div class="panel"><div class="scroll"><table id="ruleTbl"></table></div>
+    <div class="panel"><div class="scroll freeze"><table id="ruleTbl"></table></div>
       <p class="note" id="ruleNote"></p></div>
   </section>
 
@@ -139,7 +149,7 @@
       <div class="bar" id="mixBar"></div>
       <div class="legend" id="mixLegend"></div>
     </div>
-    <div class="panel"><div class="scroll"><table id="holdTbl"></table></div>
+    <div class="panel"><div class="scroll freeze"><table id="holdTbl"></table></div>
       <p class="note">Rules: <b>TRIM</b> = bigger than the max-per-stock setting. <b>REVIEW EXIT</b> = closed below the 3 × ATR risk line from your average cost, a SELL signal, or a KDJ Exit. <b>KEEP</b> = picked today by the recommended rule or the runner-up. <b>DON'T ADD</b> = flagged NO DIP – DON'T CHASE. Option positions and cash-secured puts are not included.</p></div>
   </section>
 
@@ -147,7 +157,7 @@
     <div class="desk-head"><span class="idx">3</span><h2 id="buyTitle">Buy list</h2></div>
     <p class="lede" id="buyLede"></p>
     <div class="tiles" id="buyTiles"></div>
-    <div class="panel"><div class="scroll"><table id="buyTbl"></table></div>
+    <div class="panel"><div class="scroll freeze"><table id="buyTbl"></table></div>
       <p class="note">Sizing splits the budget equally across the <b>BUY</b> rows from the recommended rule (most 6), capped at the max-per-stock setting, in two entries: the latest close and Support (or one ATR lower if it is already under Support). Runner-up and 2-week rows are shown for reference and are not funded. Stocks with a SELL signal or NO DIP – DON'T CHASE are not funded. Earnings inside the next 10 days are flagged: a gap can skip straight past your entry.</p></div>
   </section>
 
@@ -183,7 +193,8 @@ const save=()=>{try{localStorage.setItem("lookaheadPrefs",JSON.stringify(P))}cat
 let D,T,V={}, ALL=new Map(), BOX={};
 
 /* ---- tracker helpers (copied from tracker.html) ---- */
-function cutoffFor(dateStr,months){const a=new Date(dateStr+"T00:00:00");a.setMonth(a.getMonth()-months);return a.toISOString().slice(0,10)}
+function cutoffFor(dateStr,months){const a=new Date(dateStr+"T00:00:00");a.setMonth(a.getMonth()-months);return isoLocal(a)}
+function isoLocal(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}  /* local date, not UTC: toISOString shifted dates by a day in Malaysia (UTC+8) */
 function topRowsAt(i,n=SR_TOP){
   const d=D.watch_dates[i], cut=cutoffFor(d,SR_MONTHS), first={};
   for(const e of D.events){ if(e.src!=="top20"||e.d<cut||e.d>d) continue; if(!first[e.t]||e.d<first[e.t].d) first[e.t]=e; }
@@ -386,7 +397,7 @@ function renderBuys(bp,trimCash,SB){
 /* ---- 4. month plan ---- */
 function renderPlan(plan,bp,SB){
   const asOf=new Date(D.as_of_session+"T00:00:00"), months=[0,1,2].map(k=>new Date(asOf.getFullYear(),asOf.getMonth()+k,1));
-  const ym=d=>d.toISOString().slice(0,7), name=d=>d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+  const ym=d=>isoLocal(d).slice(0,7), name=d=>d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
   const earn=[]; const seen=new Set();
   for(const p of plan) if(p.a.earnings_date&&!seen.has(p.h.ticker)){seen.add(p.h.ticker);earn.push({t:p.h.ticker,d:p.a.earnings_date,held:true})}
   for(const r of bp.funded) if(r.a.earnings_date&&!seen.has(r.t)){seen.add(r.t);earn.push({t:r.t,d:r.a.earnings_date,held:false})}
@@ -439,6 +450,10 @@ function boot([pick,dash]){
   $("cap").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P.cap=+b.dataset.v;save();render()});
   prepRules(); SB=scoreRules(); renderScoreboard(SB); render();
 }
+// keep the sticky offsets in step with the real heights of the settings bar and a section title
+(function(){const root=document.documentElement,ctl=document.querySelector(".controls"),dh=document.querySelector(".desk-head");
+  const sync=()=>{const phone=matchMedia("(max-width:600px)").matches;root.style.setProperty("--ctl-h",(phone?0:ctl.offsetHeight)+"px");root.style.setProperty("--dh",(dh?dh.offsetHeight:44)+"px")};
+  sync();addEventListener("resize",sync);if(window.ResizeObserver)new ResizeObserver(sync).observe(ctl)})();
 const get=f=>fetch(f+"?v="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(f+" "+r.status);return r.json()});
 const valP=window.Valuation?Valuation.load():Promise.resolve();  // for the Valuation buttons
 Promise.all([get("pick_tracker_data.json"),get("dashboard_data.json"),get("valuation_data.json").catch(()=>({tickers:{}})),valP])
