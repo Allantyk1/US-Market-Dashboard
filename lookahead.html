@@ -44,6 +44,9 @@
   .ctl{display:flex;flex-direction:column;gap:4px}
   .lbl{font-family:var(--font-data);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
   .ctl input[type=number]{font:500 14px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;width:150px}
+  .asof{font:500 10.5px var(--font-data);color:var(--ink-faint);min-height:13px}
+  .asof.stale{color:var(--amber)}
+  .ctl input.stale{border-color:var(--amber)}
   .ctl input:focus-visible,.seg button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
   .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:2px;flex-wrap:wrap}
   .seg button{font:500 12px var(--font-body);color:var(--ink-dim);background:none;border:0;border-radius:7px;padding:6px 10px;cursor:pointer;white-space:nowrap}
@@ -125,7 +128,7 @@
 
   <div class="controls">
     <div class="ctl"><label class="lbl" for="cash">Cash you can deploy (USD)</label>
-      <input type="number" id="cash" min="0" step="100" inputmode="decimal"></div>
+      <input type="number" id="cash" min="0" step="100" inputmode="decimal"><span id="cashAsOf" class="asof"></span></div>
     <div class="ctl"><span class="lbl">Fund buys with trims too</span>
       <div class="seg" id="useTrim"><button type="button" data-v="1">Yes</button><button type="button" data-v="0">No, cash only</button></div></div>
     <div class="ctl"><span class="lbl">Max per stock</span>
@@ -184,7 +187,7 @@ const tile=(k,v,s)=>`<div class="tile"><div class="k">${k}</div><div class="v">$
 
 /* ---- constants: same rules as tracker.html (keep in sync) ---- */
 const SR_TOP=30, SR_MONTHS=3, SR_MIN_WHITE=2, SR_MAX_WHITE=6, SR_MIN_GREEN=2, ND_MAX_GREEN=1;
-const RISK_ATR=3, MAX_BUYS=6, EARN_SOON_DAYS=10, HORIZONS=[10,20];
+const CASH_STALE_DAYS=7, RISK_ATR=3, MAX_BUYS=6, EARN_SOON_DAYS=10, HORIZONS=[10,20];
 
 const P={cash:null,useTrim:"1",cap:15};
 try{Object.assign(P,JSON.parse(localStorage.getItem("lookaheadPrefs")||"{}"))}catch(e){}
@@ -445,8 +448,15 @@ function boot([pick,dash]){
   $("title").textContent=`${m0.toLocaleDateString("en-US",{month:"short"})} → ${m2.toLocaleDateString("en-US",{month:"short",year:"numeric"})}`;
   $("meta").innerHTML=`<span>Session <b>${dshort(D.as_of_session)}</b> close</span><span>Portfolio <b>${money(dash.portfolio.total_value)}</b></span><span>Tracker log <b>${D.logged_sessions}</b> sessions</span>`;
   if(P.cash==null) P.cash=0;
+  // "as of" date for the cash box: amber after CASH_STALE_DAYS so you know to refresh it
+  window.cashAsOf=function(){const el=$("cashAsOf"),inp=$("cash");
+    if(!P.cashAt){el.textContent=P.cash?"date unknown: re-enter to date it":"not entered yet";el.className="asof"+(P.cash?" stale":"");inp.classList.toggle("stale",!!P.cash);return}
+    const d=new Date(P.cashAt+"T00:00:00"),age=Math.floor((new Date().setHours(0,0,0,0)-d)/864e5),stale=age>CASH_STALE_DAYS;
+    el.textContent=`entered ${d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}`+(stale?` · ${age} days old, update it`:age===0?" (today)":` (${age}d ago)`);
+    el.className="asof"+(stale?" stale":""); inp.classList.toggle("stale",stale);};
   $("cash").value=P.cash;
-  $("cash").addEventListener("input",e=>{P.cash=Math.max(0,+e.target.value||0);save();render()});
+  $("cash").addEventListener("input",e=>{P.cash=Math.max(0,+e.target.value||0);P.cashAt=isoLocal(new Date());save();cashAsOf();render()});
+  cashAsOf();
   $("useTrim").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P.useTrim=b.dataset.v;save();render()});
   $("cap").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P.cap=+b.dataset.v;save();render()});
   prepRules(); SB=scoreRules(); renderScoreboard(SB); render();
