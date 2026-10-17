@@ -62,6 +62,9 @@ if exist stock_screener_us.py git add stock_screener_us.py
 if exist valuation.js git add valuation.js
 if exist valuation_data.json git add valuation_data.json
 if exist generate_valuation.py git add generate_valuation.py
+:: Look-ahead Strategy tab (added 2026-10-17). Reads the JSON files above,
+:: no data file of its own. Linked from index.html only (it shows portfolio).
+if exist lookahead.html git add lookahead.html
 git commit -m "Daily dashboard update %date% %time%"
 
 echo.

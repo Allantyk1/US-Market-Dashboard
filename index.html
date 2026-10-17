@@ -210,6 +210,17 @@
   .alert-card.buy{border-left-color:var(--green); border-color:var(--green-dim);}
   .alert-title{font-weight:600; font-size:14px; margin-bottom:3px;}
   .alert-msg{font-size:13px; color:var(--ink-dim); line-height:1.4;}
+  .model-row{display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:11px 14px; margin-bottom:8px;}
+  .model-row.due{border-color:var(--amber-dim); border-left:3px solid var(--amber);}
+  .model-row.setup{border-color:var(--red-dim); border-left:3px solid var(--red);}
+  .model-badge{font:700 10px 'IBM Plex Mono',monospace; letter-spacing:.04em; border-radius:5px; padding:2px 7px; white-space:nowrap; margin-top:2px;}
+  .model-badge.due{background:var(--amber); color:var(--amber-ink);}
+  .model-badge.soon{background:var(--amber-dim); color:var(--amber);}
+  .model-badge.ok{background:var(--green-dim); color:var(--green);}
+  .model-badge.setup{background:var(--red-dim); color:var(--red);}
+  .model-row .t{font-weight:600; font-size:13.5px;}
+  .model-row .m{font-size:12.5px; color:var(--ink-dim); line-height:1.45; margin-top:2px;}
+  .model-row code{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--panel-2); border-radius:4px; padding:0 4px; color:var(--ink);}
 
   .card{
     background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
@@ -350,6 +361,7 @@
     </div>
     <div style="display:flex; gap:8px; align-items:center; flex-shrink:0;">
       <a href="tracker.html" class="theme-toggle" style="width:auto; padding:0 10px; font-family:'IBM Plex Mono',monospace; font-size:12px; text-decoration:none;" title="Pick Tracker: how past recommendations performed">Tracker</a>
+      <a href="lookahead.html" class="theme-toggle" style="width:auto; padding:0 10px; font-family:'IBM Plex Mono',monospace; font-size:12px; text-decoration:none;" title="Look-ahead Strategy: what to change in your portfolio over the next 3 months">Look-ahead</a>
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">◐</button>
     </div>
   </div>
@@ -368,6 +380,14 @@
     <span id="dataMode" style="color:var(--ink-faint);"></span>
   </div>
 </div>
+
+<!-- Model check-ups (added 2026-10-17): reminds you to run the monthly model
+     review / win-rate model setup and other refinement scripts on your PC.
+     The browser can't run .bat files, so each item says what to double-click. -->
+<section id="modelSection">
+  <div class="section-title">Model check-ups <span class="count" id="modelCount"></span></div>
+  <div id="modelChecks"><div class="empty">Checking…</div></div>
+</section>
 
 <section>
   <div class="section-title">Alerts <span class="count" id="alertCount"></span></div>
@@ -1382,7 +1402,61 @@ function renderTickerTape(items){
   track.innerHTML = html + html;
 }
 
+// --- Model check-ups (2026-10-17) ---------------------------------------
+// Monthly model review = monthly_model_review.bat (grades matured Top-20
+// cohorts, RSI refinement, retrains the win-rate model). Due 30 days after the
+// last training, or once a new month starts (from the 6th, when last month's
+// cohort can be graded). If winrate_predictions.json is missing, the one-time
+// setup (setup_winrate_model.bat) hasn't been run or pushed yet.
+const MODEL_DUE_DAYS = 30, MODEL_SOON_DAYS = 5, COHORT_GRADE_DAY = 6;
+// Box-rule backtest (backtest_box_momentum.py) is re-run quarterly by hand;
+// update this date when you re-run it.
+const BOX_BACKTEST_LAST = '2026-10-12', BOX_BACKTEST_EVERY_DAYS = 91;
+function daysBetween(a, b){ return Math.floor((b - a) / 864e5); }
+function fmtDay(d){ return d.toLocaleDateString(undefined, {day:'numeric', month:'short', year:'numeric'}); }
+async function renderModelChecks(){
+  const el = document.getElementById('modelChecks'), rows = [];
+  const today = new Date(); today.setHours(0,0,0,0);
+  let wp = null;
+  try{
+    const r = await fetch('winrate_predictions.json?v=' + Date.now(), {cache:'no-store'});
+    if (r.ok) wp = await r.json();
+  }catch(e){}
+  if (!wp || !wp.model_trained_at){
+    rows.push({cls:'setup', badge:'SET UP', title:'Win-rate model not set up',
+      msg:'Double-click <code>setup_winrate_model.bat</code> in your screener folder once (10–20 min, downloads ~5 years of prices). Then run <code>publish_to_web.bat</code> so this reminder can track it.'});
+  } else {
+    const trained = new Date(wp.model_trained_at); trained.setHours(0,0,0,0);
+    const age = daysBetween(trained, today);
+    const newMonth = (today.getFullYear()*12 + today.getMonth()) > (trained.getFullYear()*12 + trained.getMonth());
+    const due = age >= MODEL_DUE_DAYS || (newMonth && today.getDate() >= COHORT_GRADE_DAY);
+    const nextDue = new Date(Math.min(trained.getTime() + MODEL_DUE_DAYS*864e5,
+                    new Date(trained.getFullYear(), trained.getMonth()+1, COHORT_GRADE_DAY).getTime()));
+    const left = daysBetween(today, nextDue);
+    const status = (wp.status || '').replace(/\s*\|\s*/g, ' · ');
+    rows.push({cls: due ? 'due' : '', badge: due ? 'DUE NOW' : (left <= MODEL_SOON_DAYS ? `IN ${left}D` : 'OK'),
+      badgeCls: due ? 'due' : (left <= MODEL_SOON_DAYS ? 'soon' : 'ok'),
+      title: 'Monthly model review',
+      msg: `Last trained ${fmtDay(trained)} (${age} days ago)${due ? '' : ` · next due ${fmtDay(nextDue)}`}. ` +
+           (due ? 'Double-click <code>monthly_model_review.bat</code> (5–10 min): grades last month\'s Top-20 picks, refines the RSI scoring and retrains the win-rate model. Then run <code>publish_to_web.bat</code>. ' : '') +
+           (status ? `<br>Model status: ${status}` : '')});
+  }
+  const btLast = new Date(BOX_BACKTEST_LAST + 'T00:00:00'), btNext = new Date(btLast.getTime() + BOX_BACKTEST_EVERY_DAYS*864e5);
+  const btLeft = daysBetween(today, btNext);
+  rows.push({cls: btLeft <= 0 ? 'due' : '', badge: btLeft <= 0 ? 'DUE NOW' : (btLeft <= 14 ? `IN ${btLeft}D` : 'OK'), badgeCls: btLeft <= 0 ? 'due' : (btLeft <= 14 ? 'soon' : 'ok'),
+    title: 'Quarterly box-rule backtest',
+    msg: `Re-tests STRONG REBOUND / NO DIP on 3 years of prices. Last run ${fmtDay(btLast)} · next ${fmtDay(btNext)}. ` +
+         (btLeft <= 0 ? 'Run <code>python backtest_box_momentum.py --top-rows 30 --picks top20 --window-months 3</code>, then update BOX_BACKTEST_LAST in index.html.' : '')});
+  rows.push({cls:'', badge:'DAILY', badgeCls:'ok', title:'Which stock-picking rule is working',
+    msg:'The <a href="lookahead.html">Look-ahead</a> tab re-scores every rule each day and says which one to follow. Check it at least every two weeks.'});
+  const nDue = rows.filter(r => r.cls === 'due' || r.cls === 'setup').length;
+  document.getElementById('modelCount').textContent = nDue ? `(${nDue} due)` : '';
+  el.innerHTML = rows.map(r => `<div class="model-row ${r.cls}"><span class="model-badge ${r.badgeCls || r.cls}">${r.badge}</span>
+    <div><div class="t">${r.title}</div><div class="m">${r.msg}</div></div></div>`).join('');
+}
+
 async function load(){
+  renderModelChecks();
   try{
     // Cache-busting query param defeats GitHub Pages' CDN edge caching -
     // {cache:'no-store'} alone only stops the BROWSER from caching, it has
