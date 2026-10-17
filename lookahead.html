@@ -344,7 +344,7 @@ function buyPlan(top,held,trimCash,SB){
     // Top 30 keeps its rank order; other rules are ordered by Matrix Score, then valuation discount
     const ms=t=>ALL.get(t)?.matrix_score??-9, mos=t=>(V[t]&&V[t].mos!=null&&!V[t].warn)?V[t].mos:-9;
     const order=R.k==="top30"?R.today:[...R.today].sort((a,b)=>ms(b)-ms(a)||mos(b)-mos(a));
-    const limit=role==="lead"?SHOW_LEAD:SHOW_REF; let shown=0, hidden=0;
+    const limit=P.showAll?1e9:(role==="lead"?SHOW_LEAD:SHOW_REF); let shown=0, hidden=0;
     for(const t of order){
       if(shown>=limit){ if(!held.has(t)&&!seen.has(t)) hidden++; continue; } if(held.has(t)||seen.has(t)) continue;
       const st=stateToday(t,top); if(!st||st.last==null) continue; seen.add(t);
@@ -359,7 +359,7 @@ function buyPlan(top,held,trimCash,SB){
       if(earnSoon(a)) why.push(`Earnings in ${a.earnings_days} days: a gap can skip your entry.`);
       rows.push({t,st,a,v,act,why,role,rule:R}); shown++;
     }
-    if(hidden) more.push(`${hidden} more from "${R.name}" not shown`);
+    if(hidden) more.push(`${hidden} more from "${R.name}"`);
   };
   add(SB.leader,"lead"); add(SB.runner,"runner"); add(SB.short,"short");
   const funded=rows.filter(r=>r.act==="buy").slice(0,MAX_BUYS);
@@ -391,7 +391,8 @@ function renderBuys(bp,trimCash,SB){
       <td>${money(r.st.last,2)}</td><td>${money(r.st.bid,2)}</td><td>${money(r.st.half,2)}</td><td>${money(r.st.lb,2)}</td>
       <td>${r.alloc?`${r.sh1} @ ${money(r.e1,2)}<br>${r.sh2} @ ${money(r.e2,2)}<div class="muted">${money(r.alloc)}</div>`:'<span class="muted">–</span>'}</td>
       <td class="why">${r.why.join(" ")}</td></tr>`).join(""):`<tr><td colspan="9" class="muted">Nothing to buy from the recommended rule today.</td></tr>`)+
-    (bp.more.length?`<tr><td colspan="9" class="muted" style="text-align:left">${bp.more.map(esc).join(" · ")} (ordered by Matrix Score, then valuation).</td></tr>`:"")+`</tbody>`;
+    (bp.more.length||P.showAll?`<tr><td colspan="9" class="muted" style="text-align:left">${P.showAll?"Showing every pick.":`Hidden to keep the list short: ${bp.more.map(esc).join(" · ")}. Lower Matrix Score / valuation, so further down the queue.`} <button type="button" id="showAllBtn" class="act hold" style="cursor:pointer;margin-left:6px">${P.showAll?"Show fewer":"Show all"}</button></td></tr>`:"")+`</tbody>`;
+  const sa=$("showAllBtn"); if(sa) sa.onclick=()=>{P.showAll=!P.showAll;save();render()};
 }
 
 /* ---- 4. month plan ---- */
