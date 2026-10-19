@@ -45,6 +45,14 @@
   .lbl{font-family:var(--font-data);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
   .ctl input[type=number]{font:500 14px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;width:150px}
   [hidden]{display:none!important}
+  #pfGridTbl input{font:500 13px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:5px 8px;width:100%;min-width:90px}
+  #pfGridTbl td{padding:3px 6px} #pfGridTbl input:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+  .ra{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:12px;margin-bottom:12px}
+  @media (max-width:980px){.ra{grid-template-columns:minmax(0,1fr)}}
+  .ra .panel h3 .n{font:600 11px var(--font-data);color:var(--amber);margin-right:6px}
+  .ra ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--ink-dim)} .ra li{margin:4px 0} .ra li b{color:var(--ink)}
+  .ra table td,.ra table th{padding:5px 6px} .ra table td:first-child{white-space:normal}
+  .ra .better{color:var(--green)} .ra .worse{color:var(--red)}
   .upl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
   .upl .btn{font:600 12px var(--font-body);color:var(--bg);background:var(--amber);border:0;border-radius:9px;padding:8px 14px;cursor:pointer}
   .upl .btn.ghost{background:var(--panel-2);color:var(--ink-dim);border:1px solid var(--line)}
@@ -138,8 +146,8 @@
   <div class="controls">
     <div class="ctl"><label class="lbl" for="cash">Cash you can deploy (USD)</label>
       <input type="number" id="cash" min="0" step="100" inputmode="decimal"><span id="cashAsOf" class="asof"></span></div>
-    <div class="ctl"><span class="lbl">Fund buys with trims too</span>
-      <div class="seg" id="useTrim"><button type="button" data-v="1">Yes</button><button type="button" data-v="0">No, cash only</button></div></div>
+    <div class="ctl"><span class="lbl">Fund buys from</span>
+      <div class="seg" id="useTrim"><button type="button" data-v="0" title="Only the cash entered">Cash only</button><button type="button" data-v="1" title="Cash plus trimming positions above the max per stock">+ Trims</button><button type="button" data-v="2" title="Cash, trims, and selling every REVIEW EXIT position in full">+ Trims &amp; exits</button></div></div>
     <div class="ctl"><span class="lbl">Max per stock</span>
       <div class="seg" id="cap"><button type="button" data-v="10">10%</button><button type="button" data-v="15">15%</button><button type="button" data-v="20">20%</button></div></div>
   </div>
@@ -160,9 +168,17 @@
         <div class="seg" id="pfSource" hidden><button type="button" data-v="desk">Market Desk portfolio</button><button type="button" data-v="upload">My uploaded file</button></div>
         <input type="file" id="pfFile" accept=".csv,.xlsx,.xls,text/csv" hidden>
         <button type="button" class="btn" id="pfPick">Upload portfolio (CSV or Excel)</button>
-        <button type="button" class="btn ghost" id="pfTemplate">Download template</button>
+        <button type="button" class="btn ghost" id="pfType">Type holdings in</button>
+        <button type="button" class="btn ghost" id="pfTemplateX">Excel template</button>
+        <button type="button" class="btn ghost" id="pfTemplate">CSV template</button>
         <button type="button" class="btn ghost" id="pfClear" hidden>Remove file</button>
         <label class="chk"><input type="checkbox" id="pfRemember"> Remember on this device</label>
+      </div>
+      <div id="pfGrid" hidden style="margin-top:12px">
+        <div class="scroll" style="max-height:340px;overflow:auto"><table id="pfGridTbl"></table></div>
+        <div class="upl" style="margin-top:10px"><button type="button" class="btn" id="pfGridUse">Use these holdings</button>
+          <button type="button" class="btn ghost" id="pfGridAdd">Add 5 rows</button><button type="button" class="btn ghost" id="pfGridCancel">Cancel</button>
+          <span class="upl-status" style="margin:0">Ticker and shares are required; average cost is optional but needed for P/L and risk lines.</span></div>
       </div>
       <div class="upl-status" id="pfStatus">Columns needed: <b>Ticker</b>, <b>Shares</b>, <b>Average cost</b> (optional: Price, Name). Moomoo / broker exports with Symbol, Quantity, Average Cost or Diluted Cost also work. Your file is read <b>only in this browser</b>: it is never sent to a server or saved in the published data.</div>
     </div>
@@ -180,6 +196,7 @@
   <section class="desk">
     <div class="desk-head"><span class="idx">3</span><h2 id="buyTitle">Buy list</h2></div>
     <p class="lede" id="buyLede"></p>
+    <div id="realign"></div>
     <div class="tiles" id="buyTiles"></div>
     <div class="panel"><div class="scroll freeze"><table id="buyTbl"></table></div>
       <p class="note">Sizing splits the budget equally across the <b>BUY</b> rows from the recommended rule (most 6), capped at the max-per-stock setting, in two entries: the latest close and Support (or one ATR lower if it is already under Support). Runner-up and 2-week rows are shown for reference and are not funded. Stocks with a SELL signal or NO DIP – DON'T CHASE are not funded. Earnings inside the next 10 days are flagged: a gap can skip straight past your entry.</p></div>
@@ -329,7 +346,7 @@ function holdingPlan(pf,top,SB){
     if(earnSoon(a)) why.push(`Earnings in ${a.earnings_days} days: decide before, not after.`);
     if(h.inScreener===false) why.push(`Not in the screener, so no signals, Top 30 or risk line. Priced from ${h.priceFrom}.`);
     if(!why.length) why.push("No rule fired: hold and let the next checkpoint decide.");
-    return {h,a,st,w,act,trimSh,trimUsd,why,rl,below};
+    return {h,a,st,w,act,trimSh,trimUsd,why,rl,below,isExit:exitWhy.length>0};
   });
 }
 const ACT={buy:["BUY","buy"],dip:["BUY ON DIP","dip"],trim:["TRIM","trim"],exit:["REVIEW EXIT","exit"],hold:["HOLD","hold"],keep:["KEEP","keep"],wait:["WAIT","wait"],nd:["DON'T CHASE","wait"]};
@@ -395,7 +412,7 @@ function buyPlan(top,held,trimCash,SB){
   };
   add(SB.leader,"lead"); add(SB.runner,"runner"); add(SB.short,"short");
   const funded=rows.filter(r=>r.act==="buy").slice(0,MAX_BUYS);
-  const total=(D._pfTotal||0)+(+P.cash||0), budget=(+P.cash||0)+(P.useTrim==="1"?trimCash:0);
+  const total=(D._pfTotal||0)+(+P.cash||0), budget=(+P.cash||0)+(P.useTrim!=="0"?trimCash:0);
   const each=funded.length?Math.min(budget/funded.length,(P.cap/100)*total):0;
   for(const r of funded){
     const e1=r.st.last; const e2=r.st.lb!=null&&r.st.lb<e1*0.995?r.st.lb:(r.a.atr14?e1-r.a.atr14:e1*0.95);
@@ -412,7 +429,7 @@ function renderBuys(bp,trimCash,SB){
     const voo=ALL.get("VOO");
     $("buyLede").innerHTML=`No rule passed the test, so nothing is funded. The fallback is a broad index fund${voo?`: VOO closed at <b>${money(voo.current_price,2)}</b> (Support ${money(voo.support_lower_bb,2)}, Mid BB ${money(voo.middle_bb,2)})`:""}, or simply keeping the cash until a rule leads.${list.length?" The rows below are 2-week ideas only.":""}`;
   } else
-    $("buyLede").innerHTML=`Stocks picked today by <b>${esc(L.name)}</b> that you don't hold, then the runner-up and 2-week rows for reference. Budget: <b>${money(+P.cash||0)}</b> cash${P.useTrim==="1"&&trimCash?` + <b>${money(trimCash)}</b> from trims`:""} = <b>${money(budget)}</b>, about <b>${money(each)}</b> each across ${funded.length} funded stock${funded.length===1?"":"s"}.`;
+    $("buyLede").innerHTML=`Stocks picked today by <b>${esc(L.name)}</b> that you don't hold, then the runner-up and 2-week rows for reference. Budget: <b>${money(+P.cash||0)}</b> cash${P.useTrim!=="0"&&trimCash?` + <b>${money(trimCash)}</b> from ${P.useTrim==="2"?"trims and exits":"trims"}`:""} = <b>${money(budget)}</b>, about <b>${money(each)}</b> each across ${funded.length} funded stock${funded.length===1?"":"s"}.`;
   const cnt=k=>list.filter(r=>r.act===k).length;
   $("buyTiles").innerHTML=[tile("Funded buys",String(funded.length),L?`from "${esc(L.name)}"`:"no rule leading"),tile("Next in line / reference",String(cnt("wait")),"runner-up, 2-week or over limit"),
     tile("Don't chase",String(cnt("nd")),"no dip yet"),tile("Budget",money(budget),`${money(each)} each`)].join("");
@@ -552,19 +569,97 @@ function initUpload(){
     if(!PUBLIC){P.pfSource="desk";syncSrc()} save(); $("pfStatus").className="upl-status"; $("pfStatus").textContent="File removed."; render()});
   $("pfRemember").addEventListener("change",e=>{P.pfRemember=e.target.checked;save();
     try{ if(P.pfRemember&&UPLOAD) localStorage.setItem(UPKEY,JSON.stringify(UPLOAD)); else localStorage.removeItem(UPKEY);}catch(x){} render()});
+  // type holdings into a blank grid (the "empty template" without a file)
+  const gridRows=n=>Array.from({length:n},()=>`<tr><td><input data-c="t" placeholder="e.g. AAPL" autocapitalize="characters"></td><td><input data-c="s" inputmode="decimal" placeholder="10"></td><td><input data-c="c" inputmode="decimal" placeholder="185.50"></td></tr>`).join("");
+  $("pfType").addEventListener("click",()=>{
+    const pre=UPLOAD?UPLOAD.rows:[];
+    $("pfGridTbl").innerHTML=`<thead><tr><th class="l">Ticker</th><th class="l">Shares</th><th class="l">Average cost (USD)</th></tr></thead><tbody>`+gridRows(Math.max(10,pre.length+3))+`</tbody>`;
+    const trs=$("pfGridTbl").querySelectorAll("tbody tr");
+    pre.forEach((r,i)=>{const q=trs[i].querySelectorAll("input");q[0].value=r.ticker;q[1].value=r.shares;q[2].value=isFinite(r.cost)?r.cost:""});
+    $("pfGrid").hidden=false; trs[0].querySelector("input").focus();});
+  $("pfGridAdd").addEventListener("click",()=>$("pfGridTbl").querySelector("tbody").insertAdjacentHTML("beforeend",gridRows(5)));
+  $("pfGridCancel").addEventListener("click",()=>{$("pfGrid").hidden=true});
+  $("pfGridUse").addEventListener("click",()=>{
+    const rows=[["Ticker","Shares","Average Cost"]];
+    $("pfGridTbl").querySelectorAll("tbody tr").forEach(tr=>{const q=tr.querySelectorAll("input");if(q[0].value.trim())rows.push([q[0].value,q[1].value,q[2].value])});
+    const st=$("pfStatus");
+    try{ UPLOAD=rowsToHoldings(rows,"holdings typed in"); if(!PUBLIC){P.pfSource="upload";syncSrc()}
+      if(P.pfRemember){try{localStorage.setItem(UPKEY,JSON.stringify(UPLOAD))}catch(e){}}
+      $("pfGrid").hidden=true; save(); render(); }
+    catch(err){ st.className="upl-status err"; st.textContent=`Couldn't use those rows: ${err.message}.`; }});
+  $("pfTemplateX").addEventListener("click",async()=>{
+    try{ await loadXlsxLib();
+      const ws=XLSX.utils.aoa_to_sheet([["Ticker","Shares","Average Cost","Name"],["AAPL",10,185.5,"Apple Inc. (example: replace or delete)"],["","","",""]]);
+      ws["!cols"]=[{wch:10},{wch:10},{wch:14},{wch:40}];
+      const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Portfolio"); XLSX.writeFile(wb,"portfolio_template.xlsx"); }
+    catch(err){ $("pfStatus").className="upl-status err"; $("pfStatus").textContent=err.message; }});
   $("pfTemplate").addEventListener("click",()=>{
-    const csv="Ticker,Shares,Average Cost,Name\nAAPL,10,185.50,Apple Inc.\nMSFT,5,410.00,Microsoft Corporation\nVOO,3,520.00,Vanguard S&P 500 ETF\n";
+    const csv="Ticker,Shares,Average Cost,Name\nAAPL,10,185.50,Apple Inc. (example: replace or delete)\n";
     const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="portfolio_template.csv"; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)});
 }
+
+/* ---- realignment: section 2 sells -> section 3 buys -> before/after (2026-10-19) ---- */
+function sellPlan(plan){
+  const mode=P.useTrim, out=[];
+  for(const p of plan){
+    if(mode==="2"&&p.isExit&&p.h.current_price) out.push({p,kind:"exit",sh:p.h.shares,usd:p.h.market_value});
+    else if(mode!=="0"&&p.act==="trim"&&p.trimUsd>0) out.push({p,kind:"trim",sh:Math.min(p.trimSh,p.h.shares),usd:Math.min(p.trimSh,p.h.shares)*p.h.current_price});
+  }
+  return out;
+}
+function mixStats(positions,cash,SB){
+  // positions: [{ticker, mv, below}]
+  const inv=positions.reduce((s,x)=>s+x.mv,0), tot=inv+cash, lead=SB.leader?new Set(SB.leader.today):new Set();
+  const big=positions.reduce((m,x)=>x.mv>m.mv?x:m,{mv:0,ticker:"–"});
+  return {n:positions.filter(x=>x.mv>0.5).length, inv, cash, tot,
+    big:tot?big.mv/tot:0, bigT:big.ticker, lead:tot?positions.filter(x=>lead.has(x.ticker)).reduce((s,x)=>s+x.mv,0)/tot:0,
+    below:positions.filter(x=>x.below&&x.mv>0.5).length, over:positions.filter(x=>tot&&x.mv/tot>P.cap/100+1e-9).length};
+}
+function renderRealign(plan,sells,bp,SB){
+  const el=$("realign"); if(!plan.length&&!bp.funded.length){el.innerHTML="";return}
+  const cash0=+P.cash||0, sellMap=new Map(sells.map(x=>[x.p.h.ticker,x]));
+  const before=plan.map(p=>({ticker:p.h.ticker,mv:p.h.market_value||0,below:p.below}));
+  const proceeds=sells.reduce((s,x)=>s+x.usd,0);
+  const buys=bp.funded.filter(r=>r.sh1+r.sh2>0).map(r=>({t:r.t,sh:r.sh1+r.sh2,usd:r.sh1*r.e1+r.sh2*r.e2,r}));
+  const spend=buys.reduce((s,x)=>s+x.usd,0);
+  const after=plan.map(p=>{const x=sellMap.get(p.h.ticker);const mv=(p.h.market_value||0)-(x?x.usd:0);return {ticker:p.h.ticker,mv:Math.max(0,mv),below:p.below}})
+    .concat(buys.map(b=>({ticker:b.t,mv:b.usd,below:false})));
+  const B=mixStats(before,cash0,SB), A=mixStats(after,cash0+proceeds-spend,SB);
+  const L=SB.leader, leadName=L?L.name:"the leading rule";
+  const sellLis=sells.length?sells.map(x=>`<li><b>${esc(x.p.h.ticker)}</b> sell ${x.kind==="exit"?"all ":""}${fmtSh(x.sh)} sh ≈ <b>${money(x.usd)}</b> <span class="muted">(${x.kind==="exit"?"REVIEW EXIT":`trim to ${P.cap}%`})</span></li>`).join("")
+    :`<li>${P.useTrim==="0"?"Nothing: <b>Fund buys from</b> is set to cash only.":"Nothing to sell under the current settings."}</li>`;
+  const skipped=P.useTrim!=="2"?plan.filter(p=>p.isExit&&!sellMap.has(p.h.ticker)).length:0;
+  const buyLis=buys.length?buys.map(b=>`<li><b>${esc(b.t)}</b> ${b.r.sh1} @ ${money(b.r.e1,2)} + ${b.r.sh2} @ ${money(b.r.e2,2)} ≈ <b>${money(b.usd)}</b></li>`).join("")
+    :`<li>${!L?"No rule is leading, so nothing is bought.":"No budget: enter cash, or let trims/exits fund buys."}</li>`;
+  const row=(lbl,b,a,fmt,goodDown)=>{const d=a-b, cls2=Math.abs(d)<1e-9?"":((goodDown?d<0:d>0)?"better":"worse");
+    return `<tr><td>${lbl}</td><td>${fmt(b)}</td><td class="${cls2}">${fmt(a)}</td></tr>`};
+  el.innerHTML=`<div class="ra">
+    <div class="panel"><h3><span class="n">STEP 1</span>Sell (from section 2)</h3><ul>${sellLis}</ul>
+      <p class="note">Frees about <b>${money(proceeds)}</b>.${skipped?` ${skipped} REVIEW EXIT holding${skipped===1?" is":"s are"} kept: choose <b>+ Trims &amp; exits</b> above to sell ${skipped===1?"it":"them"} too.`:""}</p></div>
+    <div class="panel"><h3><span class="n">STEP 2</span>Buy (${esc(leadName)})</h3><ul>${buyLis}</ul>
+      <p class="note">Spends about <b>${money(spend)}</b> of the ${money(cash0+proceeds)} available, in two entries each (the second only fills if the price dips to it).</p></div>
+    <div class="panel"><h3><span class="n">RESULT</span>Before → after</h3>
+      <table><thead><tr><th>Measure</th><th>Before</th><th>After</th></tr></thead><tbody>
+      ${row("Positions",B.n,A.n,v=>String(v),false).replace(/class="(better|worse)"/,"")}
+      ${row(`<span title="Share of the total in stocks picked today by ${esc(leadName)}">In leading-rule picks</span>`,B.lead,A.lead,v=>pct(v,0),false)}
+      ${row("Largest position",B.big,A.big,v=>pct(v,0),true)}
+      ${row(`Over ${P.cap}% max`,B.over,A.over,v=>String(v),true)}
+      ${row("Below risk line",B.below,A.below,v=>String(v),true)}
+      ${row("Cash",B.cash,A.cash,v=>money(v),false).replace(/class="(better|worse)"/,"")}
+      </tbody></table>
+      <p class="note">Shares of the total (holdings + cash). Assumes both entries fill at the listed prices.</p></div>
+  </div>`;
+}
+const fmtSh=v=>Number.isInteger(v)?String(v):v.toFixed(2);
 
 /* ---- wiring ---- */
 let SB=null;
 function render(){
   const top=topRowsAt(D.watch_dates.length-1), pf=currentPortfolio(), held=new Set(pf.holdings.map(h=>h.ticker));
   D._pfTotal=pf.total_value||0;
-  const plan=holdingPlan(pf,top,SB), trimCash=plan.reduce((s,p)=>s+p.trimUsd,0);
+  const plan=holdingPlan(pf,top,SB), sells=sellPlan(plan), trimCash=sells.reduce((s,x)=>s+x.usd,0);
   renderHoldings(plan,pf,top); renderUploadStatus(pf);
-  const bp=buyPlan(top,held,trimCash,SB); renderBuys(bp,trimCash,SB); renderPlan(plan,bp,SB);
+  const bp=buyPlan(top,held,trimCash,SB); renderBuys(bp,trimCash,SB); renderRealign(plan,sells,bp,SB); renderPlan(plan,bp,SB);
   document.querySelectorAll("#useTrim button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===P.useTrim)));
   document.querySelectorAll("#cap button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.v===+P.cap)));
 }
