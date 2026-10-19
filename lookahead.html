@@ -44,6 +44,15 @@
   .ctl{display:flex;flex-direction:column;gap:4px}
   .lbl{font-family:var(--font-data);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
   .ctl input[type=number]{font:500 14px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;width:150px}
+  [hidden]{display:none!important}
+  .upl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+  .upl .btn{font:600 12px var(--font-body);color:var(--bg);background:var(--amber);border:0;border-radius:9px;padding:8px 14px;cursor:pointer}
+  .upl .btn.ghost{background:var(--panel-2);color:var(--ink-dim);border:1px solid var(--line)}
+  .upl .btn:hover{filter:brightness(1.08)} .upl .btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .upl label.chk{font-size:12px;color:var(--ink-dim);display:flex;gap:6px;align-items:center}
+  .upl-status{font-size:12px;color:var(--ink-dim);margin-top:8px;line-height:1.5}
+  .upl-status.err{color:var(--red)} .upl-status b{color:var(--ink)}
+  .empty-pf{padding:22px;text-align:center;color:var(--ink-dim);font-size:13px}
   .asof{font:500 10.5px var(--font-data);color:var(--ink-faint);min-height:13px}
   .asof.stale{color:var(--amber)}
   .ctl input.stale{border-color:var(--amber)}
@@ -119,7 +128,7 @@
 <div class="wrap">
   <header class="top">
     <div>
-      <a class="back-btn" href="index.html" aria-label="Back to Market Desk">‹ Market Desk</a>
+      <a class="back-btn" id="backLink" href="index.html" aria-label="Back to Market Desk">‹ Market Desk</a>
       <p class="eyebrow">Look-ahead strategy</p>
       <h1 id="title">Next 3 months</h1>
     </div>
@@ -145,6 +154,18 @@
 
   <section class="desk">
     <div class="desk-head"><span class="idx">2</span><h2>Your portfolio vs the plan</h2></div>
+    <div class="panel" style="margin-bottom:12px" id="uplPanel">
+      <h3 id="uplTitle">Check your own portfolio</h3>
+      <div class="upl">
+        <div class="seg" id="pfSource" hidden><button type="button" data-v="desk">Market Desk portfolio</button><button type="button" data-v="upload">My uploaded file</button></div>
+        <input type="file" id="pfFile" accept=".csv,.xlsx,.xls,text/csv" hidden>
+        <button type="button" class="btn" id="pfPick">Upload portfolio (CSV or Excel)</button>
+        <button type="button" class="btn ghost" id="pfTemplate">Download template</button>
+        <button type="button" class="btn ghost" id="pfClear" hidden>Remove file</button>
+        <label class="chk"><input type="checkbox" id="pfRemember"> Remember on this device</label>
+      </div>
+      <div class="upl-status" id="pfStatus">Columns needed: <b>Ticker</b>, <b>Shares</b>, <b>Average cost</b> (optional: Price, Name). Moomoo / broker exports with Symbol, Quantity, Average Cost or Diluted Cost also work. Your file is read <b>only in this browser</b>: it is never sent to a server or saved in the published data.</div>
+    </div>
     <p class="lede" id="pfLede"></p>
     <div class="tiles" id="pfTiles"></div>
     <div class="panel" style="margin-bottom:12px">
@@ -290,7 +311,7 @@ function holdingPlan(pf,top,SB){
   const cap=P.cap/100, total=pf.total_value||pf.stock_value||0;
   return pf.holdings.map(h=>{
     const a=ALL.get(h.ticker)||{}, st=stateToday(h.ticker,top), v=V[h.ticker];
-    const rl=a.atr14?h.avg_cost-RISK_ATR*a.atr14:null, below=rl!=null&&h.current_price<rl;
+    const rl=a.atr14&&h.avg_cost?h.avg_cost-RISK_ATR*a.atr14:null, below=rl!=null&&h.current_price<rl;
     const w=total?h.market_value/total:h.weight_pct, why=[]; let act="hold", trimSh=0, trimUsd=0;
     if(w>cap){act="trim";trimUsd=h.market_value-cap*total;trimSh=Math.ceil(trimUsd/h.current_price);
       why.push(`${pct(w)} of the portfolio, above your ${P.cap}% max. Selling about ${trimSh} shares (${money(trimUsd)}) brings it to ${P.cap}%.`);}
@@ -306,6 +327,7 @@ function holdingPlan(pf,top,SB){
     if(st&&st.nd) why.push("NO DIP – DON'T CHASE: don't add until it dips below its weekly average.");
     if(v&&v.fair&&!v.warn) why.push(`Valuation ${v.mos>=0?pct(v.mos,0)+" under":pct(-v.mos,0)+" over"} fair value, ${v.quality.grade} quality.`);
     if(earnSoon(a)) why.push(`Earnings in ${a.earnings_days} days: decide before, not after.`);
+    if(h.inScreener===false) why.push(`Not in the screener, so no signals, Top 30 or risk line. Priced from ${h.priceFrom}.`);
     if(!why.length) why.push("No rule fired: hold and let the next checkpoint decide.");
     return {h,a,st,w,act,trimSh,trimUsd,why,rl,below};
   });
@@ -314,6 +336,12 @@ const ACT={buy:["BUY","buy"],dip:["BUY ON DIP","dip"],trim:["TRIM","trim"],exit:
 const actTag=k=>`<span class="act ${ACT[k][1]}">${ACT[k][0]}</span>`;
 
 function renderHoldings(plan,pf,top){
+  const noPf=!plan.length;
+  document.querySelectorAll("#pfTiles,#mixBar,#mixLegend").forEach(e=>e.closest(".panel")?e.closest(".panel").hidden=noPf:e.hidden=noPf);
+  if(noPf){
+    $("pfLede").innerHTML=PUBLIC?"Upload your holdings above to see which ones to keep, trim or review against the plan. Until then, section 3 sizes buys from the cash you enter.":"No holdings found.";
+    $("pfTiles").innerHTML=""; $("holdTbl").innerHTML=`<tbody><tr><td class="empty-pf">No portfolio loaded yet.</td></tr></tbody>`; return;
+  }
   const total=pf.total_value||0, inTop=plan.filter(p=>p.st&&p.st.top), inTopV=inTop.reduce((s,p)=>s+p.h.market_value,0);
   const stockV=plan.reduce((s,p)=>s+p.h.market_value,0), big=plan.reduce((m,p)=>p.w>m.w?p:m,{w:0});
   const nExit=plan.filter(p=>p.act==="exit"||(p.act==="trim"&&p.why.some(x=>x.startsWith("Review")))).length, nTrim=plan.filter(p=>p.act==="trim").length;
@@ -324,10 +352,11 @@ function renderHoldings(plan,pf,top){
     tile("Largest position",big.h?`${esc(big.h.ticker)} ${pct(big.w,0)}`:"–",`your max is ${P.cap}%`),
     tile("To trim",String(nTrim),`over ${P.cap}% of the portfolio`),
     tile("To review for exit",String(plan.filter(p=>p.why.some(x=>x.startsWith("Review"))).length),"risk line, SELL or KDJ Exit"),
-    tile("Options (not planned here)",money(pf.options_value||0),"LEAPs; CSPs live in CSP_Portfolio.xlsx"),
+    pf.uploaded?tile("Portfolio value",money(pf.total_value),`${plan.length} holdings from ${esc(pf.fileName)}`):tile("Options (not planned here)",money(pf.options_value||0),"LEAPs; CSPs live in CSP_Portfolio.xlsx"),
   ].join("");
   // mix bar
   const groups=[["Top 30",inTopV,"var(--green)"],["Other holdings",stockV-inTopV,"var(--blue)"],["Options",pf.options_value||0,"var(--amber)"]];
+  if(pf.uploaded) groups.pop();   // uploaded files have no options
   $("mixBar").innerHTML=groups.map(([l,v,c])=>`<i style="width:${total?100*v/total:0}%;background:${c}" title="${l} ${money(v)}"></i>`).join("");
   $("mixLegend").innerHTML=groups.map(([l,v,c])=>`<span><i style="background:${c}"></i>${l} ${money(v)} (${pct(total?v/total:0,0)})</span>`).join("");
   const order={exit:0,trim:1,keep:2,hold:3};
@@ -431,13 +460,110 @@ function renderPlan(plan,bp,SB){
   }).join("");
 }
 
+/* ---- uploaded portfolio (added 2026-10-19) ----
+   public.html links here with ?from=public: that mode loads public_data.json
+   (no portfolio) and works only from a file the visitor uploads. The file is
+   parsed in the browser and never leaves it; "Remember on this device" keeps
+   the parsed holdings in localStorage. index.html mode can switch between the
+   Market Desk portfolio and an uploaded file. */
+const PUBLIC=/(^|[?&])from=public\b/.test(location.search);
+const UPKEY="lookaheadUpload";
+let UPLOAD=null;   // {fileName, at, rows:[{ticker,shares,cost,price,name}], skipped}
+const norm=h=>String(h??"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const COLS={ticker:["ticker","symbol","code","stock","stockcode","securitycode","tickersymbol","instrument"],
+  shares:["shares","quantity","qty","position","units","holding","holdings","sharesheld","qtyheld","totalquantity"],
+  cost:["avgcost","averagecost","costprice","avgprice","averageprice","dilutedcost","unitcost","costpershare","cost","costbasispershare","purchaseprice","buyprice"],
+  price:["price","currentprice","lastprice","marketprice","current","last","close"],
+  name:["name","company","description","securityname","stockname"]};
+function findCol(headers,key){const H=headers.map(norm);for(const c of COLS[key]){const i=H.indexOf(c);if(i>=0)return i}
+  for(const c of COLS[key]){const i=H.findIndex(h=>h.startsWith(c));if(i>=0)return i}return -1}
+const numOf=v=>{if(v==null)return NaN;if(typeof v==="number")return v;const t=String(v).replace(/[,$\s]/g,"").replace(/^\((.*)\)$/,"-$1");return t===""?NaN:+t};
+function cleanTicker(v){let t=String(v??"").trim().toUpperCase();t=t.replace(/^US[.:]/,"").replace(/\.US$/,"").replace(/\s+/g,"");if(/^[A-Z]+\.[A-Z]$/.test(t))t=t.replace(".","-");return t}
+function parseCSV(text){const rows=[];let row=[],f="",q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];
+    if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c==='"')q=true; else if(c===","){row.push(f);f=""} else if(c==="\n"||c==="\r"){if(c==="\r"&&text[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f=""} else f+=c}
+  if(f!==""||row.length){row.push(f);rows.push(row)} return rows.filter(r=>r.some(x=>String(x).trim()!==""))}
+function rowsToHoldings(rows,fileName){
+  // header = first row that has a ticker-like and a shares-like column
+  let hi=rows.findIndex(r=>findCol(r,"ticker")>=0&&findCol(r,"shares")>=0);
+  if(hi<0) throw new Error("couldn't find a Ticker/Symbol column and a Shares/Quantity column");
+  const H=rows[hi], ix={}; for(const k in COLS) ix[k]=findCol(H,k);
+  const out=new Map(); let skipped=0;
+  for(const r of rows.slice(hi+1)){
+    const t=cleanTicker(r[ix.ticker]), sh=numOf(r[ix.shares]);
+    if(!t||!/^[A-Z][A-Z0-9-]{0,9}$/.test(t)||!(sh>0)){skipped++;continue}
+    const cost=ix.cost>=0?numOf(r[ix.cost]):NaN, price=ix.price>=0?numOf(r[ix.price]):NaN;
+    const prev=out.get(t);   // same ticker twice (e.g. two lots): merge, weighting the cost
+    if(prev){const tot=prev.shares+sh;prev.cost=(isFinite(prev.cost)&&isFinite(cost))?(prev.cost*prev.shares+cost*sh)/tot:(isFinite(prev.cost)?prev.cost:cost);prev.shares=tot;continue}
+    out.set(t,{ticker:t,shares:sh,cost,price,name:ix.name>=0?String(r[ix.name]??"").trim():""});
+  }
+  if(!out.size) throw new Error("no rows with a ticker and a positive number of shares");
+  return {fileName,at:isoLocal(new Date()),rows:[...out.values()],skipped,hasCost:ix.cost>=0};
+}
+function loadXlsxLib(){return window.XLSX?Promise.resolve():new Promise((ok,bad)=>{const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";sc.onload=ok;sc.onerror=()=>bad(new Error("could not load the Excel reader - save the file as CSV and try again"));document.head.appendChild(sc)})}
+async function readFile(file){
+  if(/\.(xlsx|xls)$/i.test(file.name)){await loadXlsxLib();const wb=XLSX.read(await file.arrayBuffer(),{type:"array"});
+    for(const name of wb.SheetNames){const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:""});try{return rowsToHoldings(rows,file.name)}catch(e){}}
+    throw new Error("no sheet had a Ticker/Symbol column and a Shares/Quantity column");}
+  return rowsToHoldings(parseCSV(await file.text()),file.name);
+}
+function currentPortfolio(){
+  const useUpload=UPLOAD&&(PUBLIC||P.pfSource==="upload");
+  if(!useUpload) return T.portfolio||{holdings:[],total_value:0};
+  const hs=UPLOAD.rows.map(r=>{const a=ALL.get(r.ticker), px=a?.current_price??(isFinite(r.price)?r.price:(isFinite(r.cost)?r.cost:null));
+    const cost=isFinite(r.cost)?r.cost:null, mv=px!=null?px*r.shares:0;
+    return {ticker:r.ticker,company:a?.company||r.name||"",shares:r.shares,avg_cost:cost,current_price:px,market_value:mv,
+      gain_pct:cost&&px!=null?px/cost-1:null,inScreener:!!a,priceFrom:a?"screener":isFinite(r.price)?"your file":"cost (no price)"}});
+  const total=hs.reduce((s,h)=>s+h.market_value,0); hs.forEach(h=>h.weight_pct=total?h.market_value/total:0);
+  return {holdings:hs,total_value:total,stock_value:total,options_value:0,uploaded:true,fileName:UPLOAD.fileName};
+}
+function renderUploadStatus(pf){
+  const st=$("pfStatus"); if(!UPLOAD){ $("pfClear").hidden=true; return }
+  $("pfClear").hidden=false;
+  if(!PUBLIC&&P.pfSource!=="upload"){st.className="upl-status";st.innerHTML=`Loaded <b>${esc(UPLOAD.fileName)}</b> (${UPLOAD.rows.length} holdings). Pick "My uploaded file" to use it.`;return}
+  const miss=pf.holdings.filter(h=>!h.inScreener);
+  st.className="upl-status";
+  st.innerHTML=`Using <b>${esc(UPLOAD.fileName)}</b>: ${UPLOAD.rows.length} holding${UPLOAD.rows.length===1?"":"s"}, worth <b>${money(pf.total_value)}</b> at the ${dshort(D.as_of_session)} close`+
+    (UPLOAD.skipped?` · ${UPLOAD.skipped} row${UPLOAD.skipped===1?"":"s"} skipped (no ticker or shares)`:"")+
+    (!UPLOAD.hasCost?` · <span style="color:var(--amber)">no average-cost column, so risk lines and P/L are blank</span>`:"")+
+    (miss.length?`<br><span style="color:var(--amber)">Not in the screener (no signals, priced from ${miss.some(h=>h.priceFrom==="your file")?"your file":"cost"}): ${miss.map(h=>esc(h.ticker)).join(", ")}</span>`:"")+
+    `<br>Read in this browser only.${P.pfRemember?" Remembered on this device.":" Not saved: it's gone when you close the page."}`;
+}
+function initUpload(){
+  if(PUBLIC){ $("backLink").href="public.html"; $("backLink").innerHTML="‹ Market Desk"; }
+  else { $("pfSource").hidden=false; $("uplTitle").textContent="Portfolio to check"; if(!P.pfSource) P.pfSource="desk"; }
+  if(P.pfRemember){ try{UPLOAD=JSON.parse(localStorage.getItem(UPKEY)||"null")}catch(e){} }
+  $("pfRemember").checked=!!P.pfRemember;
+  const syncSrc=()=>document.querySelectorAll("#pfSource button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===P.pfSource)));
+  syncSrc();
+  $("pfSource").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.v==="upload"&&!UPLOAD){$("pfFile").click();return}
+    P.pfSource=b.dataset.v;save();syncSrc();render()});
+  $("pfPick").addEventListener("click",()=>$("pfFile").click());
+  $("pfFile").addEventListener("change",async e=>{const f=e.target.files[0]; e.target.value=""; if(!f) return;
+    const st=$("pfStatus"); st.className="upl-status"; st.textContent=`Reading ${f.name}…`;
+    try{ UPLOAD=await readFile(f); if(!PUBLIC){P.pfSource="upload";syncSrc()}
+      if(P.pfRemember){try{localStorage.setItem(UPKEY,JSON.stringify(UPLOAD))}catch(e){}}
+      save(); render(); }
+    catch(err){ st.className="upl-status err"; st.textContent=`Couldn't read ${f.name}: ${err.message}. Try the template.`; }});
+  $("pfClear").addEventListener("click",()=>{UPLOAD=null;try{localStorage.removeItem(UPKEY)}catch(e){}
+    if(!PUBLIC){P.pfSource="desk";syncSrc()} save(); $("pfStatus").className="upl-status"; $("pfStatus").textContent="File removed."; render()});
+  $("pfRemember").addEventListener("change",e=>{P.pfRemember=e.target.checked;save();
+    try{ if(P.pfRemember&&UPLOAD) localStorage.setItem(UPKEY,JSON.stringify(UPLOAD)); else localStorage.removeItem(UPKEY);}catch(x){} render()});
+  $("pfTemplate").addEventListener("click",()=>{
+    const csv="Ticker,Shares,Average Cost,Name\nAAPL,10,185.50,Apple Inc.\nMSFT,5,410.00,Microsoft Corporation\nVOO,3,520.00,Vanguard S&P 500 ETF\n";
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="portfolio_template.csv"; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)});
+}
+
 /* ---- wiring ---- */
 let SB=null;
 function render(){
-  const top=topRowsAt(D.watch_dates.length-1), pf=T.portfolio, held=new Set(pf.holdings.map(h=>h.ticker));
+  const top=topRowsAt(D.watch_dates.length-1), pf=currentPortfolio(), held=new Set(pf.holdings.map(h=>h.ticker));
   D._pfTotal=pf.total_value||0;
   const plan=holdingPlan(pf,top,SB), trimCash=plan.reduce((s,p)=>s+p.trimUsd,0);
-  renderHoldings(plan,pf,top);
+  renderHoldings(plan,pf,top); renderUploadStatus(pf);
   const bp=buyPlan(top,held,trimCash,SB); renderBuys(bp,trimCash,SB); renderPlan(plan,bp,SB);
   document.querySelectorAll("#useTrim button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===P.useTrim)));
   document.querySelectorAll("#cap button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.v===+P.cap)));
@@ -446,7 +572,8 @@ function boot([pick,dash]){
   D=pick; T=dash; ALL=new Map((dash.all_tickers||[]).map(t=>[t.ticker,t]));
   const m0=new Date(D.as_of_session+"T00:00:00"), m2=new Date(m0.getFullYear(),m0.getMonth()+2,1);
   $("title").textContent=`${m0.toLocaleDateString("en-US",{month:"short"})} → ${m2.toLocaleDateString("en-US",{month:"short",year:"numeric"})}`;
-  $("meta").innerHTML=`<span>Session <b>${dshort(D.as_of_session)}</b> close</span><span>Portfolio <b>${money(dash.portfolio.total_value)}</b></span><span>Tracker log <b>${D.logged_sessions}</b> sessions</span>`;
+  $("meta").innerHTML=`<span>Session <b>${dshort(D.as_of_session)}</b> close</span>`+(dash.portfolio?`<span>Portfolio <b>${money(dash.portfolio.total_value)}</b></span>`:"")+`<span>Tracker log <b>${D.logged_sessions}</b> sessions</span>`;
+  initUpload();
   if(P.cash==null) P.cash=0;
   // "as of" date for the cash box: amber after CASH_STALE_DAYS so you know to refresh it
   window.cashAsOf=function(){const el=$("cashAsOf"),inp=$("cash");
@@ -467,7 +594,7 @@ function boot([pick,dash]){
   sync();addEventListener("resize",sync);if(window.ResizeObserver)new ResizeObserver(sync).observe(ctl)})();
 const get=f=>fetch(f+"?v="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(f+" "+r.status);return r.json()});
 const valP=window.Valuation?Valuation.load():Promise.resolve();  // for the Valuation buttons
-Promise.all([get("pick_tracker_data.json"),get("dashboard_data.json"),get("valuation_data.json").catch(()=>({tickers:{}})),valP])
+Promise.all([get("pick_tracker_data.json"),get(PUBLIC?"public_data.json":"dashboard_data.json"),get("valuation_data.json").catch(()=>({tickers:{}})),valP])
   .then(([pick,dash,val])=>{V=val.tickers||{};boot([pick,dash])})
   .catch(err=>{$("meta").textContent="Could not load data: "+err.message+". Run the daily pipeline and publish again.";});
 })();
