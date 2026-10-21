@@ -45,6 +45,15 @@
   .lbl{font-family:var(--font-data);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
   .ctl input[type=number]{font:500 14px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;width:150px}
   [hidden]{display:none!important}
+  .jump{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;align-self:center}
+  .jump a{font:500 11.5px var(--font-body);color:var(--ink-dim);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;text-decoration:none;white-space:nowrap}
+  .jump a:hover{color:var(--amber);border-color:var(--amber)}
+  section.desk{scroll-margin-top:calc(var(--ctl-h,0px) + 8px)}
+  #pnlTbl tr.q td{font-weight:600} #pnlTbl tr.ytd td{font-weight:700;background:var(--red-soft)} #pnlTbl tr.ytd.up td{background:var(--green-soft)}
+  #pnlItems tr.mon td{background:var(--panel-2);cursor:pointer;font-family:var(--font-body);font-weight:600}
+  #pnlItems tr.mon td .muted{font-weight:400}
+  #pnlItems th.sort{cursor:pointer} #pnlItems th.sort[aria-sort]{color:var(--amber)}
+  .tag.div{color:var(--blue);border-color:var(--blue)}
   #pfGridTbl input{font:500 13px var(--font-data);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:5px 8px;width:100%;min-width:90px}
   #pfGridTbl td{padding:3px 6px} #pfGridTbl input:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
   .ra{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:12px;margin-bottom:12px}
@@ -150,9 +159,10 @@
       <div class="seg" id="useTrim"><button type="button" data-v="0" title="Only the cash entered">Cash only</button><button type="button" data-v="1" title="Cash plus trimming positions above the max per stock">+ Trims</button><button type="button" data-v="2" title="Cash, trims, and selling every REVIEW EXIT position in full">+ Trims &amp; exits</button></div></div>
     <div class="ctl"><span class="lbl">Max per stock</span>
       <div class="seg" id="cap"><button type="button" data-v="10">10%</button><button type="button" data-v="15">15%</button><button type="button" data-v="20">20%</button></div></div>
+    <nav class="jump" aria-label="Jump to section"><a href="#s1">1 Scoreboard</a><a href="#s2">2 Portfolio</a><a href="#s3">3 Buy list</a><a href="#s4">4 Month plan</a><a href="#s5" id="jump5" hidden>5 Actual P&amp;L</a></nav>
   </div>
 
-  <section class="desk">
+  <section class="desk" id="s1">
     <div class="desk-head"><span class="idx">1</span><h2>Which rule is working: the scoreboard</h2></div>
     <p class="lede">Every past session in the tracker log is replayed. For each rule, take the stocks it would have picked that day and compare their move <b>2 and 4 weeks later</b> with the average of every tracked stock (the "market"). The page then <b>recommends the rule that is leading</b>: if the Top 30 leads, the plan is a plain rotation into the Top 30; if another rule leads, the plan switches to it; if nothing beats the market, it says so. This re-runs every day as the log grows.</p>
     <div id="verdict"></div>
@@ -160,7 +170,7 @@
       <p class="note" id="ruleNote"></p></div>
   </section>
 
-  <section class="desk">
+  <section class="desk" id="s2">
     <div class="desk-head"><span class="idx">2</span><h2>Your portfolio vs the plan</h2></div>
     <div class="panel" style="margin-bottom:12px" id="uplPanel">
       <h3 id="uplTitle">Check your own portfolio</h3>
@@ -193,7 +203,7 @@
       <p class="note">Rules: <b>TRIM</b> = bigger than the max-per-stock setting. <b>REVIEW EXIT</b> = closed below the 3 × ATR risk line from your average cost, a SELL signal, or a KDJ Exit. <b>KEEP</b> = picked today by the recommended rule or the runner-up. <b>DON'T ADD</b> = flagged NO DIP – DON'T CHASE. Option positions and cash-secured puts are not included.</p></div>
   </section>
 
-  <section class="desk">
+  <section class="desk" id="s3">
     <div class="desk-head"><span class="idx">3</span><h2 id="buyTitle">Buy list</h2></div>
     <p class="lede" id="buyLede"></p>
     <div id="realign"></div>
@@ -202,15 +212,30 @@
       <p class="note">Sizing splits the budget equally across the <b>BUY</b> rows from the recommended rule (most 6), capped at the max-per-stock setting, in two entries: the latest close and Support (or one ATR lower if it is already under Support). Runner-up and 2-week rows are shown for reference and are not funded. Stocks with a SELL signal or NO DIP – DON'T CHASE are not funded. Earnings inside the next 10 days are flagged: a gap can skip straight past your entry.</p></div>
   </section>
 
-  <section class="desk">
+  <section class="desk" id="s4">
     <div class="desk-head"><span class="idx">4</span><h2>Month-by-month plan</h2></div>
     <p class="lede">A checklist, not a forecast. Each month lists the earnings dates that matter for your holdings and buy list, and the checkpoints where this page should be re-read. The Top 30 changes every day, so re-check every two weeks.</p>
     <div class="plan" id="plan"></div>
   </section>
 
+  <section class="desk" id="s5" hidden>
+    <div class="desk-head"><span class="idx">5</span><h2>Actual P&amp;L: month, quarter, year to date</h2></div>
+    <p class="lede" id="pnlLede"></p>
+    <div class="tiles" id="pnlTiles"></div>
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="panel"><h3>Realized P&amp;L by month</h3><div style="position:relative;height:260px"><canvas id="pnlBar"></canvas></div></div>
+      <div class="panel"><h3>Cumulative realized P&amp;L, year to date</h3><div style="position:relative;height:260px"><canvas id="pnlCum"></canvas></div></div>
+    </div>
+    <div class="panel" style="margin-bottom:12px"><div class="scroll"><table id="pnlTbl"></table></div></div>
+    <div class="upl" style="justify-content:space-between;margin:18px 0 8px"><h3 style="margin:0;font-size:15px">Closed trades &amp; dividends</h3><button type="button" class="btn ghost" id="pnlCollapse" style="font:600 12px var(--font-body);color:var(--ink-dim);background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:7px 12px;cursor:pointer">Collapse all months</button></div>
+    <div class="panel"><div class="scroll freeze"><table id="pnlItems"></table></div>
+      <p class="note" id="pnlNote"></p></div>
+  </section>
+
   <footer>Built from dashboard_data.json, pick_tracker_data.json and valuation_data.json, so it refreshes with the daily pipeline. Rules come from your own backtests (backtest_box_momentum.py, 2026-10-12) and the replay in section 1. Past patterns over a few months of data do not guarantee future results. Not financial advice.</footer>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="valuation.js"></script>
 <script>
 (function(){
@@ -652,6 +677,90 @@ function renderRealign(plan,sells,bp,SB){
 }
 const fmtSh=v=>Number.isInteger(v)?String(v):v.toFixed(2);
 
+/* ---- 5. Actual P&L (added 2026-10-21) ----
+   From dashboard_data.json portfolio.realized.pnl, built by generate_dashboard_data.py
+   from Trade_Tracker.xlsx > My Trades (SELL and DIVIDEND rows). Private page only. */
+let PNL_DONE=false, PNL_CH=[], PNL_SORT={k:"date",dir:-1}, PNL_OPEN=null;
+const qOf=ym=>Math.floor((+ym.slice(5,7)-1)/3)+1;
+const ymName=(ym,long)=>new Date(+ym.slice(0,4),+ym.slice(5,7)-1,1).toLocaleDateString("en-US",long?{month:"long",year:"numeric"}:{month:"short",year:"2-digit"});
+const usd=(v,dp=0)=>v==null||isNaN(v)?"–":(v<0?"−$":"$")+Math.abs(v).toLocaleString("en-US",{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const susd=(v,dp=0)=>v==null||isNaN(v)?"–":(v>0?"+":"")+usd(v,dp);
+function sumRows(rows){const o={bought:0,sold:0,gains:0,losses:0,dividends:0,sells:0,wins:0,n_div:0};for(const r of rows)for(const k in o)o[k]+=r[k]||0;o.total=o.gains+o.losses+o.dividends;return o}
+function renderPnl(){
+  const R=T.portfolio&&T.portfolio.realized, X=R&&R.pnl;
+  if(PUBLIC||!X||!X.months||!X.months.length){$("s5").hidden=true;$("jump5").hidden=true;return}
+  $("s5").hidden=false; $("jump5").hidden=false;
+  const tgt=X.target_per_month||0, months=X.months, cur=months[months.length-1].ym, yr=cur.slice(0,4), q=qOf(cur);
+  const yRows=months.filter(m=>m.ym.slice(0,4)===yr), qRows=yRows.filter(m=>qOf(m.ym)===q), mRow=sumRows([months[months.length-1]]);
+  const Q=sumRows(qRows), Y=sumRows(yRows), tgtY=tgt*yRows.length, tgtQ=tgt*qRows.length;
+  $("pnlLede").innerHTML=`Realized gain / loss from shares (and options) you <b>sold</b>, counted in the month of the sale, from <b>${ymName(X.start_month,true)}</b> (journal start ${dshort(X.journal_start)}) to the build date. <b>Bought</b> = new money put into BUY rows that month (opening balances are not counted). Cash <b>dividends</b> (DIVIDEND rows, after withholding tax) are added in the month they were paid. Gains, losses and dividends are shown separately; YTD restarts each January. Target <b>${usd(tgt)}/month</b> (set US_MONTHLY_PNL_TARGET in generate_dashboard_data.py). Fees as typed in the journal.`;
+  const sub=o=>`Gains ${susd(o.gains)} · Losses ${susd(o.losses)} · Dividends ${usd(o.dividends)}`;
+  const big=(v)=>`<span class="${cls(v)}">${susd(v,2)}</span>`;
+  $("pnlTiles").innerHTML=[
+    tile(`${ymName(cur,true)} realized`,big(mRow.total),sub(mRow)),
+    tile(`Q${q} ${yr} realized`,big(Q.total),sub(Q)),
+    tile(`${yr} YTD realized`,big(Y.total),`${sub(Y)} · ${Y.sells} sold, ${Y.wins} win${Y.wins===1?"":"s"}, ${Y.n_div} dividend${Y.n_div===1?"":"s"}`),
+    tile("YTD vs target",`<span class="${cls(Y.total-tgtY)}">${susd(Y.total-tgtY)}</span>`,`${usd(tgtY)} target over ${yRows.length} month${yRows.length===1?"":"s"}`),
+  ].join("");
+  // charts
+  PNL_CH.forEach(c=>c.destroy()); PNL_CH=[];
+  if(window.Chart){
+    const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+    const labels=yRows.map(m=>ymName(m.ym)), grid=css("--line"), ink=css("--ink-dim");
+    const axes={x:{grid:{display:false},ticks:{color:ink}},y:{grid:{color:grid},ticks:{color:ink,callback:v=>usd(v)}}};
+    const netLabel={id:"net",afterDatasetsDraw(c){const {ctx}=c;ctx.save();ctx.fillStyle=css("--ink");ctx.font="600 11px IBM Plex Mono, monospace";ctx.textAlign="center";
+      yRows.forEach((m,i)=>{const t=m.gains+m.losses+m.dividends;if(!m.sells&&!m.n_div)return;const meta=c.getDatasetMeta(0).data[i];if(!meta)return;
+        const top=Math.min(...[0,1,2].map(d=>c.getDatasetMeta(d).data[i]?.y??1e9));ctx.fillText("net "+susd(t),meta.x+ (c.getDatasetMeta(1).data[i].x-meta.x),Math.max(12,top-8))});ctx.restore()}};
+    PNL_CH.push(new Chart($("pnlBar"),{type:"bar",data:{labels,datasets:[
+      {label:"Gains (winning sells)",data:yRows.map(m=>m.gains),backgroundColor:css("--green"),borderRadius:3},
+      {label:"Losses (losing sells)",data:yRows.map(m=>m.losses),backgroundColor:css("--red"),borderRadius:3},
+      {label:"Dividends",data:yRows.map(m=>m.dividends),backgroundColor:css("--blue"),borderRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,scales:axes,plugins:{legend:{labels:{color:ink,boxWidth:12}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${susd(c.raw,2)}`}}}},plugins:[netLabel]}));
+    let run=0; const cum=yRows.map(m=>run+=m.gains+m.losses+m.dividends);
+    PNL_CH.push(new Chart($("pnlCum"),{type:"line",data:{labels,datasets:[
+      {label:"Total realized",data:cum,borderColor:css("--ink"),backgroundColor:css("--ink"),pointRadius:4,tension:0},
+      {label:"Target to date",data:yRows.map((m,i)=>tgt*(i+1)),borderColor:css("--ink-faint"),borderDash:[6,4],pointRadius:3,pointBackgroundColor:"transparent"}]},
+      options:{responsive:true,maintainAspectRatio:false,scales:axes,plugins:{legend:{labels:{color:ink,boxWidth:12}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${susd(c.raw,2)}`}}}}}));
+  }
+  // period table
+  const row=(name,o,ytdCum,tg,cl="")=>`<tr class="${cl}"><td>${name}</td><td>${usd(o.bought)}</td><td>${usd(o.sold)}</td><td class="pos">${susd(o.gains)}</td><td class="neg">${o.losses?susd(o.losses):usd(0)}</td><td class="${o.dividends?"pos":"muted"}">${usd(o.dividends,2)}</td><td class="${cls(o.total)}">${susd(o.total,2)}</td><td class="${cls(ytdCum)}">${susd(ytdCum,2)}</td><td>${o.sells}</td><td>${o.wins}</td><td>${usd(tg)}</td><td class="${cls(o.total-tg)}">${susd(o.total-tg)}</td></tr>`;
+  let c=0, body="";
+  for(const m of yRows){const o=sumRows([m]);c+=o.total;body+=row(ymName(m.ym,true),o,c,tgt)}
+  body+=row(`Q${q} ${yr} (to date)`,Q,Y.total,tgtQ,"q")+row(`${yr} YTD`,Y,Y.total,tgtY,"ytd"+(Y.total>=0?" up":""));
+  $("pnlTbl").innerHTML=`<thead><tr><th>Period</th><th>Bought</th><th>Sold</th><th>Gains</th><th>Losses</th><th>Dividends</th><th>Total realized</th><th>YTD cumulative</th><th>Sells</th><th>Wins</th><th>Target</th><th>vs Target</th></tr></thead><tbody>${body}</tbody>`;
+  if(PNL_OPEN==null) PNL_OPEN=new Set([cur]);
+  renderPnlItems(X);
+  $("pnlCollapse").onclick=()=>{const all=new Set((X.items||[]).map(i=>(i.date||"").slice(0,7)));PNL_OPEN=PNL_OPEN.size?new Set():all;renderPnlItems(X)};
+  $("pnlNote").innerHTML=`Every SELL and DIVIDEND row in <b>Trade_Tracker.xlsx › My Trades</b> from the journal start, grouped by month (sale date / payment date), newest month first. Tap a month to expand or collapse it; tap a column heading to sort within each month. <b>Realized P&amp;L</b> = sale value − fees − average cost × shares sold, the same average-cost method as the journal (options × 100). <b>Opened</b> = the day the position last went from zero to held; "carried over" means it came in as an OPENING balance, so its true buy date isn't in the journal. <b>Partial</b> = some shares are still held. <b>DIVIDEND</b> rows: Price = dividend per share, Amount = shares × DPS − withholding tax and fees, % = yield on your average cost; they don't count as wins.`+
+    ((X.early_rows||[]).length?`<br><span style="color:var(--amber)">⚠ ${X.early_rows.length} row${X.early_rows.length===1?"":"s"} dated before the journal start (${dshort(X.journal_start)}) left out: ${X.early_rows.map(r=>`${esc(r.ticker)} ${esc(r.action)} ${esc(r.date)} (sheet row ${r.row})`).join(", ")}. Usually a typo in the year.</span>`:"");
+}
+function renderPnlItems(X){
+  const items=X.items||[], by={};
+  for(const it of items){const k=(it.date||"").slice(0,7)||"no date";(by[k]=by[k]||[]).push(it)}
+  const keys=Object.keys(by).sort().reverse(), S=PNL_SORT;
+  const val=(it,k)=>k==="date"?(it.date||""):k==="ticker"?it.label:it[k];
+  const cols=[["ticker","Stock"],["shares","Shares"],["opened","Opened"],["date","Date"],["result","Result"],["avg_cost","Avg cost"],["price","Price / DPS"],["amount","Amount"],["pl","Realized P&L"],["pct","%"]];
+  let h=`<thead><tr>${cols.map(([k,l])=>`<th class="sort" data-k="${k}" ${S.k===k?`aria-sort="${S.dir<0?"descending":"ascending"}"`:""}>${l}${S.k===k?(S.dir<0?" ▾":" ▴"):""}</th>`).join("")}</tr></thead><tbody>`;
+  for(const k of keys){
+    const list=[...by[k]].sort((a,b)=>{const x=val(a,S.k),y=val(b,S.k);if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return (typeof x==="string"?x.localeCompare(y):x-y)*S.dir});
+    const tot=list.reduce((s,i)=>s+(i.pl||0),0), ns=list.filter(i=>i.type==="SELL").length, nw=list.filter(i=>i.type==="SELL"&&i.pl>0).length, nd=list.length-ns, open=PNL_OPEN.has(k);
+    h+=`<tr class="mon" data-m="${k}"><td colspan="9">${open?"▾":"▸"} ${k==="no date"?"No date":ymName(k,true)} <span class="muted">· ${ns} sell${ns===1?"":"s"} · ${nw} win${nw===1?"":"s"}${nd?` · ${nd} dividend${nd===1?"":"s"}`:""}</span></td><td class="${cls(tot)}">${susd(tot,2)}</td></tr>`;
+    if(!open) continue;
+    for(const it of list){
+      const isD=it.type==="DIVIDEND", op=it.opened==null?"":it.opened==="carried over"?"carried over":dshort(it.opened);
+      h+=`<tr><td><span class="tk">${esc(it.label)}</span>${isD?'<span class="tag div">DIV</span>':it.kind==="OPTION"?'<span class="tag">OPTION</span>':""}<span class="co">${esc((ALL.get(it.ticker)||{}).company||"")}</span></td>
+        <td>${it.shares!=null?Number(it.shares).toLocaleString("en-US",{maximumFractionDigits:4}):"–"}</td><td class="muted">${op}</td><td>${it.date?dshort(it.date):"–"}</td>
+        <td class="${it.result==="Partial"?"muted":""}">${it.result}</td><td>${usd(it.avg_cost,2)}</td><td>${usd(it.price,isD?4:2)}</td><td>${usd(it.amount,2)}${isD&&it.fees?`<div class="muted" style="font-size:10.5px">tax/fees ${usd(it.fees,2)}</div>`:""}</td>
+        <td class="${cls(it.pl)}">${susd(it.pl,2)}</td><td class="${cls(it.pct)}">${it.pct!=null?spct(it.pct,1):"–"}</td></tr>`;
+    }
+  }
+  if(!keys.length) h+=`<tr><td colspan="10" class="muted">No sells or dividends recorded yet.</td></tr>`;
+  $("pnlItems").innerHTML=h+"</tbody>";
+  $("pnlCollapse").textContent=PNL_OPEN.size?"Collapse all months":"Expand all months";
+  $("pnlItems").onclick=e=>{const m=e.target.closest("tr.mon");if(m){const k=m.dataset.m;PNL_OPEN.has(k)?PNL_OPEN.delete(k):PNL_OPEN.add(k);renderPnlItems(X);return}
+    const th=e.target.closest("th.sort");if(th){const k=th.dataset.k;if(PNL_SORT.k===k)PNL_SORT.dir*=-1;else PNL_SORT={k,dir:k==="ticker"||k==="result"?1:-1};renderPnlItems(X)}};
+}
+
 /* ---- wiring ---- */
 let SB=null;
 function render(){
@@ -660,6 +769,7 @@ function render(){
   const plan=holdingPlan(pf,top,SB), sells=sellPlan(plan), trimCash=sells.reduce((s,x)=>s+x.usd,0);
   renderHoldings(plan,pf,top); renderUploadStatus(pf);
   const bp=buyPlan(top,held,trimCash,SB); renderBuys(bp,trimCash,SB); renderRealign(plan,sells,bp,SB); renderPlan(plan,bp,SB);
+  if(!PNL_DONE){PNL_DONE=true; try{renderPnl()}catch(e){console.error("Actual P&L:",e)}}
   document.querySelectorAll("#useTrim button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===P.useTrim)));
   document.querySelectorAll("#cap button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.v===+P.cap)));
 }
