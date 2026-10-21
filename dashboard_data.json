@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T13:34:58",
+  "generated_at": "2026-10-21T18:14:28",
   "is_real_data": true,
   "portfolio": {
     "total_value": 100565.66,
@@ -466,7 +466,112 @@
           "closed_position": true,
           "notes": null
         }
-      ]
+      ],
+      "dividends_this_year": 0,
+      "pnl": {
+        "start_month": "2026-10",
+        "journal_start": "2026-10-09",
+        "target_per_month": 3000,
+        "currency": "USD",
+        "months": [
+          {
+            "ym": "2026-10",
+            "bought": 23193.38,
+            "sold": 6833.28,
+            "gains": 940.65,
+            "losses": -208.64,
+            "dividends": 0.0,
+            "sells": 5,
+            "wins": 2,
+            "n_div": 0
+          }
+        ],
+        "items": [
+          {
+            "type": "SELL",
+            "date": "2026-10-19",
+            "ticker": "HSIC",
+            "label": "HSIC",
+            "kind": "STOCK",
+            "shares": 10.0,
+            "opened": "carried over",
+            "result": "Closed",
+            "avg_cost": 86.56,
+            "price": 84.7506,
+            "amount": 845.24,
+            "pl": -20.36,
+            "pct": -0.0235
+          },
+          {
+            "type": "SELL",
+            "date": "2026-10-16",
+            "ticker": "MSTR",
+            "label": "MSTR",
+            "kind": "STOCK",
+            "shares": 7.0,
+            "opened": "2026-10-09",
+            "result": "Closed",
+            "avg_cost": 152.2293,
+            "price": 136.85,
+            "amount": 956.31,
+            "pl": -109.3,
+            "pct": -0.1026
+          },
+          {
+            "type": "SELL",
+            "date": "2026-10-16",
+            "ticker": "LYTE",
+            "label": "LYTE",
+            "kind": "STOCK",
+            "shares": 25.0,
+            "opened": "2026-10-13",
+            "result": "Closed",
+            "avg_cost": 23.1741,
+            "price": 20.0935,
+            "amount": 500.38,
+            "pl": -78.98,
+            "pct": -0.1363
+          },
+          {
+            "type": "SELL",
+            "date": "2026-10-14",
+            "ticker": "AMZU",
+            "label": "AMZU",
+            "kind": "STOCK",
+            "shares": 40.0,
+            "opened": "carried over",
+            "result": "Closed",
+            "avg_cost": 35.2676,
+            "price": 35.89,
+            "amount": 1432.56,
+            "pl": 21.86,
+            "pct": 0.0155
+          },
+          {
+            "type": "SELL",
+            "date": "2026-10-14",
+            "ticker": "IREN",
+            "label": "IREN C25 21-Jan-2028",
+            "kind": "OPTION",
+            "shares": 1.0,
+            "opened": "carried over",
+            "result": "Closed",
+            "avg_cost": 21.8,
+            "price": 31.0,
+            "amount": 3098.79,
+            "pl": 918.79,
+            "pct": 0.4215
+          }
+        ],
+        "early_rows": [
+          {
+            "row": 29,
+            "date": "2025-10-12",
+            "ticker": "CLSK",
+            "action": "BUY"
+          }
+        ]
+      }
     }
   },
   "top20": [
