@@ -324,7 +324,7 @@ def calculate_dcf(ticker_obj, info, current_price):
         return round(intrinsic_per_share, 2), f"{round(margin_of_safety, 1)}%"
     except Exception: return "N/A", "Error"
 
-def _fill_trailing_nan_closes(ticker_obj, hist):
+def _fill_from_unadjusted(ticker_obj, hist):
     """Recover a completed bar that Yahoo's default (auto_adjust=True) pull
     returns with a NaN Close.
 
@@ -369,6 +369,99 @@ def _fill_trailing_nan_closes(ticker_obj, hist):
                   f"(adjusted feed had NaN Close).")
         return hist
     except Exception:
+        return hist
+
+def _fill_trailing_nan_closes(ticker_obj, hist):
+    """Tier 1: adjusted daily bar (as pulled). Tier 2: unadjusted daily bar.
+    Tier 3: quote-side recovery, for a bar that is NaN in both daily feeds."""
+    hist = _fill_from_unadjusted(ticker_obj, hist)
+    if not hist.empty and pd.isna(hist['Close'].iloc[-1]):
+        hist = _recover_close_from_quote(ticker_obj, hist)
+    return hist
+
+def _bar_session_closed(bar_date, now_et=None):
+    """True once `bar_date`'s US session has definitely finished (wall clock,
+    ET, with a 15-min buffer for the closing auction to settle)."""
+    now_et = now_et or _now_et()
+    if bar_date < now_et.date():
+        return True
+    return bar_date == now_et.date() and (now_et.hour, now_et.minute) >= (16, 15)
+
+def _recover_close_from_quote(ticker_obj, hist):
+    """Tier 3 recovery for a trailing NaN-Close bar that is NaN in BOTH the
+    adjusted and unadjusted daily feeds.
+
+    Found 2026-10-22: at 2:35pm MYT (~10.5h after the Oct 21 US close) every
+    ticker's Oct 21 daily bar had NaN Close in both feeds, so the whole
+    universe fell back to Oct 20. Yahoo's daily-bar table lags, but the chart
+    response's metadata (regularMarketPrice/Time/DayHigh/DayLow/Volume) is
+    the quote side and already holds the official close.
+
+    Order:
+      a) chart metadata from the history call already made (no network call)
+         - used only if its regularMarketTime falls on the bar's date;
+      b) else rebuild the bar from that day's 5-minute bars - used only if
+         the intraday data reaches 15:55 ET (i.e. covers the whole session).
+    Both are allowed ONLY when the bar's session has closed by the wall clock,
+    so this can never reintroduce the 2026-09-12 intraday-poisoning bug."""
+    sym = getattr(ticker_obj, 'ticker', '?')
+    try:
+        idx = hist.index[-1]
+        bar_date = idx.date()
+        if not _bar_session_closed(bar_date):
+            return hist
+        import zoneinfo
+        et = zoneinfo.ZoneInfo("America/New_York")
+        hist = hist.copy()
+
+        def _apply(close, high, low, vol, source):
+            close = float(close)
+            hist.at[idx, 'Close'] = close
+            if 'Open' in hist.columns and pd.isna(hist.at[idx, 'Open']):
+                hist.at[idx, 'Open'] = close
+            if 'High' in hist.columns:
+                c = [v for v in (hist.at[idx, 'High'], high, close) if v is not None and not pd.isna(v)]
+                hist.at[idx, 'High'] = float(max(c))
+            if 'Low' in hist.columns:
+                c = [v for v in (hist.at[idx, 'Low'], low, close) if v is not None and not pd.isna(v)]
+                hist.at[idx, 'Low'] = float(min(c))
+            if 'Volume' in hist.columns and vol is not None and not pd.isna(vol) \
+                    and (pd.isna(hist.at[idx, 'Volume']) or hist.at[idx, 'Volume'] == 0):
+                hist.at[idx, 'Volume'] = float(vol)
+            print(f"[DIAG] {sym}: recovered {bar_date} Close {close:.2f} from {source} "
+                  f"(daily bar was NaN in both adjusted and unadjusted feeds).")
+            return hist
+
+        # a) chart metadata - free, already fetched with the history call
+        try:
+            meta = ticker_obj.history_metadata or {}
+        except Exception:
+            meta = {}
+        price, ts = meta.get('regularMarketPrice'), meta.get('regularMarketTime')
+        if price is not None and ts is not None and not pd.isna(price) and price > 0:
+            if isinstance(ts, datetime.datetime):
+                q_dt = ts if ts.tzinfo else ts.replace(tzinfo=datetime.timezone.utc)
+            else:
+                q_dt = datetime.datetime.fromtimestamp(int(ts), datetime.timezone.utc)
+            if q_dt.astimezone(et).date() == bar_date:
+                return _apply(price, meta.get('regularMarketDayHigh'),
+                              meta.get('regularMarketDayLow'),
+                              meta.get('regularMarketVolume'), "quote metadata")
+
+        # b) intraday 5m bars for that date
+        intra = ticker_obj.history(start=bar_date, end=bar_date + datetime.timedelta(days=1),
+                                   interval="5m", auto_adjust=False, prepost=False, timeout=10)
+        if not intra.empty:
+            intra = intra.dropna(subset=['Close'])
+        if not intra.empty:
+            last_ts = intra.index[-1]
+            last_et = last_ts.tz_convert(et) if last_ts.tzinfo else last_ts.tz_localize(et)
+            if last_et.date() == bar_date and (last_et.hour, last_et.minute) >= (15, 55):
+                return _apply(intra['Close'].iloc[-1], intra['High'].max(), intra['Low'].min(),
+                              intra['Volume'].sum(), "5-minute intraday bars (approx. volume)")
+        return hist
+    except Exception as e:
+        print(f"[DIAG] {sym}: quote-side recovery failed ({e}); keeping NaN bar.")
         return hist
 
 def fetch_history_with_retry(ticker_obj, retries=3, base_delay=2.0):
@@ -525,19 +618,21 @@ def evaluate_ticker(symbol, category_map=None):
     _rows_before_dropna = len(hist)
     _last_raw_date = hist.index[-1].date() if _rows_before_dropna else None
     hist = hist.dropna(subset=['Close'])
+    _drop_reasons = []
+    if len(hist) < _rows_before_dropna:
+        _drop_reasons.append(f"NaN_close x{_rows_before_dropna - len(hist)} "
+                             f"(no close in adjusted, unadjusted or quote feeds yet)")
     # Belt-and-suspenders: also drop a trailing row that Yahoo DID fill in
     # with a live (non-NaN) Close, if that row is for today's US session and
     # the session hasn't actually closed yet. See _session_not_yet_closed().
     if len(hist) and _session_not_yet_closed(hist.index[-1].date()):
-        print(f"[DIAG] {symbol}: dropping still-open session {hist.index[-1].date()} "
-              f"(Yahoo returned a live Close, but the US market hasn't closed yet).")
+        _drop_reasons.append(f"session_open ({hist.index[-1].date()} US session not closed yet)")
         hist = hist.iloc[:-1]
-    if len(hist) < _rows_before_dropna:
+    if _drop_reasons:
         _last_complete_date = hist.index[-1].date() if len(hist) else "N/A"
-        print(f"[DIAG] {symbol}: dropped {_rows_before_dropna - len(hist)} trailing row(s) "
-              f"(NaN Close in both adjusted and unadjusted feeds, and/or still-open session). "
-              f"Most recent raw date from Yahoo was {_last_raw_date}, "
-              f"most recent COMPLETE (usable) date is {_last_complete_date}.")
+        print(f"[DIAG] {symbol}: dropped {_rows_before_dropna - len(hist)} trailing row(s), "
+              f"reason={'; '.join(_drop_reasons)}. "
+              f"Raw last={_last_raw_date}, usable last={_last_complete_date}.")
     if hist.empty or len(hist) < 45:
         return None, err or f"insufficient COMPLETE history ({len(hist)} rows, need 45+)"
 
