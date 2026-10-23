@@ -60,6 +60,14 @@ GAP_MIN = 0.04        # open at least 4% above the prior close
 GAP_VOL = 2.0         # volume at least 2x the 50-day average
 GAP_HORIZON = 60      # gap-up edge measured over 3 months
 FLAG_SESSIONS = 70    # daily flags kept for the scoreboard replay
+# dip cards (2026-10-23): per-stock dip episodes
+EP_MAX = 60           # a dip that hasn't bounced within 12 weeks counts as "no bounce"
+RUN_PULLBACK = 0.10   # an upward run ends when the price falls 10% from its run high
+RUN_MAX = 250         # longest run tracked (about a year)
+REC_H = [5, 10, 20, 40, 60]   # 1, 2, 4, 8, 12 weeks
+CHART_SESSIONS = 378  # 1.5 years on the card chart
+CHART_STEP = 3        # every 3rd session (keeps the JSON small)
+EP_SHOW = 8           # recent dips listed on each card
 STATS_SINCE = "2023-10-01"
 MIN_PRICE = 5.0       # penny stocks are left out of the lists and rules (splits, junk moves)
 
@@ -233,6 +241,113 @@ def dip_events(c, mk):
     return out
 
 
+def dip_episodes(c):
+    """Each 15%+ dip as one episode: pre-dip peak -> low -> half-recovery bounce,
+    then the upward run that followed. The next episode is searched for only
+    after this one ends, so one long slide is never counted twice."""
+    v = c.values
+    n = len(v)
+    out, i, floor = [], LOOK, 0
+    while i < n:
+        # the pre-dip high must come after the previous episode ended, so a
+        # bounce-then-fall-again is measured from the new high, not the old one
+        lo = max(floor, i - LOOK + 1)
+        pk = lo + int(np.argmax(v[lo:i + 1]))
+        P = v[pk]
+        if not (v[i] / P - 1 <= -DIP):
+            i += 1
+            continue
+        tr, bounce = i, None
+        end = min(n - 1, i + EP_MAX)
+        for j in range(i, end + 1):
+            if v[j] < v[tr]:
+                tr = j
+            elif j > tr and v[j] >= v[tr] + 0.5 * (P - v[tr]):
+                bounce = j
+                break
+        open_ = bounce is None and i + EP_MAX > n - 1     # still inside its 12-week window
+        e = {"pk": pk, "i": i, "tr": tr, "P": P, "low": v[tr],
+             "depth": v[tr] / P - 1, "down": tr - pk,
+             "bounce": None if open_ else bounce is not None,
+             "to_bounce": (bounce - tr) if bounce is not None else None,
+             "open": open_,
+             "ret": {h: (v[i + h] / v[i] - 1) if i + h < n else None for h in REC_H}}
+        # back to the pre-dip high
+        full = next((k for k in range(tr + 1, min(n, tr + RUN_MAX + 1)) if v[k] >= P), None)
+        e["to_high"] = (full - tr) if full is not None else None
+        e["high_known"] = full is not None or tr + RUN_MAX < n
+        # the upward run after the low: ends at a 10% pullback from its high
+        m, mk_i, k = v[tr], tr, tr + 1
+        run_closed = False
+        while k < n and k <= tr + RUN_MAX:
+            if v[k] > m:
+                m, mk_i = v[k], k
+            elif v[k] <= m * (1 - RUN_PULLBACK):
+                run_closed = True
+                break
+            k += 1
+        e["run_len"], e["run_gain"] = mk_i - tr, m / v[tr] - 1
+        e["run_closed"] = run_closed or k > tr + RUN_MAX
+        out.append(e)
+        if open_:
+            break
+        floor = bounce if bounce is not None else end
+        i = floor + 1
+    return out
+
+
+def episode_card(c, sma200, eps, i_last):
+    idx = c.index
+    done = [e for e in eps if not e["open"]]
+    b = [e for e in done if e["bounce"]]
+    runs = [e for e in b if e["run_closed"]]
+    hk = [e for e in done if e["high_known"]]
+    med = lambda xs: float(np.median(xs)) if xs else None
+    card = {
+        "n": len(done),
+        "bounced": len(b),
+        "to_bounce": med([e["to_bounce"] for e in b]),
+        "down": med([e["down"] for e in done]),
+        "depth": med([e["depth"] for e in done]),
+        "run_len": med([e["run_len"] for e in runs]),
+        "run_gain": med([e["run_gain"] for e in runs]),
+        "run_n": len(runs),
+        "to_high_n": len([e for e in hk if e["to_high"] is not None]),
+        "to_high_of": len(hk),
+        "to_high": med([e["to_high"] for e in hk if e["to_high"] is not None]),
+        "rec": {},
+    }
+    for h in REC_H:
+        r = [e["ret"][h] for e in eps if e["ret"][h] is not None]
+        card["rec"][str(h)] = {"n": len(r), "avg": float(np.mean(r)) if r else None,
+                               "med": med(r), "up": float(np.mean([x > 0 for x in r])) if r else None}
+    # the dip in progress now (if the last episode is still open or just started)
+    cur = eps[-1] if eps and (eps[-1]["open"] or eps[-1]["i"] >= i_last - EP_MAX) else None
+    if cur is not None and cur["open"]:
+        depths = [e["depth"] for e in done]
+        downs = [e["down"] for e in done]
+        card["now"] = {"peak_d": idx[cur["pk"]].strftime("%Y-%m-%d"), "P": cur["P"],
+                       "low": cur["low"], "low_d": idx[cur["tr"]].strftime("%Y-%m-%d"),
+                       "depth": cur["depth"], "days": i_last - cur["pk"], "down": cur["down"],
+                       "deeper_than": float(np.mean([cur["depth"] < d for d in depths])) if depths else None,
+                       "longer_than": float(np.mean([(i_last - cur["pk"]) > d for d in downs])) if downs else None}
+    card["eps"] = [{"pk_d": idx[e["pk"]].strftime("%Y-%m-%d"), "depth": e["depth"], "down": e["down"],
+                    "to_bounce": e["to_bounce"], "bounce": e["bounce"], "run_len": e["run_len"] if e["bounce"] else None,
+                    "run_gain": e["run_gain"] if e["bounce"] else None, "run_closed": e["run_closed"],
+                    "r20": e["ret"][20], "r60": e["ret"][60]}
+                   for e in reversed(done[-EP_SHOW:])]
+    # chart: 1.5 years, every 3rd session, always ending on the latest close
+    w0 = max(0, len(c) - CHART_SESSIONS)
+    pts = list(range(len(c) - 1, w0 - 1, -CHART_STEP))[::-1]
+    sm = sma200.reindex(idx)
+    card["chart"] = {"d0": idx[pts[0]].strftime("%Y-%m-%d"), "step": CHART_STEP,
+                     "c": [round(float(c.iat[k]), 2) for k in pts],
+                     "ma": [None if np.isnan(sm.iat[k]) else round(float(sm.iat[k]), 2) for k in pts],
+                     "zones": [[(e["pk"] - pts[0]) / CHART_STEP, (e["tr"] - pts[0]) / CHART_STEP]
+                               for e in eps if e["tr"] >= pts[0]]}
+    return card
+
+
 def summarize(events):
     ev = [e for e in events if e.get("done_d") is not None]
     if not ev:
@@ -382,6 +497,7 @@ def main():
                 "suspect": bool(big is not None and big <= -0.45),
                 "uptrend": bool(c.loc[pk_date] > sma200[t].loc[pk_date]) if not np.isnan(sma200[t].loc[pk_date]) else None,
                 "hist": per.get(t, {"n": 0}),
+                "card": episode_card(c.dropna(), sma200[t], dip_episodes(c.dropna()), len(c.dropna()) - 1),
             })
         for k in range(max(0, i_last - 9), i_last + 1):
             if bool(gapf[t].iat[k]):
@@ -399,11 +515,12 @@ def main():
 
     pick = load_json(PICK_FILE, {}) or {}
     out = {
-        "version": 1,
+        "version": 2,
         "generated_at": dt.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
         "as_of": as_of,
         "tracker_session": pick.get("as_of_session"),
-        "params": {"min_price": MIN_PRICE, "dip": DIP, "look": LOOK, "horizon": HORIZON, "gap_min": GAP_MIN, "gap_vol": GAP_VOL},
+        "params": {"min_price": MIN_PRICE, "dip": DIP, "look": LOOK, "horizon": HORIZON, "gap_min": GAP_MIN, "gap_vol": GAP_VOL,
+                   "ep_max": EP_MAX, "run_pullback": RUN_PULLBACK, "rec_h": REC_H},
         "tickers_priced": len(have),
         "stats": stats,
         "dates": flag_dates,
