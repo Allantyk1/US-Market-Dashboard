@@ -127,6 +127,9 @@
   .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--ink-dim);margin-top:6px}
   .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
   .note{font-size:11.5px;color:var(--ink-faint);line-height:1.6;margin-top:10px}
+  /* Dip watch (2026-10-23) */
+  .tag.low{color:var(--red);border-color:var(--red)} .tag.held{color:var(--blue);border-color:var(--blue)} .tag.chk{color:var(--ink-faint);border-style:dashed}
+  .dw-stale{color:var(--amber)}
   footer{margin-top:34px;font-size:11px;color:var(--ink-faint);line-height:1.6}
   @media (max-width:600px){h1{font-size:25px}.co{max-width:110px}}
   /* Frozen headings (2026-10-17): the settings bar sticks to the top, each section's
@@ -159,7 +162,7 @@
       <div class="seg" id="useTrim"><button type="button" data-v="0" title="Only the cash entered">Cash only</button><button type="button" data-v="1" title="Cash plus trimming positions above the max per stock">+ Trims</button><button type="button" data-v="2" title="Cash, trims, and selling every REVIEW EXIT position in full">+ Trims &amp; exits</button></div></div>
     <div class="ctl"><span class="lbl">Max per stock</span>
       <div class="seg" id="cap"><button type="button" data-v="10">10%</button><button type="button" data-v="15">15%</button><button type="button" data-v="20">20%</button></div></div>
-    <nav class="jump" aria-label="Jump to section"><a href="#s1">1 Scoreboard</a><a href="#s2">2 Portfolio</a><a href="#s3">3 Buy list</a><a href="#s4">4 Month plan</a><a href="#s5" id="jump5" hidden>5 Actual P&amp;L</a></nav>
+    <nav class="jump" aria-label="Jump to section"><a href="#s1">1 Scoreboard</a><a href="#s2">2 Portfolio</a><a href="#s3">3 Buy list</a><a href="#s4">4 Month plan</a><a href="#sdw">5 Dip watch</a><a href="#s5" id="jump5" hidden>6 Actual P&amp;L</a></nav>
   </div>
 
   <section class="desk" id="s1">
@@ -218,8 +221,22 @@
     <div class="plan" id="plan"></div>
   </section>
 
+  <section class="desk" id="sdw">
+    <div class="desk-head"><span class="idx">5</span><h2>Dip watch &amp; momentum</h2></div>
+    <p class="lede" id="dwLede">Loading…</p>
+    <div class="tiles" id="dwTiles"></div>
+    <div class="panel" style="margin-bottom:12px">
+      <h3>Dip watch: 15%+ under the 20-day high</h3>
+      <div class="scroll freeze"><table id="dwTbl"></table></div>
+      <p class="note" id="dwNote"></p></div>
+    <div class="panel">
+      <h3>Gap-up continuation: last 10 sessions</h3>
+      <div class="scroll freeze"><table id="gapTbl"></table></div>
+      <p class="note" id="gapNote"></p></div>
+  </section>
+
   <section class="desk" id="s5" hidden>
-    <div class="desk-head"><span class="idx">5</span><h2>Actual P&amp;L: month, quarter, year to date</h2></div>
+    <div class="desk-head"><span class="idx">6</span><h2>Actual P&amp;L: month, quarter, year to date</h2></div>
     <p class="lede" id="pnlLede"></p>
     <div class="tiles" id="pnlTiles"></div>
     <div class="grid2" style="margin-bottom:12px">
@@ -232,7 +249,7 @@
       <p class="note" id="pnlNote"></p></div>
   </section>
 
-  <footer>Built from dashboard_data.json, pick_tracker_data.json and valuation_data.json, so it refreshes with the daily pipeline. Rules come from your own backtests (backtest_box_momentum.py, 2026-10-12) and the replay in section 1. Past patterns over a few months of data do not guarantee future results. Not financial advice.</footer>
+  <footer>Built from dashboard_data.json, pick_tracker_data.json, valuation_data.json and dip_watch_data.json, so it refreshes with the daily pipeline. Rules come from your own backtests (backtest_box_momentum.py, 2026-10-12) and the replay in section 1. Past patterns over a few months of data do not guarantee future results. Not financial advice.</footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
@@ -256,7 +273,7 @@ const P={cash:null,useTrim:"1",cap:15};
 try{Object.assign(P,JSON.parse(localStorage.getItem("lookaheadPrefs")||"{}"))}catch(e){}
 const save=()=>{try{localStorage.setItem("lookaheadPrefs",JSON.stringify(P))}catch(e){}};
 
-let D,T,V={}, ALL=new Map(), BOX={};
+let D,T,V={}, ALL=new Map(), BOX={}, DW=null, DWIDX=[];
 
 /* ---- tracker helpers (copied from tracker.html) ---- */
 function cutoffFor(dateStr,months){const a=new Date(dateStr+"T00:00:00");a.setMonth(a.getMonth()-months);return isoLocal(a)}
@@ -287,7 +304,11 @@ function prepRules(){
     const r=[];for(const t in first){const c=D.watch[t]?.c[i];if(c!=null&&first[t].rp>0)r.push({t,p:c/first[t].rp-1,d:first[t].d})}
     r.sort((a,b)=>b.p-a.p);RANK.push(r)}
   EVD={}; for(const e of D.events){(EVD[e.src+"|"+e.d]=EVD[e.src+"|"+e.d]||[]).push(e.t)}
+  // Dip watch flags (dip_watch_data.json) lined up with the tracker's session dates
+  const pos={}; (DW&&DW.dates||[]).forEach((d,k)=>pos[d]=k); DWIDX=D.watch_dates.map(d=>pos[d]??null);
 }
+const dwFlag=(t,key,i)=>{const k=DWIDX[i];if(k==null||!DW)return false;const f=DW.flags[t];return !!(f&&f[key]&&f[key][k]==="1")};
+const dwPick=(key,i,back=1)=>{if(!DW)return [];const out=[];for(const t in DW.flags){if(!D.watch[t])continue;for(let j=Math.max(0,i-back+1);j<=i;j++)if(dwFlag(t,key,j)){out.push(t);break}}return out};
 const recentEv=(src,i,k=5)=>{const s=new Set();for(let j=Math.max(0,i-k+1);j<=i;j++)for(const t of (EVD[src+"|"+D.watch_dates[j]]||[]))s.add(t);return [...s]};
 const ret5=(t,i)=>{const c=D.watch[t].c;return i>=5&&c[i]&&c[i-5]?c[i]/c[i-5]-1:null};
 const RULES=[
@@ -299,6 +320,9 @@ const RULES=[
   {k:"sr",name:"STRONG REBOUND",desc:"Top 30 stock, 2–6 white days right after 2+ green",short:true,pick:i=>RANK[i].slice(0,30).map(r=>r.t).filter(t=>D.watch[t]&&isSR(streakAt(boxStates(t),i),true))},
   {k:"buy5",name:"New BUY signal (last 5 days)",desc:"Signal newly turned BUY",pick:i=>recentEv("buy",i)},
   {k:"t20",name:"Today's Top 20",desc:"The screener's Top 20 that day",pick:i=>Object.keys(D.watch).filter(t=>D.watch[t].t20[i]==="1")},
+  {k:"dip15",dw:true,name:"Dip 15%+, not at a 52-week low",desc:"15%+ under its 20-day high but not a new 52-week low (section 5)",pick:i=>dwPick("dip",i)},
+  {k:"gapup",dw:true,name:"Gap-up continuation (last 5 days)",desc:"Opened 4%+ above the prior close on 2× volume and closed up (section 5)",pick:i=>dwPick("gap",i,5)},
+  {k:"low52",dw:true,name:"At a new 52-week low",desc:"Closed below every close of the past year",avoid:true,pick:i=>dwPick("low",i)},
   {k:"movers",name:"Best 1-month movers",desc:"30 biggest 20-session gainers, all stocks",avoid:true,pick:i=>i<20?[]:Object.keys(D.watch).filter(t=>{const c=D.watch[t].c;return c[i]&&c[i-20]}).sort((a,b)=>{const ca=D.watch[a].c,cb=D.watch[b].c;return cb[i]/cb[i-20]-ca[i]/ca[i-20]}).slice(0,30)},
   {k:"deep",name:"Deep discount",desc:"7+ of the last 10 days below the weekly average",avoid:true,pick:i=>Object.keys(D.watch).filter(t=>{const st=boxStates(t);if(st[i]==null)return false;let g=0;for(let j=Math.max(0,i-9);j<=i;j++)if(st[j]===1)g++;return g>=7})},
 ];
@@ -314,6 +338,8 @@ function scoreRules(){
     }
     const a=R.s[20],b=R.s[10];
     R.eligible=!R.avoid&&!R.short&&a.n>=MIN_WINDOWS&&a.avg>0&&a.wins/a.n>=MIN_WIN&&(b.avg==null||b.avg>-0.01);
+    // dip / gap rules can only lead when dip_watch_data.json covers today's session
+    R.stale=!!R.dw&&DWIDX[N-1]==null; if(R.stale) R.eligible=false;
     R.shortOk=R.short&&b.n>=5&&b.avg>0&&b.wins/b.n>=MIN_WIN;
   }
   const el=RULES.filter(r=>r.eligible).sort((x,y)=>y.s[20].avg-x.s[20].avg);
@@ -328,7 +354,7 @@ function renderScoreboard(SB){
   else v=`<div class="verdict warn"><b>No rule is reliably beating the market right now.</b> None passed the test (at least ${MIN_WINDOWS} four-week windows, ahead in ${Math.round(MIN_WIN*100)}%+ of them, positive on average). The honest plan is to <b>hold cash or a broad index fund such as VOO</b> and wait, rather than forcing trades.</div>`;
   v+=`<p class="note" style="margin-top:-4px">Sample: ${N} sessions from ${dshort(D.watch_dates[0])} to ${dshort(D.watch_dates[N-1])}. Four-week windows overlap heavily, and one market regime can favour one rule, so treat a lead under ~20 windows as provisional.</p>`;
   $("verdict").innerHTML=v;
-  const status=r=>r===SB.leader?'<span class="act buy">LEADING</span>':r===SB.runner?'<span class="act dip">RUNNER-UP</span>':r.shortOk?'<span class="act keep">2-WEEK IDEA</span>':r.avoid?'<span class="act exit">AVOID</span>':r.eligible?'<span class="act hold">PASSES</span>':(r.s[20].n<MIN_WINDOWS&&!r.short?'<span class="act wait">TOO LITTLE DATA</span>':'<span class="act wait">NOT BEATING</span>');
+  const status=r=>r===SB.leader?'<span class="act buy">LEADING</span>':r===SB.runner?'<span class="act dip">RUNNER-UP</span>':r.shortOk?'<span class="act keep">2-WEEK IDEA</span>':r.stale?'<span class="act wait" title="dip_watch_data.json is older than today\'s session: run generate_dip_watch.py">DATA OUT OF DATE</span>':r.avoid?'<span class="act exit">AVOID</span>':r.eligible?'<span class="act hold">PASSES</span>':(r.s[20].n<MIN_WINDOWS&&!r.short?'<span class="act wait">TOO LITTLE DATA</span>':'<span class="act wait">NOT BEATING</span>');
   const order=r=>r===SB.leader?0:r===SB.runner?1:r.shortOk?2:r.avoid?9:3;
   const rows=[...RULES].sort((a,b)=>order(a)-order(b)||(b.s[20].avg??-9)-(a.s[20].avg??-9));
   $("ruleTbl").innerHTML=`<thead><tr><th>Rule</th><th class="l">Status</th><th>2 wks vs market</th><th>4 wks vs market</th><th>Windows ahead (4 wks)</th><th>Picks today</th></tr></thead><tbody>`+
@@ -369,6 +395,9 @@ function holdingPlan(pf,top,SB){
     if(st&&st.nd) why.push("NO DIP – DON'T CHASE: don't add until it dips below its weekly average.");
     if(v&&v.fair&&!v.warn) why.push(`Valuation ${v.mos>=0?pct(v.mos,0)+" under":pct(-v.mos,0)+" over"} fair value, ${v.quality.grade} quality.`);
     if(earnSoon(a)) why.push(`Earnings in ${a.earnings_days} days: decide before, not after.`);
+    const dwr=dipRow(h.ticker);
+    if(dwFlag(h.ticker,"low",N-1)) why.push("At a new 52-week low: in the backtest, dips at a new low had no bounce edge. Lean on your risk line rather than hoping for a rebound.");
+    else if(dwr&&!dwr.suspect) why.push(`Dip watch: ${pct(-dwr.dd,0)} under its 20-day high.${dwr.hist&&dwr.hist.n?` It got back half of ${dwr.hist.n} past dips ${pct(dwr.hist.rec,0)} of the time (context only).`:""}`);
     if(h.inScreener===false) why.push(`Not in the screener, so no signals, Top 30 or risk line. Priced from ${h.priceFrom}.`);
     if(!why.length) why.push("No rule fired: hold and let the next checkpoint decide.");
     return {h,a,st,w,act,trimSh,trimUsd,why,rl,below,isExit:exitWhy.length>0};
@@ -761,6 +790,43 @@ function renderPnlItems(X){
     const th=e.target.closest("th.sort");if(th){const k=th.dataset.k;if(PNL_SORT.k===k)PNL_SORT.dir*=-1;else PNL_SORT={k,dir:k==="ticker"||k==="result"?1:-1};renderPnlItems(X)}};
 }
 
+/* ---- 5. dip watch & momentum (2026-10-23) ---- */
+const dipRow=t=>DW&&DW.dips?DW.dips.find(r=>r.t===t):null;
+function renderDipWatch(held){
+  if(!DW){
+    $("dwLede").innerHTML="No <b>dip_watch_data.json</b> yet. Run <b>python generate_dip_watch.py</b> (it is step 10 of the daily pipeline) and publish again.";
+    ["dwTiles","dwTbl","gapTbl","dwNote","gapNote"].forEach(id=>$(id).innerHTML=""); return;
+  }
+  const S=DW.stats||{}, st=S.notlow||{}, nl=S.newlow||{}, g=S.gap||{}, br=S.by_record||{};
+  const stale=DW.as_of!==D.as_of_session;
+  const yrs=Object.entries(g.by_year||{}), posY=yrs.filter(([,v])=>v>0).length;
+  $("dwLede").innerHTML=`Stocks that have just fallen hard, and stocks that just gapped up on heavy volume. Prices as of <b class="${stale?"dw-stale":""}">${dshort(DW.as_of)}</b>${stale?` (the tracker is on ${dshort(D.as_of_session)}: run generate_dip_watch.py again)`:""}. The figures below are re-tested on 5 years of prices every run. Stocks under $${DW.params.min_price||5} are left out. The honest summary: <b>buying big dips has a small edge with coin-flip odds</b>, a stock's own bounce record is <b>context, not a signal</b>, and <b>dips that are also a new 52-week low have no edge</b>. The two buy rules are forward-tested in the section 1 scoreboard before the page ever funds them.`;
+  $("dwTiles").innerHTML=[
+    tile("Dip, not a 52w low",spct(st.ex),`4 weeks vs market · ${pct(st.win,0)} beat it · ${st.n||0} dips since ${S.since?S.since.slice(0,4):""}`),
+    tile("Dip at a new 52w low",spct(nl.ex),`4 weeks vs market · ${pct(nl.win,0)} beat it · ${nl.n||0} dips`),
+    tile("Strong vs poor bounce record",`${pct(br.high&&br.high.rec,0)} / ${pct(br.low&&br.low.rec,0)}`,`got back half the drop in 4 weeks (${br.high?br.high.n:0} vs ${br.low?br.low.n:0} dips)`),
+    tile("Gap-up continuation",spct(g.ex),`3 months vs market · positive in ${posY} of ${yrs.length} years · ${g.n||0} gaps`),
+  ].join("");
+  const rec=r=>r.hist&&r.hist.n?r.hist:null;
+  const read=r=>r.suspect?'<span class="act wait">CHECK DATA</span>':r.low52?'<span class="act exit">AVOID: 52W LOW</span>':'<span class="act dip">DIP WATCH</span>';
+  const dips=DW.dips||[];
+  $("dwTbl").innerHTML=dips.length?`<thead><tr><th>Stock</th><th class="l">Read</th><th>Price</th><th>Off 20d high</th><th>Off 52w high</th><th>Days since peak</th><th>Biggest 1-day fall</th><th>Past dips</th><th>Got back half</th><th>Fell 10% more</th><th>4 wks vs mkt</th><th>Signal</th></tr></thead><tbody>`+
+    dips.map(r=>{const a=ALL.get(r.t)||{},h=rec(r);return `<tr><td><span class="tk">${esc(r.t)}</span>${held.has(r.t)?'<span class="tag held">HELD</span>':""}${r.low52?'<span class="tag low">52W LOW</span>':""}${r.post_earn?'<span class="tag earn" title="The biggest fall came within 4 days of the last earnings report">POST-EARNINGS</span>':""}${r.suspect?'<span class="tag chk" title="A one-day fall of 45%+ is usually a split or spin-off adjustment">SPLIT/SPIN?</span>':""}${window.Valuation?Valuation.button(r.t):""}<span class="co">${esc(a.company||"")}</span></td>
+      <td class="l">${read(r)}</td><td>${money(r.px,2)}</td><td class="neg">${spct(r.dd)}</td><td class="${cls(r.dd52)}">${spct(r.dd52,0)}</td><td>${r.days??"–"}</td>
+      <td class="${cls(r.big)}">${spct(r.big)}${r.big_d?`<span class="muted"> ${dshort(r.big_d)}</span>`:""}</td>
+      <td>${h?h.n:"–"}</td><td>${h?pct(h.rec,0):"–"}</td><td>${h?pct(h.slide,0):"–"}</td><td class="${h?cls(h.ex):"muted"}">${h?spct(h.ex):"–"}</td>
+      <td>${esc(a.signal||"–")}<span class="muted"> ${a.matrix_score??""}</span></td></tr>`}).join("")+`</tbody>`
+    :`<tbody><tr><td class="empty-pf">No stock is 15% or more under its 20-day high today.</td></tr></tbody>`;
+  $("dwNote").innerHTML=`<b>Past dips</b> = this stock's earlier 15%+ falls over 5 years. <b>Got back half</b> = recovered half the drop within 4 weeks. <b>Fell 10% more</b> = dropped another 10% within 4 weeks first or instead. Across all stocks, a strong record (two-thirds or more) got back half ${pct(br.high&&br.high.rec,0)} of the time vs ${pct(br.low&&br.low.rec,0)} for a poor one (one-third or less), too small to trade on alone. <b>POST-EARNINGS</b> = the biggest fall came within 4 days of the last report (beat or miss is not tracked). Use your usual entries (Support, then halfway to Mid BB) and the 3 × ATR risk line.`;
+  const gaps=DW.gaps||[];
+  $("gapTbl").innerHTML=gaps.length?`<thead><tr><th>Stock</th><th class="l">Gap day</th><th>Gap open</th><th>Day close</th><th>Volume ×</th><th>Since gap day</th><th>Price</th><th class="l">Trend</th><th>Signal</th></tr></thead><tbody>`+
+    gaps.map(r=>{const a=ALL.get(r.t)||{};return `<tr><td><span class="tk">${esc(r.t)}</span>${held.has(r.t)?'<span class="tag held">HELD</span>':""}${r.post_earn?'<span class="tag earn">POST-EARNINGS</span>':""}${window.Valuation?Valuation.button(r.t):""}<span class="co">${esc(a.company||"")}</span></td>
+      <td class="l">${dshort(r.d)}<span class="muted"> ${r.sessions_ago?r.sessions_ago+"d ago":"today"}</span></td><td class="pos">${spct(r.gap)}</td><td class="${cls(r.day)}">${spct(r.day)}</td><td>${(r.volx||0).toFixed(1)}×</td>
+      <td class="${cls(r.since)}">${spct(r.since)}</td><td>${money(r.px,2)}</td><td class="l">${r.uptrend?'<span class="pos">Uptrend</span>':'<span class="muted">Not in uptrend</span>'}</td><td>${esc(a.signal||"–")}<span class="muted"> ${a.matrix_score??""}</span></td></tr>`}).join("")+`</tbody>`
+    :`<tbody><tr><td class="empty-pf">No 4%+ gap-up on 2× volume in the last 10 sessions.</td></tr></tbody>`;
+  $("gapNote").innerHTML=`A <b>gap-up</b> = opened ${pct(DW.params.gap_min,0)}+ above the prior close on ${DW.params.gap_vol}× the 50-day volume and closed up, usually an earnings or news reaction. This was the only momentum entry in the backtest with a 3-month edge in most years (${yrs.map(([y,v])=>`${y} ${spct(v)}`).join(", ")}). Breakouts to new highs, MACD crosses, EMA20 pullbacks and Bollinger squeezes were all near zero. You cannot see a gap coming from price alone; this list catches the move <b>after</b> the first day, while the drift tends to continue.`;
+}
+
 /* ---- wiring ---- */
 let SB=null;
 function render(){
@@ -769,6 +835,7 @@ function render(){
   const plan=holdingPlan(pf,top,SB), sells=sellPlan(plan), trimCash=sells.reduce((s,x)=>s+x.usd,0);
   renderHoldings(plan,pf,top); renderUploadStatus(pf);
   const bp=buyPlan(top,held,trimCash,SB); renderBuys(bp,trimCash,SB); renderRealign(plan,sells,bp,SB); renderPlan(plan,bp,SB);
+  try{renderDipWatch(held)}catch(e){console.error("Dip watch:",e)}
   if(!PNL_DONE){PNL_DONE=true; try{renderPnl()}catch(e){console.error("Actual P&L:",e)}}
   document.querySelectorAll("#useTrim button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===P.useTrim)));
   document.querySelectorAll("#cap button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.v===+P.cap)));
@@ -799,8 +866,8 @@ function boot([pick,dash]){
   sync();addEventListener("resize",sync);if(window.ResizeObserver)new ResizeObserver(sync).observe(ctl)})();
 const get=f=>fetch(f+"?v="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(f+" "+r.status);return r.json()});
 const valP=window.Valuation?Valuation.load():Promise.resolve();  // for the Valuation buttons
-Promise.all([get("pick_tracker_data.json"),get(PUBLIC?"public_data.json":"dashboard_data.json"),get("valuation_data.json").catch(()=>({tickers:{}})),valP])
-  .then(([pick,dash,val])=>{V=val.tickers||{};boot([pick,dash])})
+Promise.all([get("pick_tracker_data.json"),get(PUBLIC?"public_data.json":"dashboard_data.json"),get("valuation_data.json").catch(()=>({tickers:{}})),valP,get("dip_watch_data.json").catch(()=>null)])
+  .then(([pick,dash,val,,dw])=>{V=val.tickers||{};DW=dw;boot([pick,dash])})
   .catch(err=>{$("meta").textContent="Could not load data: "+err.message+". Run the daily pipeline and publish again.";});
 })();
 </script>
