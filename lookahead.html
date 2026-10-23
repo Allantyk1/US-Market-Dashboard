@@ -133,6 +133,9 @@
   /* Dip cards (2026-10-23): same layout idea as the LEAPS screener card */
   .dw-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:10px}
   .dw-bar .btn{font:600 12px var(--font-body);color:var(--ink-dim);background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:6px 12px;cursor:pointer}
+  .dw-search input{font:500 13px var(--font-body);background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;width:240px;max-width:100%}
+  .dw-search input:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+  @media (max-width:600px){.dw-search,.dw-search input{width:100%}}
   .dcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
   @media (max-width:400px){.dcards{grid-template-columns:minmax(0,1fr)}}
   .dcard{background:var(--panel);border:1.5px solid var(--green);border-radius:16px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
@@ -265,10 +268,12 @@
     <div class="panel" style="margin-bottom:12px">
       <h3>Dip watch: 15%+ under the 20-day high</h3>
       <div class="dw-bar">
+        <div class="dw-search"><input type="search" id="dwSearch" list="dwList" placeholder="Search ticker or company" aria-label="Search dip stocks" autocomplete="off"><datalist id="dwList"></datalist></div>
         <div class="seg" id="dwView"><button type="button" data-v="cards">Cards</button><button type="button" data-v="table">Table</button></div>
         <div class="seg" id="dwSort"><button type="button" data-v="dd">Biggest dip</button><button type="button" data-v="rate">Best bounce record</button><button type="button" data-v="held">Held first</button></div>
         <label class="chk" style="font-size:12px;color:var(--ink-dim);display:flex;gap:6px;align-items:center"><input type="checkbox" id="dwHideLow"> Hide 52-week lows</label>
       </div>
+      <div class="upl-status" id="dwSearchNote" hidden style="margin:-2px 0 10px"></div>
       <div class="dcards" id="dwCards"></div>
       <div class="dw-bar" style="margin:10px 0 0"><button type="button" class="btn" id="dwMore" hidden></button></div>
       <div class="scroll freeze" id="dwTblWrap"><table id="dwTbl"></table></div>
@@ -836,7 +841,23 @@ function renderPnlItems(X){
 
 /* ---- 5. dip watch & momentum (2026-10-23) ---- */
 const dipRow=t=>DW&&DW.dips?DW.dips.find(r=>r.t===t):null;
-let DW_ALL=false;
+let DW_ALL=false, DW_Q="";
+// search: matches the ticker (start of it) or any word in the company name
+function dwMatch(list){
+  const q=DW_Q.trim().toUpperCase(); if(!q) return list;
+  return list.filter(r=>r.t.startsWith(q)||String((ALL.get(r.t)||{}).company||"").toUpperCase().includes(q));
+}
+function dwSearchNote(shown){
+  const el=$("dwSearchNote"), q=DW_Q.trim().toUpperCase();
+  if(!q){el.hidden=true;return}
+  el.hidden=false;
+  if(shown) {el.innerHTML=`${shown} match${shown===1?"":"es"} for <b>${esc(q)}</b> in today's dip list.`;return}
+  // not in the dip list: say where the stock stands, if the screener knows it
+  const a=ALL.get(q), w=D.watch[q];
+  if(a&&w){const c=w.c.filter(v=>v!=null), hi=Math.max(...c.slice(-20)), last=c[c.length-1];
+    el.innerHTML=`<b>${esc(q)}</b> is not in today's dip list: it is ${spct(last/hi-1)} from its 20-day high (a card appears at −15% or more).`}
+  else el.innerHTML=`No match for <b>${esc(q)}</b> in today's dip list or the screener.`;
+}
 const days=v=>v==null?"–":`${Math.round(v)}d`;
 function dipChart(ch,low52){
   const W=340,H=118,pad=4,c=ch.c,ma=ch.ma,n=c.length; if(!n) return "";
@@ -892,14 +913,15 @@ function dipCard(r,held){
 }
 const cls2=v=>v==null?"muted":v>=0?"pos":"neg";
 function renderDipCards(held){
-  let list=(DW.dips||[]).slice();
+  let list=dwMatch(DW.dips||[]);
   if(P.dwHideLow) list=list.filter(r=>!r.low52&&!r.suspect);
   const rate=r=>r.card&&r.card.n>=3?r.card.bounced/r.card.n:-1;
   if(P.dwSort==="rate") list.sort((a,b)=>(a.suspect-b.suspect)||(a.low52-b.low52)||rate(b)-rate(a)||((b.card||{}).n||0)-((a.card||{}).n||0));
   else if(P.dwSort==="held") list.sort((a,b)=>(held.has(b.t)-held.has(a.t))||(a.suspect-b.suspect)||(a.low52-b.low52)||a.dd-b.dd);
-  const LIMIT=12, show=DW_ALL?list:list.slice(0,LIMIT);
+  const LIMIT=12, show=(DW_ALL||DW_Q.trim())?list:list.slice(0,LIMIT);
   $("dwCards").innerHTML=show.length?show.map(r=>dipCard(r,held)).join(""):`<div class="empty-pf">No stock is 15% or more under its 20-day high today.</div>`;
-  const more=$("dwMore"); more.hidden=list.length<=LIMIT; more.textContent=DW_ALL?"Show fewer":`Show all ${list.length}`;
+  dwSearchNote(list.length);
+  const more=$("dwMore"); more.hidden=list.length<=LIMIT||!!DW_Q.trim(); more.textContent=DW_ALL?"Show fewer":`Show all ${list.length}`;
 }
 function renderDipWatch(held){
   if(!DW){
@@ -918,7 +940,8 @@ function renderDipWatch(held){
   ].join("");
   const rec=r=>r.hist&&r.hist.n?r.hist:null;
   const read=r=>r.suspect?'<span class="act wait">CHECK DATA</span>':r.low52?'<span class="act exit">AVOID: 52W LOW</span>':'<span class="act dip">DIP WATCH</span>';
-  const dips=DW.dips||[];
+  const dips=dwMatch(DW.dips||[]);
+  $("dwList").innerHTML=(DW.dips||[]).map(r=>`<option value="${esc(r.t)}">${esc((ALL.get(r.t)||{}).company||"")}</option>`).join("");
   $("dwTbl").innerHTML=dips.length?`<thead><tr><th>Stock</th><th class="l">Read</th><th>Price</th><th>Off 20d high</th><th>Off 52w high</th><th>Days since peak</th><th>Biggest 1-day fall</th><th>Past dips</th><th>Got back half</th><th>Fell 10% more</th><th>4 wks vs mkt</th><th>Signal</th></tr></thead><tbody>`+
     dips.map(r=>{const a=ALL.get(r.t)||{},h=rec(r);return `<tr><td><span class="tk">${esc(r.t)}</span>${held.has(r.t)?'<span class="tag held">HELD</span>':""}${r.low52?'<span class="tag low">52W LOW</span>':""}${r.post_earn?'<span class="tag earn" title="The biggest fall came within 4 days of the last earnings report">POST-EARNINGS</span>':""}${r.suspect?'<span class="tag chk" title="A one-day fall of 45%+ is usually a split or spin-off adjustment">SPLIT/SPIN?</span>':""}${window.Valuation?Valuation.button(r.t):""}<span class="co">${esc(a.company||"")}</span></td>
       <td class="l">${read(r)}</td><td>${money(r.px,2)}</td><td class="neg">${spct(r.dd)}</td><td class="${cls(r.dd52)}">${spct(r.dd52,0)}</td><td>${r.days??"–"}</td>
@@ -930,7 +953,7 @@ function renderDipWatch(held){
   const cardsView=P.dwView!=="table";
   $("dwTblWrap").hidden=cardsView; $("dwCards").hidden=!cardsView; $("dwMore").hidden=true;
   $("dwSort").hidden=!cardsView; $("dwHideLow").parentElement.hidden=!cardsView;
-  if(cardsView) renderDipCards(held);
+  if(cardsView) renderDipCards(held); else dwSearchNote(dips.length);
   document.querySelectorAll("#dwView button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===(cardsView?"cards":"table"))));
   document.querySelectorAll("#dwSort button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===P.dwSort)));
   $("dwHideLow").checked=!!P.dwHideLow;
@@ -977,6 +1000,7 @@ function boot([pick,dash]){
   $("dwView").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P.dwView=b.dataset.v;save();render()});
   $("dwSort").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P.dwSort=b.dataset.v;save();render()});
   $("dwHideLow").addEventListener("change",e=>{P.dwHideLow=e.target.checked;save();render()});
+  $("dwSearch").addEventListener("input",e=>{DW_Q=e.target.value;render()});
   $("dwMore").addEventListener("click",()=>{DW_ALL=!DW_ALL;render()});
   prepRules(); SB=scoreRules(); renderScoreboard(SB); render();
 }
