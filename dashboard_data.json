@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-27T22:17:03",
+  "generated_at": "2026-10-27T22:43:15",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 99436.1,
-    "total_cost": 109176.5,
-    "total_gain": -9740.4,
-    "total_gain_pct": -0.0892,
+    "total_value": 100004.35,
+    "total_cost": 109736.47,
+    "total_gain": -9732.12,
+    "total_gain_pct": -0.0887,
     "holdings": [
       {
         "ticker": "AVGO",
@@ -16,7 +16,7 @@
         "market_value": 2962.53,
         "gain_dollar": -151.37,
         "gain_pct": -0.0486,
-        "weight_pct": 0.0315,
+        "weight_pct": 0.0313,
         "suggested_entry": 320.32,
         "analyst_target": 529.1,
         "macd_trend": "FALLING"
@@ -30,7 +30,7 @@
         "market_value": 1631.36,
         "gain_dollar": -161.68,
         "gain_pct": -0.0902,
-        "weight_pct": 0.0174,
+        "weight_pct": 0.0173,
         "suggested_entry": 194.29,
         "analyst_target": 284.77,
         "macd_trend": "FALLING"
@@ -44,7 +44,7 @@
         "market_value": 2713.15,
         "gain_dollar": -471.56,
         "gain_pct": -0.1481,
-        "weight_pct": 0.0289,
+        "weight_pct": 0.0287,
         "suggested_entry": 245.42,
         "analyst_target": 468.36,
         "macd_trend": "FALLING"
@@ -58,7 +58,7 @@
         "market_value": 1165.5,
         "gain_dollar": -548.38,
         "gain_pct": -0.32,
-        "weight_pct": 0.0124,
+        "weight_pct": 0.0123,
         "suggested_entry": 6.93,
         "analyst_target": 23.17,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 2116.1,
         "gain_dollar": -231.01,
         "gain_pct": -0.0984,
-        "weight_pct": 0.0225,
+        "weight_pct": 0.0224,
         "suggested_entry": 146.37,
         "analyst_target": 284.05,
         "macd_trend": "FALLING"
@@ -100,7 +100,7 @@
         "market_value": 6524.55,
         "gain_dollar": -752.76,
         "gain_pct": -0.1034,
-        "weight_pct": 0.0694,
+        "weight_pct": 0.069,
         "suggested_entry": 44.12,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -114,7 +114,7 @@
         "market_value": 628.08,
         "gain_dollar": -41.5,
         "gain_pct": -0.062,
-        "weight_pct": 0.0067,
+        "weight_pct": 0.0066,
         "suggested_entry": 51.6,
         "analyst_target": null,
         "macd_trend": "FLAT"
@@ -142,7 +142,7 @@
         "market_value": 1392.6,
         "gain_dollar": -194.78,
         "gain_pct": -0.1227,
-        "weight_pct": 0.0148,
+        "weight_pct": 0.0147,
         "suggested_entry": 91.63,
         "analyst_target": 134.9,
         "macd_trend": "FLAT"
@@ -156,7 +156,7 @@
         "market_value": 1873.8,
         "gain_dollar": 125.53,
         "gain_pct": 0.0718,
-        "weight_pct": 0.0199,
+        "weight_pct": 0.0198,
         "suggested_entry": 84.49,
         "analyst_target": 97.47,
         "macd_trend": "FLAT"
@@ -170,7 +170,7 @@
         "market_value": 18998.7,
         "gain_dollar": -3767.19,
         "gain_pct": -0.1655,
-        "weight_pct": 0.2022,
+        "weight_pct": 0.201,
         "suggested_entry": 82.9,
         "analyst_target": 117.71,
         "macd_trend": "RISING"
@@ -184,10 +184,24 @@
         "market_value": 6357.5,
         "gain_dollar": -3578.02,
         "gain_pct": -0.3601,
-        "weight_pct": 0.0677,
+        "weight_pct": 0.0672,
         "suggested_entry": 22.51,
         "analyst_target": 77.81,
         "macd_trend": "RISING"
+      },
+      {
+        "ticker": "METU",
+        "company": "Direxion Daily META ",
+        "shares": 25.0,
+        "avg_cost": 22.3988,
+        "current_price": 22.73,
+        "market_value": 568.25,
+        "gain_dollar": 8.28,
+        "gain_pct": 0.0148,
+        "weight_pct": 0.006,
+        "suggested_entry": 22.62,
+        "analyst_target": null,
+        "macd_trend": "FALLING"
       },
       {
         "ticker": "MU",
@@ -198,7 +212,7 @@
         "market_value": 13557.4,
         "gain_dollar": 1170.57,
         "gain_pct": 0.0945,
-        "weight_pct": 0.1443,
+        "weight_pct": 0.1434,
         "suggested_entry": 844.37,
         "analyst_target": 1561.91,
         "macd_trend": "RISING"
@@ -212,7 +226,7 @@
         "market_value": 7587.35,
         "gain_dollar": 2281.41,
         "gain_pct": 0.43,
-        "weight_pct": 0.0807,
+        "weight_pct": 0.0803,
         "suggested_entry": 210.14,
         "analyst_target": 328.95,
         "macd_trend": "FLAT"
@@ -240,7 +254,7 @@
         "market_value": 4278.6,
         "gain_dollar": -256.92,
         "gain_pct": -0.0566,
-        "weight_pct": 0.0455,
+        "weight_pct": 0.0453,
         "suggested_entry": 126.42,
         "analyst_target": 243.43,
         "macd_trend": "RISING"
@@ -254,7 +268,7 @@
         "market_value": 653.8,
         "gain_dollar": -3.51,
         "gain_pct": -0.0053,
-        "weight_pct": 0.007,
+        "weight_pct": 0.0069,
         "suggested_entry": 30.27,
         "analyst_target": 43.27,
         "macd_trend": "RISING"
@@ -268,7 +282,7 @@
         "market_value": 541.62,
         "gain_dollar": -8.83,
         "gain_pct": -0.016,
-        "weight_pct": 0.0058,
+        "weight_pct": 0.0057,
         "suggested_entry": 519.25,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -282,7 +296,7 @@
         "market_value": 4338.0,
         "gain_dollar": -1760.01,
         "gain_pct": -0.2886,
-        "weight_pct": 0.0462,
+        "weight_pct": 0.0459,
         "suggested_entry": 14.17,
         "analyst_target": 20.22,
         "macd_trend": "RISING"
@@ -296,7 +310,7 @@
         "market_value": 6335.0,
         "gain_dollar": -911.43,
         "gain_pct": -0.1258,
-        "weight_pct": 0.0674,
+        "weight_pct": 0.067,
         "suggested_entry": 75.04,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -324,13 +338,13 @@
         "market_value": 7104.44,
         "gain_dollar": 970.42,
         "gain_pct": 0.1582,
-        "weight_pct": 0.0756,
+        "weight_pct": 0.0751,
         "suggested_entry": 698.92,
         "analyst_target": null,
         "macd_trend": "FALLING"
       }
     ],
-    "stock_value": 93969.89,
+    "stock_value": 94538.14,
     "options_value": 5466.21,
     "options_cost": 6053.21,
     "options": [
@@ -371,7 +385,7 @@
         "breakeven": 43.8,
         "vs_breakeven_pct": -0.4194,
         "stock_price": 25.43,
-        "iv": 1.024418940429688,
+        "iv": 1.006596763916015,
         "notes": "Bought on 8 Oct 2026 when mother share was around $35.20 with Delta of 0.82"
       }
     ],
@@ -574,7 +588,7 @@
         "months": [
           {
             "ym": "2026-10",
-            "bought": 36424.62,
+            "bought": 36984.59,
             "sold": 19230.7,
             "gains": 1177.25,
             "losses": -745.41,
@@ -869,7 +883,7 @@
       "macd_trend": "FALLING",
       "shares_needed": 1474.0,
       "capital_required": 33341.880000000005,
-      "already_held": false
+      "already_held": true
     },
     {
       "ticker": "MGM",
