@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-27T21:12:36",
+  "generated_at": "2026-10-27T22:17:03",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 99505.63,
-    "total_cost": 109264.97,
-    "total_gain": -9759.34,
-    "total_gain_pct": -0.0893,
+    "total_value": 99436.1,
+    "total_cost": 109176.5,
+    "total_gain": -9740.4,
+    "total_gain_pct": -0.0892,
     "holdings": [
       {
         "ticker": "AVGO",
@@ -30,35 +30,21 @@
         "market_value": 1631.36,
         "gain_dollar": -161.68,
         "gain_pct": -0.0902,
-        "weight_pct": 0.0173,
+        "weight_pct": 0.0174,
         "suggested_entry": 194.29,
         "analyst_target": 284.77,
         "macd_trend": "FALLING"
       },
       {
-        "ticker": "BX",
-        "company": "Blackstone Inc.",
-        "shares": 8.0,
-        "avg_cost": 110.3812,
-        "current_price": 119.06,
-        "market_value": 952.48,
-        "gain_dollar": 69.43,
-        "gain_pct": 0.0786,
-        "weight_pct": 0.0101,
-        "suggested_entry": 109.8,
-        "analyst_target": 138.77,
-        "macd_trend": "RISING"
-      },
-      {
         "ticker": "CLS",
         "company": "Celestica, Inc.",
-        "shares": 8.0,
-        "avg_cost": 298.7665,
+        "shares": 11.0,
+        "avg_cost": 289.5192,
         "current_price": 246.65,
-        "market_value": 1973.2,
-        "gain_dollar": -416.93,
-        "gain_pct": -0.1744,
-        "weight_pct": 0.021,
+        "market_value": 2713.15,
+        "gain_dollar": -471.56,
+        "gain_pct": -0.1481,
+        "weight_pct": 0.0289,
         "suggested_entry": 245.42,
         "analyst_target": 468.36,
         "macd_trend": "FALLING"
@@ -114,7 +100,7 @@
         "market_value": 6524.55,
         "gain_dollar": -752.76,
         "gain_pct": -0.1034,
-        "weight_pct": 0.0693,
+        "weight_pct": 0.0694,
         "suggested_entry": 44.12,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -184,7 +170,7 @@
         "market_value": 18998.7,
         "gain_dollar": -3767.19,
         "gain_pct": -0.1655,
-        "weight_pct": 0.2017,
+        "weight_pct": 0.2022,
         "suggested_entry": 82.9,
         "analyst_target": 117.71,
         "macd_trend": "RISING"
@@ -198,7 +184,7 @@
         "market_value": 6357.5,
         "gain_dollar": -3578.02,
         "gain_pct": -0.3601,
-        "weight_pct": 0.0675,
+        "weight_pct": 0.0677,
         "suggested_entry": 22.51,
         "analyst_target": 77.81,
         "macd_trend": "RISING"
@@ -212,7 +198,7 @@
         "market_value": 13557.4,
         "gain_dollar": 1170.57,
         "gain_pct": 0.0945,
-        "weight_pct": 0.1439,
+        "weight_pct": 0.1443,
         "suggested_entry": 844.37,
         "analyst_target": 1561.91,
         "macd_trend": "RISING"
@@ -226,7 +212,7 @@
         "market_value": 7587.35,
         "gain_dollar": 2281.41,
         "gain_pct": 0.43,
-        "weight_pct": 0.0806,
+        "weight_pct": 0.0807,
         "suggested_entry": 210.14,
         "analyst_target": 328.95,
         "macd_trend": "FLAT"
@@ -254,7 +240,7 @@
         "market_value": 4278.6,
         "gain_dollar": -256.92,
         "gain_pct": -0.0566,
-        "weight_pct": 0.0454,
+        "weight_pct": 0.0455,
         "suggested_entry": 126.42,
         "analyst_target": 243.43,
         "macd_trend": "RISING"
@@ -268,7 +254,7 @@
         "market_value": 653.8,
         "gain_dollar": -3.51,
         "gain_pct": -0.0053,
-        "weight_pct": 0.0069,
+        "weight_pct": 0.007,
         "suggested_entry": 30.27,
         "analyst_target": 43.27,
         "macd_trend": "RISING"
@@ -296,7 +282,7 @@
         "market_value": 4338.0,
         "gain_dollar": -1760.01,
         "gain_pct": -0.2886,
-        "weight_pct": 0.0461,
+        "weight_pct": 0.0462,
         "suggested_entry": 14.17,
         "analyst_target": 20.22,
         "macd_trend": "RISING"
@@ -310,7 +296,7 @@
         "market_value": 6335.0,
         "gain_dollar": -911.43,
         "gain_pct": -0.1258,
-        "weight_pct": 0.0673,
+        "weight_pct": 0.0674,
         "suggested_entry": 75.04,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -338,14 +324,14 @@
         "market_value": 7104.44,
         "gain_dollar": 970.42,
         "gain_pct": 0.1582,
-        "weight_pct": 0.0754,
+        "weight_pct": 0.0756,
         "suggested_entry": 698.92,
         "analyst_target": null,
         "macd_trend": "FALLING"
       }
     ],
-    "stock_value": 94182.42,
-    "options_value": 5323.21,
+    "stock_value": 93969.89,
+    "options_value": 5466.21,
     "options_cost": 6053.21,
     "options": [
       {
@@ -375,27 +361,41 @@
         "expiry": "2028-03-17",
         "contracts": 1.0,
         "premium_paid": 18.8,
-        "option_price": 11.5,
-        "price_source": "Yahoo last trade",
+        "option_price": 12.93,
+        "price_source": "Yahoo mid (bid/ask)",
         "cost_basis": 1880.0,
-        "market_value": 1150.0,
-        "gain_dollar": -730.0,
-        "gain_pct": -0.3883,
+        "market_value": 1293.0,
+        "gain_dollar": -587.0,
+        "gain_pct": -0.3122,
         "dte": 507.0,
         "breakeven": 43.8,
         "vs_breakeven_pct": -0.4194,
         "stock_price": 25.43,
-        "iv": 1e-05,
+        "iv": 1.024418940429688,
         "notes": "Bought on 8 Oct 2026 when mother share was around $35.20 with Delta of 0.82"
       }
     ],
     "realized": {
-      "total": 369.1,
-      "this_month": 369.1,
-      "this_year": 369.1,
-      "n_sells": 12,
-      "n_wins": 3,
+      "total": 431.84,
+      "this_month": 431.84,
+      "this_year": 431.84,
+      "n_sells": 13,
+      "n_wins": 4,
       "sells": [
+        {
+          "date": "2026-10-27",
+          "ticker": "BX",
+          "kind": "STOCK",
+          "label": "BX",
+          "shares": 8.0,
+          "price": 118.51,
+          "avg_cost": 110.3812,
+          "fees": 2.29,
+          "realized": 62.74,
+          "realized_pct": 0.0711,
+          "closed_position": true,
+          "notes": null
+        },
         {
           "date": "2026-10-23",
           "ticker": "ORLY",
@@ -574,17 +574,32 @@
         "months": [
           {
             "ym": "2026-10",
-            "bought": 35630.04,
-            "sold": 18284.91,
-            "gains": 1114.51,
+            "bought": 36424.62,
+            "sold": 19230.7,
+            "gains": 1177.25,
             "losses": -745.41,
             "dividends": 0.0,
-            "sells": 12,
-            "wins": 3,
+            "sells": 13,
+            "wins": 4,
             "n_div": 0
           }
         ],
         "items": [
+          {
+            "type": "SELL",
+            "date": "2026-10-27",
+            "ticker": "BX",
+            "label": "BX",
+            "kind": "STOCK",
+            "shares": 8.0,
+            "opened": "2026-10-16",
+            "result": "Closed",
+            "avg_cost": 110.3812,
+            "price": 118.51,
+            "amount": 945.79,
+            "pl": 62.74,
+            "pct": 0.0711
+          },
           {
             "type": "SELL",
             "date": "2026-10-23",
