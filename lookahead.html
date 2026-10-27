@@ -188,7 +188,7 @@
 <div class="wrap">
   <header class="top">
     <div>
-      <a class="back-btn" id="backLink" href="index.html" aria-label="Back to Market Desk">‹ Market Desk</a>
+      <style>.page-nav{display:inline-flex;gap:4px;margin:0 0 10px;padding:3px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line);flex-wrap:wrap}.page-nav a{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:9px;color:var(--ink-dim);font:500 12px var(--font-data);letter-spacing:.04em;text-decoration:none;white-space:nowrap}.page-nav a:hover{color:var(--amber)}.page-nav a[aria-current="page"]{background:var(--amber);color:#111;cursor:default}.page-nav a:focus-visible{outline:2px solid var(--amber);outline-offset:2px}</style><nav class="page-nav" aria-label="Market Desk pages"><a href="index.html" data-nav="desk" title="Back to Market Desk">‹ Market Desk</a><a href="tracker.html" data-nav="tracker" title="Pick Tracker: how past recommendations performed">Tracker</a><a href="lookahead.html" data-nav="look" title="Look-ahead Strategy: what to change over the next 3 months" aria-current="page">Look-ahead</a></nav><script>(function(){if(!/(^|[?&])from=public\b/.test(location.search))return;document.querySelectorAll(".page-nav a").forEach(function(a){a.href=a.dataset.nav==="desk"?"public.html":a.getAttribute("href")+"?from=public"})})()</script>
       <p class="eyebrow">Look-ahead strategy</p>
       <h1 id="title">Next 3 months</h1>
     </div>
@@ -652,7 +652,7 @@ function renderUploadStatus(pf){
     `<br>Read in this browser only.${P.pfRemember?" Remembered on this device.":" Not saved: it's gone when you close the page."}`;
 }
 function initUpload(){
-  if(PUBLIC){ $("backLink").href="public.html"; $("backLink").innerHTML="‹ Market Desk"; }
+  /* page-nav handles public links */
   else { $("pfSource").hidden=false; $("uplTitle").textContent="Portfolio to check"; if(!P.pfSource) P.pfSource="desk"; }
   if(P.pfRemember){ try{UPLOAD=JSON.parse(localStorage.getItem(UPKEY)||"null")}catch(e){} }
   $("pfRemember").checked=!!P.pfRemember;
