@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-27T16:06:29",
+  "generated_at": "2026-10-27T17:09:43",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 101670.43,
-    "total_cost": 111397.83,
-    "total_gain": -9727.4,
-    "total_gain_pct": -0.0873,
+    "total_value": 99505.63,
+    "total_cost": 109264.97,
+    "total_gain": -9759.34,
+    "total_gain_pct": -0.0893,
     "holdings": [
       {
         "ticker": "AVGO",
@@ -16,7 +16,7 @@
         "market_value": 2962.53,
         "gain_dollar": -151.37,
         "gain_pct": -0.0486,
-        "weight_pct": 0.0307,
+        "weight_pct": 0.0315,
         "suggested_entry": 320.32,
         "analyst_target": 529.1,
         "macd_trend": "FALLING"
@@ -30,7 +30,7 @@
         "market_value": 1631.36,
         "gain_dollar": -161.68,
         "gain_pct": -0.0902,
-        "weight_pct": 0.0169,
+        "weight_pct": 0.0173,
         "suggested_entry": 194.29,
         "analyst_target": 284.77,
         "macd_trend": "FALLING"
@@ -44,7 +44,7 @@
         "market_value": 952.48,
         "gain_dollar": 69.43,
         "gain_pct": 0.0786,
-        "weight_pct": 0.0099,
+        "weight_pct": 0.0101,
         "suggested_entry": 109.8,
         "analyst_target": 138.77,
         "macd_trend": "RISING"
@@ -58,7 +58,7 @@
         "market_value": 1973.2,
         "gain_dollar": -416.93,
         "gain_pct": -0.1744,
-        "weight_pct": 0.0205,
+        "weight_pct": 0.021,
         "suggested_entry": 245.42,
         "analyst_target": 468.36,
         "macd_trend": "FALLING"
@@ -72,7 +72,7 @@
         "market_value": 1165.5,
         "gain_dollar": -548.38,
         "gain_pct": -0.32,
-        "weight_pct": 0.0121,
+        "weight_pct": 0.0124,
         "suggested_entry": 6.93,
         "analyst_target": 23.17,
         "macd_trend": "RISING"
@@ -86,7 +86,7 @@
         "market_value": 732.75,
         "gain_dollar": -3.41,
         "gain_pct": -0.0046,
-        "weight_pct": 0.0076,
+        "weight_pct": 0.0078,
         "suggested_entry": 44.81,
         "analyst_target": 70.88,
         "macd_trend": "FLAT"
@@ -100,7 +100,7 @@
         "market_value": 2116.1,
         "gain_dollar": -231.01,
         "gain_pct": -0.0984,
-        "weight_pct": 0.022,
+        "weight_pct": 0.0225,
         "suggested_entry": 146.37,
         "analyst_target": 284.05,
         "macd_trend": "FALLING"
@@ -114,7 +114,7 @@
         "market_value": 6524.55,
         "gain_dollar": -752.76,
         "gain_pct": -0.1034,
-        "weight_pct": 0.0677,
+        "weight_pct": 0.0693,
         "suggested_entry": 44.12,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -128,7 +128,7 @@
         "market_value": 628.08,
         "gain_dollar": -41.5,
         "gain_pct": -0.062,
-        "weight_pct": 0.0065,
+        "weight_pct": 0.0067,
         "suggested_entry": 51.6,
         "analyst_target": null,
         "macd_trend": "FLAT"
@@ -142,7 +142,7 @@
         "market_value": 668.56,
         "gain_dollar": -180.08,
         "gain_pct": -0.2122,
-        "weight_pct": 0.0069,
+        "weight_pct": 0.0071,
         "suggested_entry": 83.15,
         "analyst_target": null,
         "macd_trend": "FALLING"
@@ -156,7 +156,7 @@
         "market_value": 1392.6,
         "gain_dollar": -194.78,
         "gain_pct": -0.1227,
-        "weight_pct": 0.0145,
+        "weight_pct": 0.0148,
         "suggested_entry": 91.63,
         "analyst_target": 134.9,
         "macd_trend": "FLAT"
@@ -170,7 +170,7 @@
         "market_value": 1873.8,
         "gain_dollar": 125.53,
         "gain_pct": 0.0718,
-        "weight_pct": 0.0194,
+        "weight_pct": 0.0199,
         "suggested_entry": 84.49,
         "analyst_target": 97.47,
         "macd_trend": "FLAT"
@@ -184,7 +184,7 @@
         "market_value": 18998.7,
         "gain_dollar": -3767.19,
         "gain_pct": -0.1655,
-        "weight_pct": 0.1972,
+        "weight_pct": 0.2017,
         "suggested_entry": 82.9,
         "analyst_target": 117.71,
         "macd_trend": "RISING"
@@ -198,7 +198,7 @@
         "market_value": 6357.5,
         "gain_dollar": -3578.02,
         "gain_pct": -0.3601,
-        "weight_pct": 0.066,
+        "weight_pct": 0.0675,
         "suggested_entry": 22.51,
         "analyst_target": 77.81,
         "macd_trend": "RISING"
@@ -212,7 +212,7 @@
         "market_value": 13557.4,
         "gain_dollar": 1170.57,
         "gain_pct": 0.0945,
-        "weight_pct": 0.1407,
+        "weight_pct": 0.1439,
         "suggested_entry": 844.37,
         "analyst_target": 1561.91,
         "macd_trend": "RISING"
@@ -226,7 +226,7 @@
         "market_value": 7587.35,
         "gain_dollar": 2281.41,
         "gain_pct": 0.43,
-        "weight_pct": 0.0788,
+        "weight_pct": 0.0806,
         "suggested_entry": 210.14,
         "analyst_target": 328.95,
         "macd_trend": "FLAT"
@@ -240,7 +240,7 @@
         "market_value": 1074.0,
         "gain_dollar": -686.4,
         "gain_pct": -0.3899,
-        "weight_pct": 0.0111,
+        "weight_pct": 0.0114,
         "suggested_entry": 4.86,
         "analyst_target": 14.75,
         "macd_trend": "RISING"
@@ -254,7 +254,7 @@
         "market_value": 4278.6,
         "gain_dollar": -256.92,
         "gain_pct": -0.0566,
-        "weight_pct": 0.0444,
+        "weight_pct": 0.0454,
         "suggested_entry": 126.42,
         "analyst_target": 243.43,
         "macd_trend": "RISING"
@@ -268,7 +268,7 @@
         "market_value": 653.8,
         "gain_dollar": -3.51,
         "gain_pct": -0.0053,
-        "weight_pct": 0.0068,
+        "weight_pct": 0.0069,
         "suggested_entry": 30.27,
         "analyst_target": 43.27,
         "macd_trend": "RISING"
@@ -282,7 +282,7 @@
         "market_value": 541.62,
         "gain_dollar": -8.83,
         "gain_pct": -0.016,
-        "weight_pct": 0.0056,
+        "weight_pct": 0.0058,
         "suggested_entry": 519.25,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -296,7 +296,7 @@
         "market_value": 4338.0,
         "gain_dollar": -1760.01,
         "gain_pct": -0.2886,
-        "weight_pct": 0.045,
+        "weight_pct": 0.0461,
         "suggested_entry": 14.17,
         "analyst_target": 20.22,
         "macd_trend": "RISING"
@@ -310,7 +310,7 @@
         "market_value": 6335.0,
         "gain_dollar": -911.43,
         "gain_pct": -0.1258,
-        "weight_pct": 0.0658,
+        "weight_pct": 0.0673,
         "suggested_entry": 75.04,
         "analyst_target": null,
         "macd_trend": "RISING"
@@ -324,7 +324,7 @@
         "market_value": 734.5,
         "gain_dollar": 7.53,
         "gain_pct": 0.0104,
-        "weight_pct": 0.0076,
+        "weight_pct": 0.0078,
         "suggested_entry": 140.85,
         "analyst_target": 256.59,
         "macd_trend": "FALLING"
@@ -338,27 +338,13 @@
         "market_value": 7104.44,
         "gain_dollar": 970.42,
         "gain_pct": 0.1582,
-        "weight_pct": 0.0737,
+        "weight_pct": 0.0754,
         "suggested_entry": 698.92,
         "analyst_target": null,
         "macd_trend": "FALLING"
-      },
-      {
-        "ticker": "XYL",
-        "company": "Xylem Inc.",
-        "shares": 20.0,
-        "avg_cost": 106.643,
-        "current_price": 108.24,
-        "market_value": 2164.8,
-        "gain_dollar": 31.94,
-        "gain_pct": 0.015,
-        "weight_pct": 0.0225,
-        "suggested_entry": 101.99,
-        "analyst_target": 142.62,
-        "macd_trend": "RISING"
       }
     ],
-    "stock_value": 96347.22,
+    "stock_value": 94182.42,
     "options_value": 5323.21,
     "options_cost": 6053.21,
     "options": [
@@ -404,10 +390,10 @@
       }
     ],
     "realized": {
-      "total": 464.86,
-      "this_month": 464.86,
-      "this_year": 464.86,
-      "n_sells": 11,
+      "total": 369.1,
+      "this_month": 369.1,
+      "this_year": 369.1,
+      "n_sells": 12,
       "n_wins": 3,
       "sells": [
         {
@@ -538,6 +524,20 @@
         },
         {
           "date": "2026-10-14",
+          "ticker": "XYL",
+          "kind": "STOCK",
+          "label": "XYL",
+          "shares": 20.0,
+          "price": 102.0501,
+          "avg_cost": 106.643,
+          "fees": 3.9,
+          "realized": -95.76,
+          "realized_pct": -0.0449,
+          "closed_position": true,
+          "notes": null
+        },
+        {
+          "date": "2026-10-14",
           "ticker": "IREN",
           "kind": "OPTION",
           "label": "IREN C25 21-Jan-2028",
@@ -575,11 +575,11 @@
           {
             "ym": "2026-10",
             "bought": 35630.04,
-            "sold": 16247.81,
+            "sold": 18284.91,
             "gains": 1114.51,
-            "losses": -649.65,
+            "losses": -745.41,
             "dividends": 0.0,
-            "sells": 11,
+            "sells": 12,
             "wins": 3,
             "n_div": 0
           }
@@ -749,6 +749,21 @@
             "amount": 3098.79,
             "pl": 918.79,
             "pct": 0.4215
+          },
+          {
+            "type": "SELL",
+            "date": "2026-10-14",
+            "ticker": "XYL",
+            "label": "XYL",
+            "kind": "STOCK",
+            "shares": 20.0,
+            "opened": "carried over",
+            "result": "Closed",
+            "avg_cost": 106.643,
+            "price": 102.0501,
+            "amount": 2037.1,
+            "pl": -95.76,
+            "pct": -0.0449
           }
         ],
         "early_rows": [
