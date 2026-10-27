@@ -652,7 +652,7 @@ function renderUploadStatus(pf){
     `<br>Read in this browser only.${P.pfRemember?" Remembered on this device.":" Not saved: it's gone when you close the page."}`;
 }
 function initUpload(){
-  /* page-nav handles public links */
+  if(PUBLIC){ /* public links are handled by the page-nav bar */ }
   else { $("pfSource").hidden=false; $("uplTitle").textContent="Portfolio to check"; if(!P.pfSource) P.pfSource="desk"; }
   if(P.pfRemember){ try{UPLOAD=JSON.parse(localStorage.getItem(UPKEY)||"null")}catch(e){} }
   $("pfRemember").checked=!!P.pfRemember;
