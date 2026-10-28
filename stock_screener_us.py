@@ -1,4 +1,5 @@
 import yfinance as yf
+import warnings; warnings.filterwarnings("ignore", message=".*inplace keyword.*")  # yfinance re-enables pandas inplace notices on import
 import pandas as pd
 import numpy as np
 import time

@@ -269,6 +269,7 @@ def _drop_unfinished_session(df):
 def download_batches(tickers, period):
     try:
         import yfinance as yf
+        import warnings; warnings.filterwarnings("ignore", message=".*inplace keyword.*")  # yfinance re-enables pandas inplace notices on import
     except ImportError:
         print("[STOP] yfinance is not installed. Run:  pip install yfinance")
         sys.exit(1)

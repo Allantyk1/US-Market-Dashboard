@@ -42,6 +42,7 @@ import datetime
 import statistics
 
 import yfinance as yf
+import warnings; warnings.filterwarnings("ignore", message=".*inplace keyword.*")  # yfinance re-enables pandas inplace notices on import
 
 DASHBOARD_FILE = "dashboard_data.json"
 PICK_FILE = "pick_tracker_data.json"
