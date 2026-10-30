@@ -1112,6 +1112,35 @@ def main():
             print("  ...pausing 8s to avoid rate limiting...", flush=True)
             time.sleep(8)
 
+    # Second-chance pass (added 2026-10-30). Failures usually come in clusters
+    # (e.g. PLTR, AMAT, NFLX, TXN, QCOM back-to-back) when Yahoo briefly
+    # throttles us and returns empty history - yfinance then prints
+    # "possibly delisted; no price data found" even for active stocks. The
+    # 2s/4s in-ticker backoff sits inside the same throttle window, so cool
+    # down properly and retry each failed ticker once, slowly, before giving up.
+    if failed:
+        retry_list = [t for t, _ in failed]
+        print(f"\n[RETRY] {len(retry_list)} ticker(s) failed on the first pass (usually "
+              f"Yahoo throttling, not real delistings). Cooling down 60s, then retrying "
+              f"them once...", flush=True)
+        time.sleep(60)
+        still_failed = []
+        for t in retry_list:
+            try:
+                data, err = evaluate_ticker(t, category_map)
+                if data:
+                    results.append(data)
+                    refreshed.add(str(t).upper())
+                    print(f"  [RETRY OK] {t}", flush=True)
+                else:
+                    still_failed.append((t, err or "unknown"))
+            except Exception as e:
+                still_failed.append((t, f"unexpected error: {e}"))
+            time.sleep(2)
+        print(f"[RETRY] Recovered {len(retry_list) - len(still_failed)} of "
+              f"{len(retry_list)}; {len(still_failed)} still failing.", flush=True)
+        failed = still_failed
+
     # Combine with any existing results (resume mode)
     all_results = (existing_df.to_dict('records') if existing_df is not None else []) + results
     if not all_results:
