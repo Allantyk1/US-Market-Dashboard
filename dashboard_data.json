@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-05T09:22:56",
+  "generated_at": "2026-11-05T21:33:31",
   "is_real_data": true,
   "portfolio": {
-    "total_value": 91071.21,
+    "total_value": 91031.21,
     "total_cost": 114542.29,
-    "total_gain": -23471.08,
-    "total_gain_pct": -0.2049,
+    "total_gain": -23511.08,
+    "total_gain_pct": -0.2053,
     "holdings": [
       {
         "ticker": "AMD",
@@ -359,7 +359,7 @@
       }
     ],
     "stock_value": 85968.0,
-    "options_value": 5103.21,
+    "options_value": 5063.21,
     "options_cost": 6053.21,
     "options": [
       {
@@ -389,17 +389,17 @@
         "expiry": "2028-03-17",
         "contracts": 1.0,
         "premium_paid": 18.8,
-        "option_price": 9.3,
-        "price_source": "Yahoo mid (bid/ask)",
+        "option_price": 8.9,
+        "price_source": "Yahoo last trade",
         "cost_basis": 1880.0,
-        "market_value": 930.0,
-        "gain_dollar": -950.0,
-        "gain_pct": -0.5053,
+        "market_value": 890.0,
+        "gain_dollar": -990.0,
+        "gain_pct": -0.5266,
         "dte": 498.0,
         "breakeven": 43.8,
         "vs_breakeven_pct": -0.5043,
         "stock_price": 21.71,
-        "iv": 1.063725384521485,
+        "iv": 0.0312596875,
         "notes": "Bought on 8 Oct 2026 when mother share was around $35.20 with Delta of 0.82"
       }
     ],
